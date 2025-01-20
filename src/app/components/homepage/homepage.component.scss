@@ -1,0 +1,15 @@
+.homepage-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100vh;
+  margin: 0;
+}
+
+.footer {
+  text-align: center;
+  padding: 16px;
+  background-color: var(--primary-theme-color-light);
+  color: var(--primary-black-color);
+  font-size: 14px;
+}
