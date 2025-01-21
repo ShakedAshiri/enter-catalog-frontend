@@ -1,0 +1,10 @@
+<div class="card-container">
+  <div class="avatar" [style.backgroundImage]="'url(' + 'user.png' + ')'"></div>
+  <mat-card class="profile-card">
+    <mat-card-title class="displayname">{{ user?.displayname }}</mat-card-title>
+    <mat-card-subtitle class="tagline">{{ user?.tagline }}</mat-card-subtitle>
+    <mat-card-content>
+      <p class="desc">{{ user?.description }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>

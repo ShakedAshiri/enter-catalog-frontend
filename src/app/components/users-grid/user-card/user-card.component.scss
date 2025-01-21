@@ -1,0 +1,40 @@
+.card-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 16px;
+}
+
+.avatar {
+  position: absolute;
+  top: -40px;
+  width: 80px;
+  height: 80px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.profile-card {
+  padding-top: 48px;
+  text-align: center;
+  width: 260px;
+  background-color: var(--secondary-theme-color);
+}
+
+.tagline {
+  font-weight: bold;
+}
+
+.displayname {
+  font-size: xx-large;
+}
+
+.desc {
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}
