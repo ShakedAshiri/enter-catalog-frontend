@@ -6,7 +6,6 @@
 .logo {
   height: 40px;
   width: auto;
-  margin-right: 16px;
 }
 
 .spacer {
@@ -15,4 +14,26 @@
 
 mat-toolbar {
   background-color: var(--primary-theme-color);
+  padding: 0px 20px;
+}
+
+.login-button {
+  min-width: 60px;
+
+  .button-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+
+  .account-icon {
+    font-size: 28px;
+    height: 28px;
+    width: 28px;
+  }
+
+  .login-text {
+    font-size: 14px;
+  }
 }
