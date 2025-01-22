@@ -3,5 +3,14 @@
 
   <span class="experts-tagline">כל המקצוענים <b>במקום אחד</b></span>
 
-  <app-users-grid [users]="users"></app-users-grid>
+  <div class="grid-container">
+    <app-users-grid [users]="visibleUsers"></app-users-grid>
+
+    <div class="fade-overlay" *ngIf="hasMoreItems" (click)="loadMore()">
+      <button mat-button class="show-more-button">
+        <img src="scroll-down.png">
+      </button>
+    </div>
+  </div>
+
 </div>
