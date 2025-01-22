@@ -10,4 +10,13 @@
   align-items: center;
   width: 60%;
   margin: 0 auto;
+  margin-top: 75px;
+}
+
+app-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
