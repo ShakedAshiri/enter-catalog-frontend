@@ -1,4 +1,22 @@
+@use "sass:map";
+@use "sass:list";
+@use "../../../../colors";
+
 mat-grid-list {
   width: 90%;
   margin: 0 auto;
+
+  mat-grid-tile {
+    @for $i from 1 through 100 {
+      &:nth-child(#{$i}) {
+        $colors: map.keys(colors.$user-card-colors);
+        $color-index: ($i - 1) % list.length($colors);
+        $random-color: list.nth($colors, $color-index + 1);
+
+        app-user-card {
+          --card-background: #{map.get(colors.$user-card-colors, $random-color)};
+        }
+      }
+    }
+  }
 }
