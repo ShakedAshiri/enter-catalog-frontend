@@ -5,10 +5,11 @@ import { UserRole } from '../../shared/models/data-tables/userRole.class';
 import { Status } from '../../shared/models/data-tables/status.class';
 import { UsersGridComponent } from './users-grid/users-grid.component';
 import { CommonModule } from '@angular/common';
+import { AboutComponent } from './about/about.component';
 
 @Component({
   selector: 'app-homepage',
-  imports: [CommonModule, BannerComponent, UsersGridComponent],
+  imports: [CommonModule, BannerComponent, UsersGridComponent, AboutComponent],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss'
 })
