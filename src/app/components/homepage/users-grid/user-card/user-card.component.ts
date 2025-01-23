@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { User } from '../../../shared/models/user.class';
 import { MatCardModule } from '@angular/material/card';
+import { User } from '../../../../shared/models/user.class';
 
 @Component({
   selector: 'app-user-card',
