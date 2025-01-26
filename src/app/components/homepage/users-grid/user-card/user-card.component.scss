@@ -1,3 +1,5 @@
+@use '../../../../../colors';
+
 .card-container {
   position: relative;
   display: flex;
@@ -17,11 +19,16 @@
   z-index: 1;
 }
 
-.profile-card {
-  padding-top: 48px;
-  text-align: center;
-  width: 260px;
-  background-color: var(--card-background, white);
+.user-card {
+  @each $category, $color in colors.$category-colors {
+    &--#{$category} {
+      background-color: $color;
+      padding-top: 48px;
+      text-align: center;
+      width: 260px;
+      border-radius: 20px;
+    }
+  }
 }
 
 .tagline {
