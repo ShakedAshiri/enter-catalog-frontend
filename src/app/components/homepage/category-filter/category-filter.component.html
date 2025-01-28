@@ -1,0 +1,24 @@
+<div class="container">
+  <mat-form-field class="input-field small" appearance="outline">
+    <span matPrefix class="prefix">
+      <button class="clear" matSuffix mat-icon-button aria-label="Clear">
+        <mat-icon>search</mat-icon>
+      </button>
+    </span>
+
+    <input disabled matInput type="text" [(ngModel)]="search">
+  </mat-form-field>
+
+  <div class="category-buttons">
+    <button mat-button class="category"
+      *ngFor="let category of categories"
+      (click)="toggleCategory(category)"
+      [class.active]="selectedCategories.has(category)"
+    >
+      {{ category.displayName }}
+    </button>
+    <button class="clear" (click)="resetFilter()">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</div>

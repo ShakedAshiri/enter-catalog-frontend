@@ -3,6 +3,8 @@
 
   <span class="experts-tagline">כל המקצוענים <b>במקום אחד</b></span>
 
+  <app-category-filter [categories]="categories" (filterChange)="filterUsers($event)"></app-category-filter>
+
   <div class="grid-container">
     <app-users-grid [users]="visibleUsers"></app-users-grid>
 
