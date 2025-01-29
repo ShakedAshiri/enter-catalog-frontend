@@ -1,3 +1,5 @@
+<span *ngIf="users.length == 0">לא נמצאו תוצאות</span>
+
 <mat-grid-list cols="3" rowHeight="1:0.8" class="card-grid">
   <mat-grid-tile *ngFor="let user of users">
     <app-user-card [user]="user"></app-user-card>
