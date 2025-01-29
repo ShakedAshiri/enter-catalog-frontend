@@ -14,9 +14,10 @@ import { FormsModule } from '@angular/forms';
 })
 export class CategoryFilterComponent {
   @Input() categories: Category[];
-  @Output() filterChange = new EventEmitter<Set<Category>>();
+  @Output() categoryFilterChange = new EventEmitter<Set<Category>>();
+  @Output() textFilterChange = new EventEmitter<string>();
   selectedCategories = new Set<Category>();
-  search : string;
+  searchText : string;
 
   toggleCategory(category: Category) {
     if (this.selectedCategories.has(category)) {
@@ -25,11 +26,20 @@ export class CategoryFilterComponent {
       this.selectedCategories.add(category);
     }
 
-    this.filterChange.emit(this.selectedCategories);
+    this.categoryFilterChange.emit(this.selectedCategories);
   }
 
   resetFilter() {
     this.selectedCategories.clear();
-    this.filterChange.emit(this.selectedCategories);
+    this.categoryFilterChange.emit(this.selectedCategories);
+  }
+
+  searchTextFilter() {
+    this.textFilterChange.emit(this.searchText);
+  }
+
+  clearText() {
+    this.searchText = "";
+    this.textFilterChange.emit(this.searchText);
   }
 }

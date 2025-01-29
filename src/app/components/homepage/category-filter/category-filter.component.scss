@@ -37,6 +37,11 @@
       transform: scale(1.4);
     }
   }
+
+  .clear-icon {
+    border: none;
+    background: none;
+  }
 }
 
 :host ::ng-deep .mdc-text-field--outlined {

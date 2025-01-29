@@ -6,7 +6,13 @@
       </button>
     </span>
 
-    <input disabled matInput type="text" [(ngModel)]="search">
+    <input matInput type="text" [(ngModel)]="searchText" (input)="searchTextFilter()">
+
+    @if (searchText) {
+      <button class="clear-icon" matSuffix mat-icon-button aria-label="Clear" (click)="clearText()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
   </mat-form-field>
 
   <div class="category-buttons">
