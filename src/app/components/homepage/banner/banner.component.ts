@@ -8,5 +8,10 @@ import { MatGridListModule } from '@angular/material/grid-list'
   styleUrl: './banner.component.scss'
 })
 export class BannerComponent {
-
+  scrollToAbout() {
+    const element = document.getElementById('about-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 }
