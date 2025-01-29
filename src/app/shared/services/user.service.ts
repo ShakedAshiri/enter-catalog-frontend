@@ -10,8 +10,8 @@ import { Status } from '../models/data-tables/status.class';
 export class UserService {
   // TODO: DELETE
   animator = new Category("1", "animator", "אנימציה");
-  uiux = new Category("1", "uiux", "UI\\UX");
-  developer = new Category("1", "developer", "פיתוח תוכנה");
+  uiux = new Category("2", "uiux", "UI\\UX");
+  developer = new Category("3", "developer", "פיתוח תוכנה");
 
   // TODO: DELETE
   categories: Category[] = [

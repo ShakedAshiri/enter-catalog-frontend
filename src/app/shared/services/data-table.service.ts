@@ -11,8 +11,8 @@ export class DataTableService {
   getCategories() {
     return [
       new Category("1", "animator", "אנימציה"),
-      new Category("1", "uiux", "UI\\UX"),
-      new Category("1", "developer", "פיתוח תוכנה")
+      new Category("2", "uiux", "UI\\UX"),
+      new Category("3", "developer", "פיתוח תוכנה")
     ]
   }
 }
