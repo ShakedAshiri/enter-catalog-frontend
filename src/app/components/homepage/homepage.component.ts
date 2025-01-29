@@ -1,6 +1,6 @@
 import { User } from './../../shared/models/user.class';
 import { Component, OnInit } from '@angular/core';
-import { BannerComponent } from '../../banner/banner.component';
+import { BannerComponent } from './banner/banner.component';
 import { UserRole } from '../../shared/models/data-tables/userRole.class';
 import { Status } from '../../shared/models/data-tables/status.class';
 import { UsersGridComponent } from './users-grid/users-grid.component';
