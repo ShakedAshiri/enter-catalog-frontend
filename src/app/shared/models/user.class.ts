@@ -5,13 +5,12 @@ import { UserRole } from "./data-tables/userRole.class";
 import { UserWork } from "./userWork.class";
 
 export class User {
-
   constructor(
-    public id: string,
+    public id: number,
     public username: string,
-    public displayname: string,
+    public displayName: string,
     public password: string,
-    public role: UserRole,
+    public userRole: UserRole,
     public isPasswordReset: boolean,
     public status: Status,
     public tagline?: string,

@@ -1,8 +1,6 @@
 import { User } from './../../shared/models/user.class';
 import { Component, OnInit } from '@angular/core';
 import { BannerComponent } from './banner/banner.component';
-import { UserRole } from '../../shared/models/data-tables/userRole.class';
-import { Status } from '../../shared/models/data-tables/status.class';
 import { UsersGridComponent } from './users-grid/users-grid.component';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './about/about.component';
@@ -44,11 +42,29 @@ export class HomepageComponent implements OnInit {
   }
 
   loadInitialItems() {
-    this.users = this.userService.getUsers();
-    this.categories = this.dataTableService.getCategories();
+    this.userService.getUsers().subscribe({
+      next: (response: User[]) => {
+        this.users = response;
+        console.log(this.users)
+
+        this.visibleUsers = this.users.slice(0, this.itemsPerPage);
+        this.filteredUsers = this.users;
+      },
+      error: (error) => {
+        console.error('Error fetching data:', error);
+      }
+    });
+
+    this.dataTableService.getCategories().subscribe({
+      next: (response: Category[]) => {
+        this.categories = response;
+      },
+      error: (error) => {
+        console.error('Error fetching data:', error);
+      }
+    });
+
     this.itemsPerPage = this.itemsPerPageCount;
-    this.visibleUsers = this.users.slice(0, this.itemsPerPage);
-    this.filteredUsers = this.users;
   }
 
   loadMore() {
@@ -113,7 +129,7 @@ export class HomepageComponent implements OnInit {
     return this.searchText.length === 0
      ? usersToSearch
      : usersToSearch.filter(user =>
-        user.displayname.includes(this.searchText) ||
+        user.displayName.includes(this.searchText) ||
         user.description.includes(this.searchText)
        )
   }

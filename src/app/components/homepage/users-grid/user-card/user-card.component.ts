@@ -13,6 +13,6 @@ export class UserCardComponent {
   @Input() user: User;
 
   getCategoryClass(category: Category): string {
-    return `user-card--${category.data || 'default'}`;
+    return `user-card--${category.name || 'default'}`;
   }
 }

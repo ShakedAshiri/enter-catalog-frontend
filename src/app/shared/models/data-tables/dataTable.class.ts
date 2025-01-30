@@ -1,5 +1,5 @@
 export class DataTable {
   constructor(
-    public id: string,
-    public data: string) {}
+    public id: number,
+    public name: string) {}
 }
