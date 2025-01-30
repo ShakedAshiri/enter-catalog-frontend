@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 100px;
+  padding: 0px 15px;
+  background-color: var(--primary-theme-color-light);
+}
+
+.title {
+  font-size: xxx-large;
+}
+
+.subtitle {
+  font-size: large;
+  font-weight: bold;
+}
+
+.input-details {
+  margin-top: 14px;
+  display: flex;
+  align-items: flex-start;
+
+  .start, .mid {
+      margin-left: 10px;
+      width: 184px;
+  }
+
+  .send-button {
+    background-color: var(--primary-theme-color);
+    border: none;
+    padding: 16.5px 15px;
+    font-family: 'Roboto';
+  }
+}

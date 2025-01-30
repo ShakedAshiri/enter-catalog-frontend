@@ -17,3 +17,34 @@ mat-form-field.small {
   border-width: 3px !important;
   }
 }
+
+mat-form-field.smaller {
+  --mat-form-field-container-height: 45px;
+  --mat-form-field-container-vertical-padding: 10px;
+  --mat-form-field-container-horizontal-padding: 5px;
+  font-size: 1.1rem;
+  --mdc-filled-text-field-container-color: white;
+  --mat-form-field-filled-with-label-container-padding-top: 10px;
+  --mat-form-field-filled-with-label-container-padding-bottom: 1px;
+  --mat-mdc-form-field-floating-label-scale: 0.8;
+
+  .mat-mdc-text-field-wrapper {
+    padding: 4px 15px 0px 0px;
+    background-color: white;
+  }
+
+  .mdc-text-field--outlined .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline__trailing {
+    border-style: none;
+  }
+
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded
+  .mdc-floating-label--float-above {
+    transform: translateY(-22px) scale(0.7);
+  }
+}
+
+.cdk-overlay-pane .white-select {
+  --mat-select-panel-background-color: white;
+}
