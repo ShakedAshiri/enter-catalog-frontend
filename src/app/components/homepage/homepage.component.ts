@@ -8,6 +8,8 @@ import { Category } from '../../shared/models/data-tables/category.class';
 import { CategoryFilterComponent } from "./category-filter/category-filter.component";
 import { UserService } from '../../shared/services/user.service';
 import { DataTableService } from '../../shared/services/data-table.service';
+import { ContactUsComponent } from "./contact-us/contact-us.component";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 
 @Component({
   selector: 'app-homepage',
@@ -16,7 +18,10 @@ import { DataTableService } from '../../shared/services/data-table.service';
     BannerComponent,
     UsersGridComponent,
     AboutComponent,
-    CategoryFilterComponent],
+    CategoryFilterComponent,
+    ContactUsComponent,
+    MatProgressSpinnerModule
+],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss'
 })
@@ -34,6 +39,10 @@ export class HomepageComponent implements OnInit {
     return this.visibleUsers.length < this.filteredUsers.length;
   }
 
+  get isUsersLoaded(): boolean {
+    return this.users.length > 0;
+  }
+
   constructor(public userService: UserService,
               public dataTableService: DataTableService) {}
 
@@ -44,8 +53,13 @@ export class HomepageComponent implements OnInit {
   loadInitialItems() {
     this.userService.getUsers().subscribe({
       next: (response: User[]) => {
+        //Suffle users
+        for (let i = response.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [response[i], response[j]] = [response[j], response[i]];
+        }
+
         this.users = response;
-        console.log(this.users)
 
         this.visibleUsers = this.users.slice(0, this.itemsPerPage);
         this.filteredUsers = this.users;
