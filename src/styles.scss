@@ -5,3 +5,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 body::-webkit-scrollbar {
   display: none;
 }
+
+mat-form-field.small {
+  --mat-form-field-container-height: 42px;
+  --mat-form-field-container-vertical-padding: 5px;
+
+  .mdc-text-field--outlined .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline__trailing {
+  border-color: var(--primary-theme-color) !important;
+  border-width: 3px !important;
+  }
+}
