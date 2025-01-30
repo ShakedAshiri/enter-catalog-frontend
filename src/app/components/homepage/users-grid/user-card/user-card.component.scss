@@ -34,10 +34,15 @@
 .tagline {
   font-weight: bold;
   font-size: large;
+  height: 1.5rem;
 }
 
 .displayname {
   font-size: xx-large;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .desc {
