@@ -1,0 +1,24 @@
+<div class="modal-container" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+  <h2 mat-dialog-title class="modal-title">
+    {{ title }}
+    <button mat-icon-button class="close-button clear" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </h2>
+
+  <mat-dialog-content class="modal-content">
+    <ng-content></ng-content>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="center" class="modal-actions">
+    <ng-container *ngTemplateOutlet="actionsTemplate || defaultActions">
+    </ng-container>
+  </mat-dialog-actions>
+</div>
+
+<ng-template #defaultActions>
+  <button mat-raised-button color="primary" class="btn btn-primary btn-login" (click)="submit()">
+    אישור
+  </button>
+  <button mat-button (click)="close()" class="btn btn-light btn-login btn-cancel">ביטול</button>
+</ng-template>

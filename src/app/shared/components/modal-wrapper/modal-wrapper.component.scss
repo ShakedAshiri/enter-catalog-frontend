@@ -1,0 +1,43 @@
+.modal-container {
+  padding: 0;
+  position: relative;
+  background-color: var(--primary-theme-color-light);
+}
+
+.modal-title {
+  margin-bottom: 15px;
+  padding: 24px 24px 0;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+}
+
+.close-button {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.modal-content {
+  padding: 0px 24px;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.modal-actions {
+  padding: 8px 24px 24px;
+  margin-bottom: 0;
+}
+
+.btn-login {
+  padding: 5px 30px;
+  font-size: 20px;
+}
+
+.btn-cancel {
+  text-decoration: underline;
+}
