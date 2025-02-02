@@ -15,7 +15,7 @@
     <app-users-grid [users]="visibleUsers"></app-users-grid>
 
     <div class="fade-overlay" *ngIf="hasMoreItems" (click)="loadMore()">
-      <button mat-button class="show-more-button">
+      <button mat-button class="show-more-button btn-clear">
         <img src="scroll-down.png">
       </button>
     </div>

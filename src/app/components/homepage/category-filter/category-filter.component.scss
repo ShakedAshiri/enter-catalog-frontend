@@ -21,11 +21,6 @@
   background-color: var(--primary-theme-color);
 }
 
-.clear {
-  background: none;
-  border: none;
-}
-
 .input-field {
   margin-left: 20px;
 
@@ -36,11 +31,6 @@
       color: var(--primary-theme-color);
       transform: scale(1.4);
     }
-  }
-
-  .clear-icon {
-    border: none;
-    background: none;
   }
 }
 

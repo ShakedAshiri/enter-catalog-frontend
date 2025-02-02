@@ -1,7 +1,7 @@
 <div class="container">
   <mat-form-field class="input-field small" appearance="outline">
     <span matPrefix class="prefix">
-      <button class="clear" matSuffix mat-icon-button aria-label="Clear">
+      <button class="btn-clear" matSuffix mat-icon-button aria-label="Clear">
         <mat-icon>search</mat-icon>
       </button>
     </span>
@@ -9,7 +9,7 @@
     <input matInput type="text" [(ngModel)]="searchText" (input)="searchTextFilter()">
 
     @if (searchText) {
-      <button class="clear-icon" matSuffix mat-icon-button aria-label="Clear" (click)="clearText()">
+      <button class="btn-clear" matSuffix mat-icon-button aria-label="Clear" (click)="clearText()">
         <mat-icon>close</mat-icon>
       </button>
     }
@@ -23,7 +23,7 @@
     >
       {{ category.displayName }}
     </button>
-    <button class="clear" (click)="resetFilter()">
+    <button class="btn-clear" (click)="resetFilter()">
       <mat-icon>cancel</mat-icon>
     </button>
   </div>
