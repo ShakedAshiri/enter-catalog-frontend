@@ -23,6 +23,11 @@ mat-form-field.light {
   .mdc-floating-label--float-above {
     transform: translateY(-25px) scale(0.7);
   }
+
+  // Color background on autofill
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+  }
 }
 
 mat-form-field.small {
