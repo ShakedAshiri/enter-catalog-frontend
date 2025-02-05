@@ -51,7 +51,7 @@ export class HomepageComponent implements OnInit {
   }
 
   loadInitialItems() {
-    this.userService.getUsers().subscribe({
+    this.userService.getWorkers().subscribe({
       next: (response: User[]) => {
         //Suffle users
         for (let i = response.length - 1; i > 0; i--) {
