@@ -1,0 +1,34 @@
+<app-modal-wrapper title="כניסה לפרופיל שלי">
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="light">
+      <mat-label>שם משתמש</mat-label>
+      <input matInput [formControl]="nameControl">
+      @if (nameControl.hasError('required')) {
+        <mat-error>יש להזין שם משתמש</mat-error>
+      }
+      @if (nameControl.hasError('pattern')) {
+        <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="light">
+      <mat-label>סיסמא</mat-label>
+      <input matInput [formControl]="passwordControl" type="password">
+      @if (passwordControl.hasError('required')) {
+        <mat-error>יש להזין סיסמא</mat-error>
+      }
+      @if (passwordControl.hasError('minlength')) {
+        <mat-error>סיסמא חייבת להיות באורך לפחות 5 תווים</mat-error>
+      }
+    </mat-form-field>
+  </form>
+
+  <ng-template #actions>
+    <button mat-raised-button color="primary" class="btn btn-primary btn-login"
+            [disabled]="!form.valid"
+            (click)="submit()">
+      אישור
+    </button>
+    <button mat-button class="btn btn-light btn-login pass-reset">איפוס סיסמא</button>
+  </ng-template>
+</app-modal-wrapper>
