@@ -10,6 +10,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ModalWrapperComponent } from '../../../shared/components/modal-wrapper/modal-wrapper.component';
 import { MatInputModule } from '@angular/material/input';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -28,9 +29,9 @@ export class LoginComponent extends BaseModalComponent {
   form: FormGroup;
   nameControl: FormControl = new FormControl('', [Validators.required,
                                                   Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$")]);
-  passwordControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(5)]);
+  passwordControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
-  constructor() {
+  constructor(private authService: AuthService) {
     super();
 
     this.form = this.fb.group({
@@ -41,8 +42,14 @@ export class LoginComponent extends BaseModalComponent {
 
   submit(): void {
     if (this.form.valid) {
-      // TODO: login
-      this.close(this.form.value);
+      this.authService.login(this.form.value.name, this.form.value.password).subscribe({
+        next: () => {
+          this.close(this.form.value);
+        },
+        error: (error) => {
+          console.error('Error fetching data:', error);
+        }
+      });
     }
   }
 }

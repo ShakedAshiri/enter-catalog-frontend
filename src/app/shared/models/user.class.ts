@@ -15,10 +15,11 @@ export class User {
     public status: Status,
     public tagline?: string,
     public description?: string,
-    //public image?: string,
+    public image?: string,
     public categories?: Category[],
     public branch?: Branch,
-    public works?: UserWork[]
+    public works?: UserWork[],
+    public token?: string
   ) {}
 
 }

@@ -3,10 +3,24 @@
     <img src="logo.png" alt="Logo" class="logo">
   </div>
   <span class="spacer"></span>
-  <button mat-button class="login-button">
-    <div class="button-content" (click)="openLoginForm()">
-      <mat-icon class="account-icon">account_circle</mat-icon>
-      <span class="login-text">כניסה</span>
+
+  <ng-container *ngIf="user$ | async as user; else loginTemplate">
+    <div class="logged-in">
+      <img [src]="user.image || 'user.png'" class="avatar">
+      <span class="display-name">{{ user.displayName }}</span>
+      <div class="actions">
+        <a>ניהול גלריה</a> |
+        <a (click)="logout()">יציאה</a>
+      </div>
     </div>
-  </button>
+  </ng-container>
+
+  <ng-template #loginTemplate>
+    <button mat-button class="login-button">
+      <div class="button-content" (click)="openLoginForm()">
+        <mat-icon class="account-icon">account_circle</mat-icon>
+        <span class="login-text">כניסה</span>
+      </div>
+    </button>
+  </ng-template>
 </mat-toolbar>
