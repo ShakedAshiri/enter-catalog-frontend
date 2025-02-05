@@ -18,7 +18,8 @@ export class User {
     //public image?: string,
     public categories?: Category[],
     public branch?: Branch,
-    public works?: UserWork[]
+    public works?: UserWork[],
+    public token?: string
   ) {}
 
 }
