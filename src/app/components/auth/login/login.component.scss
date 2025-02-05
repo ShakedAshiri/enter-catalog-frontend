@@ -1,0 +1,14 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.btn-login {
+  padding: 5px 30px;
+  font-size: 20px;
+}
+
+.pass-reset {
+  text-decoration: underline;
+}
