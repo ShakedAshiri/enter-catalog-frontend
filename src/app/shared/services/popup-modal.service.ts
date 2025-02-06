@@ -16,8 +16,7 @@ export class PopupModalService {
     // Set default configuration
     const defaultConfig: MatDialogConfig = {
       width: '500px',
-      disableClose: false,
-      autoFocus: true,
+      autoFocus: false,
       ...config
     };
 

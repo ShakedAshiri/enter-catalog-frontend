@@ -1,7 +1,7 @@
 <div class="modal-container" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   <h2 mat-dialog-title class="modal-title">
     {{ title }}
-    <button mat-icon-button class="close-button btn-clear" (click)="close()">
+    <button *ngIf="closeOption" mat-icon-button class="close-button btn-clear" (click)="close()">
       <mat-icon>close</mat-icon>
     </button>
   </h2>
