@@ -30,6 +30,7 @@ export class LoginComponent extends BaseModalComponent {
   nameControl: FormControl = new FormControl('', [Validators.required,
                                                   Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$")]);
   passwordControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  //TODO: set minLength
 
   constructor(private authService: AuthService) {
     super();
@@ -43,8 +44,8 @@ export class LoginComponent extends BaseModalComponent {
   submit(): void {
     if (this.form.valid) {
       this.authService.login(this.form.value.name, this.form.value.password).subscribe({
-        next: () => {
-          this.close(this.form.value);
+        next: (result) => {
+          this.close(result);
         },
         error: (error) => {
           console.error('Error fetching data:', error);
