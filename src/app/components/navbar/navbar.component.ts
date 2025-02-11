@@ -8,13 +8,15 @@ import { AuthService } from '../../shared/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { User } from '../../shared/models/user.class';
 import { Observable } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   imports: [MatToolbarModule,
             MatButtonModule,
             MatIconModule,
-            CommonModule],
+            CommonModule,
+            RouterModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })

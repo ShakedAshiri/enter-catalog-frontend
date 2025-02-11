@@ -1,8 +1,10 @@
+import { UserService } from './user.service';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, firstValueFrom, map, Observable, of, tap } from 'rxjs';
 import { User } from '../models/user.class';
 import { ApiConstants } from '../constants/api.constants';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Role } from '../constants/role';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class AuthService {
   private accessToken: string | null = null;
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private userService: UserService) {
     this.restoreSession();
   }
 
@@ -101,5 +103,24 @@ export class AuthService {
 
   getAccessToken(): string | null {
     return this.accessToken;
+  }
+
+  /**
+   * Check if current user or ADMIN or TEAMLEAD from the same branch
+   * @param forUserId user to perform action on
+   * @returns is permitted
+   */
+  isActionPermitted(forUserId: number) {
+    // Action permitted for current user
+    // -OR-
+    // ADMIN
+    // -OR-
+    // for TEAMLEAD if:
+    // teamlead is from the same branch as the user we want to perform action on
+    return this.isLoggedIn() &&
+           (this.getCurrentUser().id === forUserId ||
+            this.getCurrentUser().userRole.id === Role.ADMIN ||
+            (this.getCurrentUser().userRole.id === Role.TEAMLEAD &&
+             this.userService.isUserFromBranch(forUserId, this.getCurrentUser().branch?.id)))
   }
 }
