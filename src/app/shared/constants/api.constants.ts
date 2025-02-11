@@ -8,6 +8,8 @@ export class ApiConstants {
     USERS: {
       WORKERS: `${ApiConstants.BASE_URL}/user/workers`,
       ALL_USERS: `${ApiConstants.BASE_URL}/user`,
+      PUBLIC_USER: `${ApiConstants.BASE_URL}/user/public/:id`,
+      SECURE_USER: `${ApiConstants.BASE_URL}/user/:id`,
       PROFILE: `${ApiConstants.BASE_URL}/user/profile`
     },
 
