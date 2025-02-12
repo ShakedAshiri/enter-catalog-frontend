@@ -54,6 +54,7 @@ export class HomepageComponent implements OnInit {
     this.userService.getWorkers().subscribe({
       next: (response: User[]) => {
         //Suffle users
+        // TODO: move to backend?
         for (let i = response.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [response[i], response[j]] = [response[j], response[i]];

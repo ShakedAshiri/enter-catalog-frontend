@@ -1,5 +1,5 @@
 <mat-toolbar>
-  <div class="logo-container">
+  <div class="logo-container" [routerLink]="['/']">
     <img src="logo.png" alt="Logo" class="logo">
   </div>
   <span class="spacer"></span>
@@ -9,7 +9,7 @@
       <img [src]="user.image || 'user.png'" class="avatar">
       <span class="display-name">{{ user.displayName }}</span>
       <div class="actions">
-        <a>ניהול גלריה</a> |
+        <a [routerLink]="['/profile', user.id]">ניהול גלריה</a> |
         <a (click)="logout()">יציאה</a>
       </div>
     </div>
