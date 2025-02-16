@@ -9,12 +9,11 @@ import {
   FormControl,
 } from '@angular/forms';
 
-import { BaseModalComponent } from '../../../shared/components/base-modal/base-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ModalWrapperComponent } from '../../../shared/components/modal-wrapper/modal-wrapper.component';
 import { MatInputModule } from '@angular/material/input';
-import { AuthService } from '../../../shared/services/auth.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-user-info',
@@ -24,6 +23,8 @@ import { AuthService } from '../../../shared/services/auth.service';
     MatFormFieldModule,
     MatDialogModule,
     MatInputModule,
+    MatCardModule,
+    MatIconModule,
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
@@ -34,7 +35,7 @@ export class UserInfoComponent {
   userInfoForm: FormGroup;
   usernameControl = new FormControl('', Validators.required);
   displayNameControl = new FormControl('', Validators.required);
-  imageControl = new FormControl('', Validators.required);
+  imageControl = new FormControl('avatar.png', Validators.required);
   taglineControl = new FormControl('', Validators.required);
   descriptionControl = new FormControl('', Validators.required);
 
