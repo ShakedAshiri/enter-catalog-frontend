@@ -1,3 +1,57 @@
 <div>
-  <form action=""></form>
+  <form
+    [formGroup]="userInfoForm"
+    (ngSubmit)="onSubmit(userInfoForm)"
+    action=""
+  >
+    <mat-form-field appearance="outline" class="light">
+      <mat-label>{{ userInfoForm.get("username")?.value }}</mat-label>
+      <input matInput [formControl]="usernameControl" />
+      <!-- @if (usernameControl.hasError('required')) {
+      <mat-error>יש להזין שם משתמש</mat-error>
+      } @if (usernameControl.hasError('pattern')) {
+      <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
+      } -->
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="light">
+      <mat-label>{{ userInfoForm.get("displayName")?.value }}</mat-label>
+      <input matInput [formControl]="displayNameControl" />
+      <!-- @if (displayNameControl.hasError('required')) {
+      <mat-error>יש להזין שם משתמש</mat-error>
+      } @if (displayNameControl.hasError('pattern')) {
+      <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
+      } -->
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="light">
+      <mat-label>{{ userInfoForm.get("image")?.value }}</mat-label>
+      <input matInput [formControl]="imageControl" />
+      <!-- @if (displayNameControl.hasError('required')) {
+      <mat-error>יש להזין שם משתמש</mat-error>
+      } @if (displayNameControl.hasError('pattern')) {
+      <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
+      } -->
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="light">
+      <mat-label>{{ userInfoForm.get("tagline")?.value }}</mat-label>
+      <input matInput [formControl]="taglineControl" />
+      <!-- @if (displayNameControl.hasError('required')) {
+      <mat-error>יש להזין שם משתמש</mat-error>
+      } @if (displayNameControl.hasError('pattern')) {
+      <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
+      } -->
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="light">
+      <mat-label>{{ userInfoForm.get("description")?.value }}</mat-label>
+      <input matInput [formControl]="descriptionControl" />
+      <!-- @if (displayNameControl.hasError('required')) {
+      <mat-error>יש להזין שם משתמש</mat-error>
+      } @if (displayNameControl.hasError('pattern')) {
+      <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
+      } -->
+    </mat-form-field>
+  </form>
 </div>
