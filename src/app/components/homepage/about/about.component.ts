@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-about',
@@ -12,10 +12,12 @@ export class AboutComponent implements AfterViewInit {
   isOverflowing = false;
   readMore = false;
 
+  constructor(private cdr: ChangeDetectorRef) {}
+
   ngAfterViewInit() {
     const el = this.textContainer.nativeElement;
     this.isOverflowing = el.scrollHeight > el.clientHeight;
+
+    this.cdr.detectChanges();
   }
-
-
 }
