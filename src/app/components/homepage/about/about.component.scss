@@ -1,9 +1,14 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  padding: 0px 100px;
+  padding: 0px 43px;
+  max-height: 350px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
 }
 
+
 .title {
-  font-size: xxx-large;
+  font-size: clamp(1.4rem, 3vw, 4vw);
 }
