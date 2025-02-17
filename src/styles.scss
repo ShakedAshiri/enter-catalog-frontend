@@ -41,17 +41,40 @@ mat-form-field.light {
   }
 }
 
-mat-form-field.small {
-  --mat-form-field-container-height: 42px;
-  --mat-form-field-container-vertical-padding: 5px;
+mat-form-field.border {
+  .mdc-text-field--outlined .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline__trailing {
+    border-color: black !important;
+    border-width: 3px !important;
+  }
+}
+
+mat-form-field.transparent {
+  --mdc-filled-text-field-container-color: transparent;
 
   .mdc-text-field--outlined .mdc-notched-outline__leading,
   .mdc-text-field--outlined .mdc-notched-outline__notch,
   .mdc-text-field--outlined .mdc-notched-outline__trailing {
-      border-color: black !important;
-      border-width: 3px !important;
+    border-style: none;
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background-color: transparent;
+  }
+
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+    .mdc-notched-outline--upgraded
+    .mdc-floating-label--float-above {
+    transform: translateY(-25px) scale(0.7);
+  }
+
+  // Color background on autofill
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
   }
 }
+
 mat-form-field.small {
   --mat-form-field-container-height: clamp(2vw, 2vw, 7vw);
   --mat-form-field-container-vertical-padding: 0.5vw;
