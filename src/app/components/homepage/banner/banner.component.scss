@@ -1,5 +1,15 @@
+.banner-grid {
+  height: 13vh;
+  margin: 0px 10px;
+}
+
+mat-grid-tile {
+  height: 13vh;
+  background-color: var(--primary-theme-color);
+}
+
+
 .banner-section {
-  background-color: var(--secondary-theme-color);
   color: var(--primary-white-color);
   text-align: center;
   display: flex;
@@ -20,10 +30,9 @@
   justify-content: space-between;
   align-items: center;
   height: 100%;
-  background-color: var(--secondary-theme-color);
+  background-color: var(--primary-theme-color);
   color: white;
   text-align: center;
-  padding: 0px 20px;
 
   img {
     max-width: 100%;
@@ -64,5 +73,16 @@
 
 .left-banner {
   cursor: pointer;
-  padding-left: 30px;
+}
+
+.rolling-text {
+  font-size: clamp(0.9rem, 1.5vw, 1.8vw);
+  line-height: 0.8;
+  color: black;
+  padding: 3px;
+  max-width: 230px;
+
+  b {
+    color: var(--secondary-theme-color-light);
+  }
 }

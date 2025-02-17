@@ -1,8 +1,6 @@
-<mat-grid-list cols="12" rowHeight="200px" gutterSize="0px">
+<mat-grid-list class="banner-grid" cols="12" rowHeight="2:1" gutterSize="2vh">
   <!--ENTER-->
-  <mat-grid-tile colspan="7" class="left-banner" (click)="scrollToAbout()">
-    <span class="expand"></span>
-
+  <mat-grid-tile colspan="8" class="left-banner" (click)="scrollToAbout()">
     <div class="rectangle">
       <div class="half left">
         <img src="ENTER.png" alt="ENTER">
@@ -15,9 +13,13 @@
   </mat-grid-tile>
 
   <!--ENTER TEXT-->
-  <mat-grid-tile colspan="5">
+  <mat-grid-tile colspan="4">
     <div class="rectangle">
-      <img src="choose-enter.png" alt="ENTER">
+      <span class="rolling-text">
+        <b>צפו</b> בעבודות של אנשי מקצוע מובילים בתחומים מגוונים.
+        <b>בחרו</b> את השירות שמתאים לצרכים שלכם.
+        <b>צרו קשר</b> ואנחנו נחזור אליכם בהקדם.
+      </span>
     </div>
   </mat-grid-tile>
 </mat-grid-list>
