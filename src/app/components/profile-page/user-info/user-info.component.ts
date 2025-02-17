@@ -33,11 +33,28 @@ export class UserInfoComponent {
   @Input({ required: true }) user!: User;
 
   userInfoForm: FormGroup;
-  usernameControl = new FormControl('', Validators.required);
-  displayNameControl = new FormControl('', Validators.required);
+  usernameControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(2),
+    Validators.maxLength(30),
+    Validators.pattern('^[a-z]+$'),
+  ]);
+  displayNameControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(2),
+    Validators.maxLength(30),
+  ]);
   imageControl = new FormControl('avatar.png', Validators.required);
-  taglineControl = new FormControl('', Validators.required);
-  descriptionControl = new FormControl('', Validators.required);
+  taglineControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(2),
+    Validators.maxLength(30),
+  ]);
+  descriptionControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(2),
+    Validators.maxLength(500),
+  ]);
 
   constructor(private fb: FormBuilder) {}
 
