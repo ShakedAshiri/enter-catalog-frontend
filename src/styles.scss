@@ -1,7 +1,13 @@
-@forward '_colors.scss';
+@forward "_colors.scss";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: "open sans hebrew"; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "open sans hebrew";
+}
 body::-webkit-scrollbar {
   display: none;
 }
@@ -35,12 +41,15 @@ mat-form-field.light {
   }
 }
 
-mat-form-field.border {
+mat-form-field.small {
+  --mat-form-field-container-height: 42px;
+  --mat-form-field-container-vertical-padding: 5px;
+
   .mdc-text-field--outlined .mdc-notched-outline__leading,
   .mdc-text-field--outlined .mdc-notched-outline__notch,
   .mdc-text-field--outlined .mdc-notched-outline__trailing {
-    border-color: black !important;
-    border-width: 3px !important;
+      border-color: black !important;
+      border-width: 3px !important;
   }
 }
 mat-form-field.small {
@@ -67,8 +76,9 @@ mat-form-field.smaller {
     padding: 4px 15px 0px 0px;
   }
 
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded
-  .mdc-floating-label--float-above {
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+    .mdc-notched-outline--upgraded
+    .mdc-floating-label--float-above {
     transform: translateY(-22px) scale(0.7);
   }
 }
