@@ -18,7 +18,8 @@
   <span class="text">הממ... לא נמצאו תוצאות בינתיים</span>
 </div>
 
-<mat-grid-list cols="3" rowHeight="1:0.8" class="card-grid" *ngIf="users.length > 0">
+<mat-grid-list [cols]="breakpoint" [rowHeight]="rowHeight" class="card-grid"
+               *ngIf="users.length > 0">
   <mat-grid-tile *ngFor="let user of users">
     <app-user-card [user]="user"></app-user-card>
   </mat-grid-tile>
