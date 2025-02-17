@@ -14,8 +14,6 @@ export class AboutComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     const el = this.textContainer.nativeElement;
-    console.log(el.scrollHeight)
-    console.log(el.clientHeight)
     this.isOverflowing = el.scrollHeight > el.clientHeight;
   }
 
