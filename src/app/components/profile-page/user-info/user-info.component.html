@@ -1,0 +1,41 @@
+<div>
+  <form [formGroup]="userInfoForm" (ngSubmit)="onSubmit(userInfoForm)">
+    <mat-card class="card">
+      <div class="card-img-container">
+        <img
+          class="card-img"
+          [src]="
+            userInfoForm.get('image')?.value !== 'avatar.png'
+              ? userInfoForm.get('image')?.value
+              : 'user.png'
+          "
+        />
+        <mat-icon svgIcon="edit-pencil" />
+      </div>
+      <div class="card-text-container">
+        <mat-form-field
+          class="displayName small transparent"
+          appearance="outline"
+        >
+          <div class="card-title-container">
+            <input matInput [formControl]="displayNameControl" />
+            <mat-icon svgIcon="edit-pencil" />
+          </div>
+        </mat-form-field>
+        <mat-form-field class="tagline small transparent" appearance="outline">
+          <input matInput [formControl]="taglineControl" />
+        </mat-form-field>
+        <mat-form-field
+          class="description small transparent"
+          appearance="outline"
+        >
+          <textarea
+            matInput
+            rows="3"
+            [formControl]="descriptionControl"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </mat-card>
+  </form>
+</div>
