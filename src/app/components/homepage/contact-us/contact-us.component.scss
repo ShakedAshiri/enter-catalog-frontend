@@ -1,17 +1,17 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin: 0px 100px;
-  padding: 0px 15px;
+  margin: 0px 43px;
+  padding: 4px 15px;
   background-color: var(--primary-theme-color-light);
 }
 
 .title {
-  font-size: xxx-large;
+  font-size: clamp(1.4rem, 3vw, 4vw);
 }
 
 .subtitle {
-  font-size: large;
+  font-size: clamp(0.6rem, 1vw, 1rem);
   font-weight: bold;
 }
 
