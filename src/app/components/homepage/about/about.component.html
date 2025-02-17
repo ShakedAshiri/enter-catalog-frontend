@@ -1,10 +1,12 @@
 <div class="container">
   <span class="title">מי אנחנו?</span>
-  <br/>
-  <span class="desc">Enter הוא הסטודיו החברתי הראשון המהווה מסגרת שיקום והכשרה עבור א.נשים עם חסמים תעסוקתיים במקצועות
+  <div #aboutDesc class="desc" [class.expanded]="readMore" (click)="readMore = !readMore">
+    Enter הוא הסטודיו החברתי הראשון המהווה מסגרת שיקום והכשרה עבור א.נשים עם חסמים תעסוקתיים במקצועות
     חדשניים מעולם הדיגיטל: עיצוב, תכנות, פיתוח אתרים ושיווק דיגיטלי.
     <br/>
     מעניקים שירותי גרפיקה, עיצוב, תכנות ופיתוח אתרים ושיווק דיגיטלי עבור עמותות, ארגונים חברתיים ועסקים קטנים.
-  </span>
+  </div>
+  <a *ngIf="isOverflowing && !readMore" (click)="readMore = true"><קראו עוד></a>
+  <a *ngIf="readMore" (click)="readMore = false"><קראו פחות></a>
 </div>
 

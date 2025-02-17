@@ -1,14 +1,27 @@
 .container {
   padding: 0px 43px;
-  max-height: 350px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  line-clamp: 4;
-  overflow: hidden;
+
+  .title {
+    font-size: clamp(1.4rem, 3vw, 4vw);
+  }
+
+  .desc {
+    max-height: 350px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .desc.expanded {
+    -webkit-line-clamp: unset;
+    line-clamp: none;
+  }
+
+  a {
+    font-weight: bold;
+  }
 }
 
-
-.title {
-  font-size: clamp(1.4rem, 3vw, 4vw);
-}
