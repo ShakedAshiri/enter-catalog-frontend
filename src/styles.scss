@@ -54,10 +54,10 @@ mat-form-field.small {
 }
 
 mat-form-field.smaller {
-  --mat-form-field-container-height: clamp(30px, 1vw, 45px);
-  --mat-form-field-container-vertical-padding: clamp(3px, 1vw, 10px);
+  --mat-form-field-container-height: 45px;
+  --mat-form-field-container-vertical-padding: 10px;
   --mat-form-field-container-horizontal-padding: 5px;
-  font-size: clamp(0.7rem, 3vw, 1.1rem);
+  font-size: 1.1rem;
 
   --mdc-filled-text-field-container-color: white;
   --mat-form-field-filled-with-label-container-padding-top: 10px;
