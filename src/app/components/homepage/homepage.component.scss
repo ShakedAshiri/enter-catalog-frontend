@@ -6,7 +6,7 @@
 }
 
 .experts-tagline {
-  font-size: xxx-large;
+  font-size: clamp(1.4rem, 3vw, 4vw);
   text-align: center;
   padding: 10px 0px;
 }
