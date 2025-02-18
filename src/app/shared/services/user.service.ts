@@ -5,7 +5,7 @@ import { Observable, tap } from 'rxjs';
 import { ApiConstants } from '../constants/api.constants';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private workers: User[];
@@ -17,29 +17,36 @@ export class UserService {
   }
 
   public isUserFromBranch(id: number, branchId: number): boolean | null {
-    return this.workers?.some(worker => worker.id === id &&
-                                        worker.branch.id === branchId)
-           ?? null;
-  }
-
-
-  public getUsers():  Observable<User[]>  {
-    return this.http.get<User[]>(ApiConstants.ENDPOINTS.USERS.ALL_USERS);
-  }
-
-  public getWorkers():  Observable<User[]>  {
-    return this.http.get<User[]>(ApiConstants.ENDPOINTS.USERS.WORKERS).pipe(
-      tap(response => this.setWorkers(response))
+    return (
+      this.workers?.some(
+        (worker) => worker.id === id && worker.branch.id === branchId
+      ) ?? null
     );
   }
 
-  public getPublicUserById(id: number):  Observable<User>  {
-    const url = ApiConstants.ENDPOINTS.USERS.PUBLIC_USER.replace(':id', id.toString());
+  public getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(ApiConstants.ENDPOINTS.USERS.ALL_USERS);
+  }
+
+  public getWorkers(): Observable<User[]> {
+    return this.http
+      .get<User[]>(ApiConstants.ENDPOINTS.USERS.WORKERS)
+      .pipe(tap((response) => this.setWorkers(response)));
+  }
+
+  public getPublicUserById(id: number): Observable<User> {
+    const url = ApiConstants.buildUrl(
+      ApiConstants.ENDPOINTS.USERS.PUBLIC_USER,
+      { id: id }
+    );
     return this.http.get<User>(url);
   }
 
-  public getSecureUserById(id: number):  Observable<User>  {
-    const url = ApiConstants.ENDPOINTS.USERS.SECURE_USER.replace(':id', id.toString());
+  public getSecureUserById(id: number): Observable<User> {
+    const url = ApiConstants.buildUrl(
+      ApiConstants.ENDPOINTS.USERS.SECURE_USER,
+      { id: id }
+    );
     return this.http.get<User>(url);
   }
 

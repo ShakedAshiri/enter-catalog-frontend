@@ -1,20 +1,27 @@
 import { UserService } from './user.service';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, firstValueFrom, map, Observable, of, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  firstValueFrom,
+  map,
+  Observable,
+  of,
+  tap,
+} from 'rxjs';
 import { User } from '../models/user.class';
 import { ApiConstants } from '../constants/api.constants';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Role } from '../constants/role';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
   private accessToken: string | null = null;
-
 
   constructor(private http: HttpClient, private userService: UserService) {
     this.restoreSession();
@@ -57,21 +64,21 @@ export class AuthService {
       return of(null);
     }
 
-    return this.http.post<User>(ApiConstants.ENDPOINTS.AUTH.REFRESH, { refreshToken })
+    return this.http
+      .post<User>(ApiConstants.ENDPOINTS.AUTH.REFRESH, { refreshToken })
       .pipe(
-        tap(response => this.setSession(response)),
-        catchError(error => {
+        tap((response) => this.setSession(response)),
+        catchError((error) => {
           this.clearSession();
           throw error;
         })
       );
   }
 
-  login(username: string, password: string):  Observable<User> {
-    return this.http.post<User>(ApiConstants.ENDPOINTS.AUTH.LOGIN, {username, password})
-      .pipe(
-        tap(response => this.setSession(response))
-      );
+  login(username: string, password: string): Observable<User> {
+    return this.http
+      .post<User>(ApiConstants.ENDPOINTS.AUTH.LOGIN, { username, password })
+      .pipe(tap((response) => this.setSession(response)));
   }
 
   logout() {
@@ -83,14 +90,19 @@ export class AuthService {
     this.http.post(ApiConstants.ENDPOINTS.AUTH.LOGOUT, {});
   }
 
-  resetPassword(currentPassword: string, newPassword: string): Observable<User> {
-    return this.http.post<User>(
+  resetPassword(
+    currentPassword: string,
+    newPassword: string
+  ): Observable<User> {
+    let url = ApiConstants.buildUrl(
       ApiConstants.ENDPOINTS.AUTH.RESET_PASSWORD,
-      {
-        currentPassword,
-        newPassword
-      }
+      { id: this.getCurrentUser().id }
     );
+
+    return this.http.patch<User>(url, {
+      currentPassword,
+      newPassword,
+    });
   }
 
   getCurrentUser(): User | null {
@@ -117,10 +129,15 @@ export class AuthService {
     // -OR-
     // for TEAMLEAD if:
     // teamlead is from the same branch as the user we want to perform action on
-    return this.isLoggedIn() &&
-           (this.getCurrentUser().id === forUserId ||
-            this.getCurrentUser().userRole.id === Role.ADMIN ||
-            (this.getCurrentUser().userRole.id === Role.TEAMLEAD &&
-             this.userService.isUserFromBranch(forUserId, this.getCurrentUser().branch?.id)))
+    return (
+      this.isLoggedIn() &&
+      (this.getCurrentUser().id === forUserId ||
+        this.getCurrentUser().userRole.id === Role.ADMIN ||
+        (this.getCurrentUser().userRole.id === Role.TEAMLEAD &&
+          this.userService.isUserFromBranch(
+            forUserId,
+            this.getCurrentUser().branch?.id
+          )))
+    );
   }
 }
