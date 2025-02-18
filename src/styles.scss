@@ -133,3 +133,11 @@ button.btn-light {
 button.btn-secondary {
   background-color: var(--secondary-theme-color);
 }
+
+mat-grid-tile.work-tile {
+  display: flex;
+
+  div.mat-grid-tile-content {
+    align-items: start !important;
+  }
+}

@@ -5,10 +5,11 @@ import { User } from '../../shared/models/user.class';
 import { AuthService } from '../../shared/services/auth.service';
 import { Role } from '../../shared/constants/role';
 import { UserInfoComponent } from './user-info/user-info.component';
+import { UserWorksComponent } from './user-works/user-works.component';
 
 @Component({
   selector: 'app-profile-page',
-  imports: [UserInfoComponent],
+  imports: [UserInfoComponent, UserWorksComponent],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
 })
