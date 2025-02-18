@@ -56,7 +56,6 @@ export class ProfilePageComponent {
     return {
       next: (response: User) => {
         this.profileUser = response;
-        console.log(response);
         let a = this.authService.isActionPermitted(response.id);
         this.isEditable = false;
       },
