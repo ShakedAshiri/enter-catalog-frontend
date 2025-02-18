@@ -118,3 +118,11 @@ button.btn-primary {
 button.btn-light {
   background-color: var(--primary-theme-color-light);
 }
+
+mat-grid-tile.work-tile {
+  display: flex;
+
+  div.mat-grid-tile-content {
+    align-items: start !important;
+  }
+}
