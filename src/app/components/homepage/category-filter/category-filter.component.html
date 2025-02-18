@@ -1,7 +1,7 @@
 <div class="container">
   <mat-form-field class="input-field small" appearance="outline">
     <span matPrefix class="prefix">
-      <button class="btn-clear" matSuffix mat-icon-button aria-label="Clear">
+      <button class="btn-clear btn-search" matSuffix mat-icon-button aria-label="Clear">
         <mat-icon>search</mat-icon>
       </button>
     </span>
@@ -16,14 +16,15 @@
   </mat-form-field>
 
   <div class="category-buttons">
-    <button mat-button class="category"
+    <button mat-button
       *ngFor="let category of categories"
       (click)="toggleCategory(category)"
       [class.active]="selectedCategories.has(category)"
+      [class]="'category--' + category.name"
     >
       {{ category.displayName }}
     </button>
-    <button class="btn-clear" (click)="resetFilter()">
+    <button class="btn-clear btn-close" (click)="resetFilter()">
       <mat-icon>cancel</mat-icon>
     </button>
   </div>

@@ -1,13 +1,13 @@
 :root {
   // Define primary color palette
-  --primary-theme-color: #2196f3;
+  --primary-theme-color: #99e2e8;
   --primary-theme-color-dark: #0b79d0;
-  --primary-theme-color-light: #e3f2fd;
+  --primary-theme-color-light: #8fe0df;
 
   // Define secondary color palette
-  --secondary-theme-color: #f48fb1;
+  --secondary-theme-color: #c1aa4e;
   --secondary-theme-color-dark: #bf5f82;
-  --secondary-theme-color-light: #fce4ec;
+  --secondary-theme-color-light: #e9ad68;
 
   // Define neutral colors
   --primary-white-color: white;
@@ -25,11 +25,8 @@
 
 // Define user cards colors
 $category-colors: (
-  "animator": #2196f3,
-  // primary-light
-  "uiux": #f48fb1,
-  // secondary
-  "software-development": #bf5f82,
-  // secondary-dark
-  "default": #0b79d0 // primary,,
+  "animation": #e9ad68,
+  "uiux": #d88ff6,
+  "software-development": #f49eb1,
+  "default": #6bd2d9
 );

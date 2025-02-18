@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { User } from '../../shared/models/user.class';
 import { Observable } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import { PasswordResetComponent } from '../auth/password-reset/password-reset.component';
 
 @Component({
   selector: 'app-navbar',
@@ -31,10 +32,16 @@ export class NavbarComponent {
   openLoginForm(): void {
     const loginDialogRef = this.popupModalService.open(LoginComponent);
 
-    loginDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // TODO: Display Error? if needed
+    loginDialogRef.afterClosed().subscribe((result: User) => {
+      if (result && result.isPasswordReset) {
+        // Reset password
+        const resetDialogRef = this.popupModalService.open(PasswordResetComponent, {disableClose: true});
+
+        resetDialogRef.afterClosed().subscribe(() => {
+          // TODO: Show error if needed
+        });
       }
+      // TODO: Show error if needed
     });
   }
 
