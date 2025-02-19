@@ -4,17 +4,17 @@
   <span class="experts-tagline">כל המקצוענים <b>במקום אחד</b></span>
 
   <app-category-filter
-    *ngIf="!categoriesServerError"
+    *ngIf="!showCategoriesServerError"
     [categories]="categories"
     (categoryFilterChange)="filterUsersByCategory($event)"
     (textFilterChange)="filterUsersByText($event)"
   ></app-category-filter>
 
   <section class="categories-server-error">
-    <app-server-error *ngIf="categoriesServerError" />
+    <app-server-error *ngIf="showCategoriesServerError" />
   </section>
 
-  <div *ngIf="!isUsersLoaded && !usersServerError" class="spinner">
+  <div *ngIf="!isUsersLoaded && !showUsersServerError" class="spinner">
     <mat-spinner></mat-spinner>
   </div>
 
@@ -41,7 +41,7 @@
   </div>
 
   <section class="users-server-error">
-    <app-server-error *ngIf="usersServerError" />
+    <app-server-error *ngIf="showUsersServerError" />
   </section>
 
   <app-about id="about-section"></app-about>

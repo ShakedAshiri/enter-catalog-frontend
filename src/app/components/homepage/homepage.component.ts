@@ -37,8 +37,8 @@ export class HomepageComponent implements OnInit {
   itemsPerPage: number;
   categories: Category[] = [];
 
-  usersServerError = false;
-  categoriesServerError = false;
+  showUsersServerError = false;
+  showCategoriesServerError = false;
 
   get hasMoreItems(): boolean {
     return this.visibleUsers.length < this.filteredUsers.length;
@@ -74,7 +74,7 @@ export class HomepageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching data:', error);
-        this.usersServerError = true;
+        this.showUsersServerError = true;
       },
     });
 
@@ -84,7 +84,7 @@ export class HomepageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching data:', error);
-        this.categoriesServerError = true;
+        this.showCategoriesServerError = true;
       },
     });
 
