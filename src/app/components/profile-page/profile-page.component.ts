@@ -8,6 +8,7 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import { UserWorksComponent } from './user-works/user-works.component';
 import { NgIf } from '@angular/common';
 import { ServerErrorComponent } from '../../shared/components/server-error/server-error.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-profile-page',
@@ -20,6 +21,8 @@ export class ProfilePageComponent {
   isEditable: boolean = false;
 
   showUserProfileServerError = false;
+
+  isProduction = environment.production;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,7 +54,7 @@ export class ProfilePageComponent {
           .getSecureUserById(+id)
           .subscribe(this.getUserProfile());
       } else {
-        console.error('error in getUserProfile');
+        if (!this.isProduction) console.error('error in getUserProfile');
         this.showUserProfileServerError = true;
       }
     }
@@ -65,7 +68,7 @@ export class ProfilePageComponent {
         this.isEditable = false;
       },
       error: (error) => {
-        console.error('Error fetching data:', error);
+        if (!this.isProduction) console.error('Error fetching data:', error);
         this.showUserProfileServerError = true;
       },
     };

@@ -11,6 +11,7 @@ import { DataTableService } from '../../shared/services/data-table.service';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../shared/components/server-error/server-error.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-homepage',
@@ -39,6 +40,8 @@ export class HomepageComponent implements OnInit {
 
   showCategoriesServerError = false;
   showUsersServerError = false;
+
+  isProduction = environment.production;
 
   get hasMoreItems(): boolean {
     return this.visibleUsers.length < this.filteredUsers.length;
@@ -73,7 +76,7 @@ export class HomepageComponent implements OnInit {
         this.filteredUsers = this.users;
       },
       error: (error) => {
-        console.error('Error fetching data:', error);
+        if (!this.isProduction) console.error('Error fetching data:', error);
         this.showUsersServerError = true;
       },
     });
@@ -83,7 +86,7 @@ export class HomepageComponent implements OnInit {
         this.categories = response;
       },
       error: (error) => {
-        console.error('Error fetching data:', error);
+        if (!this.isProduction) console.error('Error fetching data:', error);
         this.showCategoriesServerError = true;
       },
     });
