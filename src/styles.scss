@@ -121,6 +121,11 @@ button.btn {
   padding: 16.5px 15px;
 }
 
+button.btn-small {
+  border: none;
+  padding: 6px 15px;
+}
+
 button.btn-primary {
   background-color: var(--primary-theme-color);
   color: var(--primary-black-color);
