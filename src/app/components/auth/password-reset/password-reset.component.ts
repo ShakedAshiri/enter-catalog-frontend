@@ -31,7 +31,6 @@ export class PasswordResetComponent extends BaseModalComponent {
 
     this.tempPassControl = this.fb.control('', [Validators.required]);
     this.newPassControl = this.fb.control('', [Validators.required, Validators.minLength(5)]);
-    // TODO: add pattern validation to password?
     this.newPassConfirmControl = this.fb.control('', [Validators.required]);
 
     this.form = this.fb.group({
