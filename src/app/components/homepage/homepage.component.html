@@ -3,11 +3,18 @@
 
   <span class="experts-tagline">כל המקצוענים <b>במקום אחד</b></span>
 
-  <app-category-filter [categories]="categories"
-                       (categoryFilterChange)="filterUsersByCategory($event)"
-                       (textFilterChange)="filterUsersByText($event)"></app-category-filter>
+  <app-category-filter
+    *ngIf="!categoriesServerError"
+    [categories]="categories"
+    (categoryFilterChange)="filterUsersByCategory($event)"
+    (textFilterChange)="filterUsersByText($event)"
+  ></app-category-filter>
 
-  <div *ngIf="!isUsersLoaded" class="spinner">
+  <section class="categories-server-error">
+    <app-server-error *ngIf="categoriesServerError" />
+  </section>
+
+  <div *ngIf="!isUsersLoaded && !usersServerError" class="spinner">
     <mat-spinner></mat-spinner>
   </div>
 
@@ -16,12 +23,26 @@
 
     <div class="fade-overlay" *ngIf="hasMoreItems" (click)="loadMore()">
       <button mat-button class="show-more-button btn-clear">
-        <svg width="47" height="17" viewBox="0 0 47 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M23.5 17L-2.32851e-06 -2.94174e-07L23.5 9.63333L47 3.8147e-06L23.5 17Z" fill="#1E1E1E" fill-opacity="0.83"/>
+        <svg
+          width="47"
+          height="17"
+          viewBox="0 0 47 17"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M23.5 17L-2.32851e-06 -2.94174e-07L23.5 9.63333L47 3.8147e-06L23.5 17Z"
+            fill="#1E1E1E"
+            fill-opacity="0.83"
+          />
         </svg>
       </button>
     </div>
   </div>
+
+  <section class="users-server-error">
+    <app-server-error *ngIf="usersServerError" />
+  </section>
 
   <app-about id="about-section"></app-about>
 

@@ -5,11 +5,12 @@ import { UsersGridComponent } from './users-grid/users-grid.component';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './about/about.component';
 import { Category } from '../../shared/models/data-tables/category.class';
-import { CategoryFilterComponent } from "./category-filter/category-filter.component";
+import { CategoryFilterComponent } from './category-filter/category-filter.component';
 import { UserService } from '../../shared/services/user.service';
 import { DataTableService } from '../../shared/services/data-table.service';
-import { ContactUsComponent } from "./contact-us/contact-us.component";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
+import { ContactUsComponent } from './contact-us/contact-us.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ServerErrorComponent } from '../../shared/components/server-error/server-error.component';
 
 @Component({
   selector: 'app-homepage',
@@ -20,20 +21,24 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
     AboutComponent,
     CategoryFilterComponent,
     ContactUsComponent,
-    MatProgressSpinnerModule
-],
+    MatProgressSpinnerModule,
+    ServerErrorComponent,
+  ],
   templateUrl: './homepage.component.html',
-  styleUrl: './homepage.component.scss'
+  styleUrl: './homepage.component.scss',
 })
 export class HomepageComponent implements OnInit {
-  private users: User[] = []
-  visibleUsers : User[] = [];
-  private filteredUsers : User[] = [];
-  private searchText : string = "";
-  private searchCategories : Set<Category>;
-  itemsPerPageCount : number = 6;
-  itemsPerPage : number;
-  categories : Category[] = [];
+  private users: User[] = [];
+  visibleUsers: User[] = [];
+  private filteredUsers: User[] = [];
+  private searchText: string = '';
+  private searchCategories: Set<Category>;
+  itemsPerPageCount: number = 6;
+  itemsPerPage: number;
+  categories: Category[] = [];
+
+  usersServerError = false;
+  categoriesServerError = false;
 
   get hasMoreItems(): boolean {
     return this.visibleUsers.length < this.filteredUsers.length;
@@ -43,8 +48,10 @@ export class HomepageComponent implements OnInit {
     return this.users.length > 0;
   }
 
-  constructor(public userService: UserService,
-              public dataTableService: DataTableService) {}
+  constructor(
+    public userService: UserService,
+    public dataTableService: DataTableService
+  ) {}
 
   ngOnInit() {
     this.loadInitialItems();
@@ -67,7 +74,8 @@ export class HomepageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching data:', error);
-      }
+        this.usersServerError = true;
+      },
     });
 
     this.dataTableService.getCategories().subscribe({
@@ -76,7 +84,8 @@ export class HomepageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching data:', error);
-      }
+        this.categoriesServerError = true;
+      },
     });
 
     this.itemsPerPage = this.itemsPerPageCount;
@@ -103,7 +112,8 @@ export class HomepageComponent implements OnInit {
     let usersAfterTextFilter = this.searchUsersByText(this.users);
 
     // Step 2: Filter by category only if categoryFilter is not empty
-    this.filteredUsers = categoryFilter.size > 0
+    this.filteredUsers =
+      categoryFilter.size > 0
         ? this.searchUsersByCategory(usersAfterTextFilter)
         : usersAfterTextFilter;
 
@@ -111,17 +121,17 @@ export class HomepageComponent implements OnInit {
     this.updateVisibleUsers();
   }
 
-  private searchUsersByCategory(usersToSearch: User[]) : User[] {
+  private searchUsersByCategory(usersToSearch: User[]): User[] {
     if (!this.searchCategories || this.searchCategories.size === 0) {
       return usersToSearch;
     }
 
     const selectedCategories = Array.from(this.searchCategories);
 
-    return usersToSearch.filter(user =>
-        user.categories.some(userCategory =>
-            selectedCategories.some(category => category.id === userCategory.id)
-        )
+    return usersToSearch.filter((user) =>
+      user.categories.some((userCategory) =>
+        selectedCategories.some((category) => category.id === userCategory.id)
+      )
     );
   }
 
@@ -132,20 +142,22 @@ export class HomepageComponent implements OnInit {
     let usersAfterCategoryFilter = this.searchUsersByCategory(this.users);
 
     // Step 2: Filter by text only if textFilter is not empty
-    this.filteredUsers = textFilter.length > 0
-                        ? this.searchUsersByText(usersAfterCategoryFilter)
-                        : usersAfterCategoryFilter;
+    this.filteredUsers =
+      textFilter.length > 0
+        ? this.searchUsersByText(usersAfterCategoryFilter)
+        : usersAfterCategoryFilter;
 
     // Step 3: Apply pagination separately
     this.updateVisibleUsers();
   }
 
-  private searchUsersByText(usersToSearch: User[]) : User[] {
+  private searchUsersByText(usersToSearch: User[]): User[] {
     return this.searchText.length === 0
-     ? usersToSearch
-     : usersToSearch.filter(user =>
-        user.displayName.includes(this.searchText) ||
-        user.description.includes(this.searchText)
-       )
+      ? usersToSearch
+      : usersToSearch.filter(
+          (user) =>
+            user.displayName.includes(this.searchText) ||
+            user.description.includes(this.searchText)
+        );
   }
 }
