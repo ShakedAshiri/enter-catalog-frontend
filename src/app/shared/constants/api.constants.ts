@@ -18,7 +18,7 @@ export class ApiConstants {
       LOGIN: `${ApiConstants.BASE_URL}/auth/login`,
       LOGOUT: `${ApiConstants.BASE_URL}/auth/logout`,
       REFRESH: `${ApiConstants.BASE_URL}/auth/refresh`,
-      RESET_PASSWORD: `${ApiConstants.BASE_URL}/user/reset-password/:id`,
+      RESET_PASSWORD: `${ApiConstants.BASE_URL}/auth/change-password`,
     },
 
     // Data table endpoints

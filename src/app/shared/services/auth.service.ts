@@ -94,14 +94,8 @@ export class AuthService {
     currentPassword: string,
     newPassword: string
   ): Observable<User> {
-    let url = ApiConstants.buildUrl(
-      ApiConstants.ENDPOINTS.AUTH.RESET_PASSWORD,
-      { id: this.getCurrentUser().id }
-    );
-
-    return this.http.patch<User>(url, {
-      currentPassword,
-      newPassword,
+    return this.http.patch<User>(ApiConstants.ENDPOINTS.AUTH.RESET_PASSWORD, {
+      password: newPassword,
     });
   }
 
