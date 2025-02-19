@@ -16,7 +16,7 @@
 }
 
 .input-details {
-  margin-top: 14px;
+  margin: 14px 0px;
 
   .contact-details-row {
     display: grid;
@@ -29,7 +29,7 @@
   @media (max-width: 768px) {
     .contact-details-row {
       grid-template-columns: 1fr;
-      gap: 0;
+      gap: 10px;
     }
   }
 }
@@ -37,7 +37,6 @@
 .button-container {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 20px;
 
   .btn-send {
     width: 100%;
