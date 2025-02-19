@@ -10,15 +10,15 @@
     (textFilterChange)="filterUsersByText($event)"
   ></app-category-filter>
 
-  <section class="categories-server-error">
-    <app-server-error *ngIf="showCategoriesServerError" />
+  <section class="categories-server-error" *ngIf="showCategoriesServerError">
+    <app-server-error />
   </section>
 
   <div *ngIf="!isUsersLoaded && !showUsersServerError" class="spinner">
     <mat-spinner></mat-spinner>
   </div>
 
-  <div class="grid-container" *ngIf="isUsersLoaded">
+  <div class="grid-container" *ngIf="isUsersLoaded && !showUsersServerError">
     <app-users-grid [users]="visibleUsers"></app-users-grid>
 
     <div class="fade-overlay" *ngIf="hasMoreItems" (click)="loadMore()">
@@ -40,8 +40,8 @@
     </div>
   </div>
 
-  <section class="users-server-error">
-    <app-server-error *ngIf="showUsersServerError" />
+  <section class="users-server-error" *ngIf="showUsersServerError">
+    <app-server-error />
   </section>
 
   <app-about id="about-section"></app-about>

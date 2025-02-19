@@ -37,8 +37,8 @@ export class HomepageComponent implements OnInit {
   itemsPerPage: number;
   categories: Category[] = [];
 
-  showUsersServerError = false;
   showCategoriesServerError = false;
+  showUsersServerError = false;
 
   get hasMoreItems(): boolean {
     return this.visibleUsers.length < this.filteredUsers.length;
