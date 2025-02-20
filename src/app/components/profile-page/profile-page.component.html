@@ -1,4 +1,8 @@
-<div>
+<div *ngIf="profileUser; else loading">
   <app-user-info [user]="profileUser" />
   <app-user-works [userWorks]="profileUser.works" />
 </div>
+
+<ng-template #loading>
+  <mat-spinner class="spinner page-mid"></mat-spinner>
+</ng-template>

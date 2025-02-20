@@ -6,10 +6,17 @@ import { AuthService } from '../../shared/services/auth.service';
 import { Role } from '../../shared/constants/role';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { UserWorksComponent } from './user-works/user-works.component';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-profile-page',
-  imports: [UserInfoComponent, UserWorksComponent],
+  imports: [
+    UserInfoComponent,
+    UserWorksComponent,
+    NgIf,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
 })
