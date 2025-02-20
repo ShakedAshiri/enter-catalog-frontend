@@ -58,10 +58,15 @@ export class EditableDirective implements AfterViewInit {
 
   ngAfterViewInit() {
     const inputElements = this.el.nativeElement.querySelectorAll('input');
+    const textareaElements = this.el.nativeElement.querySelectorAll('textarea');
 
     // Set pointer cursor if editable
-    if (inputElements && inputElements[0] && this.isEditable) {
-      this.renderer.setStyle(inputElements[0], 'cursor', 'pointer');
+    if (this.isEditable) {
+      if (inputElements && inputElements[0]) {
+        this.renderer.setStyle(inputElements[0], 'cursor', 'pointer');
+      } else if (textareaElements && textareaElements[0]) {
+        this.renderer.setStyle(textareaElements[0], 'cursor', 'pointer');
+      }
     }
   }
 
