@@ -17,6 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     UserInfoComponent,
     UserWorksComponent,
     NgIf,
+    ServerErrorComponent,
     MatProgressSpinnerModule,
   ],
   templateUrl: './profile-page.component.html',
