@@ -17,6 +17,11 @@ body::-webkit-scrollbar {
   src: url('/fonts/OpenSansHebrew-Regular.ttf') format("opentype");
 }
 
+.spinner {
+  display: flex;
+  margin: auto;
+}
+
 mat-form-field.light {
   --mdc-filled-text-field-container-color: white;
 
