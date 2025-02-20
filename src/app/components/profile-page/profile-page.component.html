@@ -1,8 +1,15 @@
-<div *ngIf="profileUser; else loading">
-  <app-user-info [user]="profileUser" />
-  <app-user-works [userWorks]="profileUser.works" />
+<div>
+  <section class="show-user-profile" *ngIf="!showUserProfileServerError && profileUser">
+    <app-user-info [user]="profileUser" />
+    <app-user-works [userWorks]="profileUser.works" />
+  </section>
+  <section
+    class="show-user-profile-server-error"
+    *ngIf="showUserProfileServerError"
+  >
+    <app-server-error />
+  </section>
+  <section *ngIf="!profileUser && !showUserProfileServerError">
+    <mat-spinner class="spinner page-mid"></mat-spinner>
+  </section>
 </div>
-
-<ng-template #loading>
-  <mat-spinner class="spinner page-mid"></mat-spinner>
-</ng-template>
