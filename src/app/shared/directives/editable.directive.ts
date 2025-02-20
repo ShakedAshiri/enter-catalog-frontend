@@ -5,8 +5,10 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
   Renderer2,
+  SimpleChanges,
   ViewContainerRef,
 } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
@@ -14,12 +16,14 @@ import { MatIcon } from '@angular/material/icon';
 @Directive({
   selector: '[appEditable]',
 })
-export class EditableDirective implements AfterViewInit {
+export class EditableDirective implements AfterViewInit, OnChanges {
   private editIcon: ComponentRef<MatIcon>;
   private actionsContainer: HTMLElement;
   private isEditing = false;
 
   @Input() isEditable = true;
+  @Input() iconTop: number = 5;
+  @Input() iconRight: number = -5;
   @Output() startEdit = new EventEmitter<void>();
   @Output() saveEdit = new EventEmitter<void>();
   @Output() cancelEdit = new EventEmitter<void>();
@@ -31,9 +35,6 @@ export class EditableDirective implements AfterViewInit {
   ) {
     // Setup host element
     this.renderer.setStyle(this.el.nativeElement, 'position', 'relative');
-
-    // Create edit icon
-    this.createEditIcon();
 
     // Add click listener to host element
     this.renderer.listen(this.el.nativeElement, 'click', () => {
@@ -54,6 +55,11 @@ export class EditableDirective implements AfterViewInit {
         this.hideEditIcon();
       }
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Create edit icon - only after receiving input
+    this.createEditIcon();
   }
 
   ngAfterViewInit() {
@@ -80,8 +86,8 @@ export class EditableDirective implements AfterViewInit {
 
     // Set styles
     this.renderer.setStyle(iconElement, 'position', 'absolute');
-    this.renderer.setStyle(iconElement, 'top', '5px');
-    this.renderer.setStyle(iconElement, 'right', '-5px');
+    this.renderer.setStyle(iconElement, 'top', this.iconTop + 'px');
+    this.renderer.setStyle(iconElement, 'right', this.iconRight + 'px');
     this.renderer.setStyle(iconElement, 'opacity', '0');
     this.renderer.setStyle(iconElement, 'overflow', 'visible');
     this.renderer.setStyle(
