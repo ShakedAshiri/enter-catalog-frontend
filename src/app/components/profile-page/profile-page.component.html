@@ -1,4 +1,12 @@
 <div>
-  <app-user-info [user]="profileUser" />
-  <app-user-works [userWorks]="profileUser.works" />
+  <section class="show-user-profile" *ngIf="!showUserProfileServerError">
+    <app-user-info [user]="profileUser" />
+    <app-user-works [userWorks]="profileUser.works" />
+  </section>
+  <section
+    class="show-user-profile-server-error"
+    *ngIf="showUserProfileServerError"
+  >
+    <app-server-error />
+  </section>
 </div>
