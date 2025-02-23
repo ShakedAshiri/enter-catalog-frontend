@@ -1,34 +1,36 @@
 <div class="container">
   <span class="title">בואו לעבוד איתנו!</span>
-  <span class="subtitle">השאירו את הפרטים שלכם וצוות החממה יצור אתכם קשר בהקדם!</span>
+  <span class="subtitle"
+    >השאירו את הפרטים שלכם וצוות החממה יצור אתכם קשר בהקדם!</span
+  >
   <span class="input-details">
     <div class="contact-details-row">
       <mat-form-field class="smaller light" appearance="outline">
         <mat-label>שם מלא</mat-label>
-        <input matInput type="text">
+        <input matInput type="text" />
       </mat-form-field>
 
       <mat-form-field class="smaller light" appearance="outline">
         <mat-label>אימייל</mat-label>
-        <input matInput type="email">
+        <input matInput type="email" />
       </mat-form-field>
 
       <mat-form-field class="smaller light" appearance="outline">
         <mat-label>סיבת הפנייה</mat-label>
         <mat-select multiple panelClass="white-select">
-          <!--@for (topping of toppingList; track topping) {
-            <mat-option [value]="topping">{{topping}}</mat-option>
-        }-->
-          <mat-option value="reason1">סיבה 1</mat-option>
-          <mat-option value="reason2">סיבה 2</mat-option>
-          <mat-option value="reason3">סיבה 3</mat-option>
+          <mat-option
+            *ngFor="let applyReason of applyReasons"
+            [value]="applyReason.id"
+            >{{ applyReason.name }}</mat-option
+          >
         </mat-select>
       </mat-form-field>
 
       <div class="button-container">
-        <button class="btn btn-secondary btn-send" mat-stroked-button>יאללה לעבודה!</button>
+        <button class="btn btn-secondary btn-send" mat-stroked-button>
+          יאללה לעבודה!
+        </button>
       </div>
     </div>
-
   </span>
 </div>
