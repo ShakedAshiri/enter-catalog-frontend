@@ -24,6 +24,7 @@ export class ApiConstants {
     // Data table endpoints
     DATA_TABLES: {
       CATEGORIES: `${ApiConstants.BASE_URL}/data-table/categories`,
+      APPLY_REASONS: `${ApiConstants.BASE_URL}data-table/apply-reasons`,
     },
   } as const;
 
