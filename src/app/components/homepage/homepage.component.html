@@ -47,7 +47,15 @@
   <app-about id="about-section"></app-about>
 
   <app-contact-us
+    *ngIf="!showApplyReasonsServerError"
     [applyReasons]="applyReasons"
     class="contact-us"
   ></app-contact-us>
+
+  <section
+    class="apply-reasons-server-error"
+    *ngIf="showApplyReasonsServerError"
+  >
+    <app-server-error />
+  </section>
 </div>
