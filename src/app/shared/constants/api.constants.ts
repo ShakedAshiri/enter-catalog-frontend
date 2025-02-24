@@ -11,6 +11,7 @@ export class ApiConstants {
       PUBLIC_USER: `${ApiConstants.BASE_URL}/user/public/:id`,
       SECURE_USER: `${ApiConstants.BASE_URL}/user/:id`,
       PROFILE: `${ApiConstants.BASE_URL}/user/profile`,
+      UPDATE: `${ApiConstants.BASE_URL}/user/update/:id`
     },
 
     // Authentication endpoints

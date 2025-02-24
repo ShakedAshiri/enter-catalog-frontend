@@ -15,7 +15,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { EditableDirective } from '../../../shared/directives/editable.directive';
-import { AuthService } from '../../../shared/services/auth.service';
+import { UserService } from '../../../shared/services/user.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-user-info',
@@ -61,7 +62,7 @@ export class UserInfoComponent {
     Validators.maxLength(500),
   ]);
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(private fb: FormBuilder, private userService: UserService) {}
 
   ngOnInit() {
     this.userInfoForm = this.fb.group({
@@ -97,8 +98,19 @@ export class UserInfoComponent {
 
   saveEdit(fieldName: string) {
     if (this.userInfoForm.get(fieldName).valid) {
-      // TODO: save
       const newValue = this.userInfoForm.get(fieldName).value;
+      const updatedUserData = { [fieldName]: newValue };
+
+      this.userService.updateUser(this.user.id, updatedUserData).subscribe({
+        next: (result) => {
+          delete this.previousValues[fieldName];
+        },
+        error: (error) => {
+          if (!environment.production)
+            console.error('Error fetching data:', error);
+          // TODO: show error to user
+        },
+      });
     }
   }
 

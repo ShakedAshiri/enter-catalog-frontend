@@ -53,4 +53,11 @@ export class UserService {
   public getUserProfile() {
     return this.http.get<User>(ApiConstants.ENDPOINTS.USERS.PROFILE);
   }
+
+  public updateUser(id: number, userData: Partial<User>): Observable<User> {
+    const url = ApiConstants.buildUrl(ApiConstants.ENDPOINTS.USERS.UPDATE, {
+      id: id,
+    });
+    return this.http.patch<User>(url, userData);
+  }
 }
