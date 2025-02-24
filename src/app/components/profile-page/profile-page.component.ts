@@ -71,8 +71,9 @@ export class ProfilePageComponent {
     return {
       next: (response: User) => {
         this.profileUser = response;
-        let a = this.authService.isActionPermitted(response.id);
-        this.isEditable = false;
+        this.authService.isActionPermitted(response.id).subscribe(isAllowed => {
+          this.isEditable = isAllowed;
+        });
       },
       error: (error) => {
         if (!this.isProduction) console.error('Error fetching data:', error);

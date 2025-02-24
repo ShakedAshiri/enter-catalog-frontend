@@ -1,6 +1,6 @@
 <div>
   <section class="show-user-profile" *ngIf="!showUserProfileServerError && profileUser">
-    <app-user-info [user]="profileUser" />
+    <app-user-info [user]="profileUser" [isEditable]="isEditable"/>
     <app-user-works [userWorks]="profileUser.works" />
   </section>
   <section
