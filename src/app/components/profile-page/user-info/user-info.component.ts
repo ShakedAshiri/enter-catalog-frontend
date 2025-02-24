@@ -14,6 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { EditableDirective } from '../../../shared/directives/editable.directive';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-user-info',
@@ -25,12 +27,15 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatCardModule,
     MatIconModule,
+    EditableDirective,
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
 })
 export class UserInfoComponent {
   @Input({ required: true }) user!: User;
+  @Input() isEditable: boolean = false;
+  previousValues: { [key: string]: any } = {};
 
   userInfoForm: FormGroup;
   usernameControl = new FormControl('', [
@@ -56,7 +61,7 @@ export class UserInfoComponent {
     Validators.maxLength(500),
   ]);
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   ngOnInit() {
     this.userInfoForm = this.fb.group({
@@ -66,18 +71,14 @@ export class UserInfoComponent {
       tagline: this.taglineControl,
       description: this.descriptionControl,
     });
-  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['user'] && changes['user'].currentValue) {
-      this.userInfoForm.setValue({
-        username: this.user.username,
-        displayName: this.user.displayName,
-        image: this.user.image,
-        tagline: this.user.tagline,
-        description: this.user.description,
-      });
-    }
+    this.userInfoForm.setValue({
+      username: this.user.username,
+      displayName: this.user.displayName,
+      image: this.user.image,
+      tagline: this.user.tagline,
+      description: this.user.description,
+    });
   }
 
   onSubmit(form: FormGroup) {
@@ -87,5 +88,24 @@ export class UserInfoComponent {
     console.log('Image', form.value.image);
     console.log('Tagline', form.value.tagline);
     console.log('Description', form.value.description);
+  }
+
+  startEditing(fieldName: string) {
+    // Store the current value in case we need to cancel
+    this.previousValues[fieldName] = this.userInfoForm.get(fieldName).value;
+  }
+
+  saveEdit(fieldName: string) {
+    if (this.userInfoForm.get(fieldName).valid) {
+      // TODO: save
+      const newValue = this.userInfoForm.get(fieldName).value;
+    }
+  }
+
+  cancelEdit(fieldName: string) {
+    // Revert to previous value
+    this.userInfoForm.get(fieldName).setValue(this.previousValues[fieldName]);
+
+    delete this.previousValues[fieldName];
   }
 }

@@ -1,7 +1,13 @@
 <div>
   <form [formGroup]="userInfoForm" (ngSubmit)="onSubmit(userInfoForm)">
     <mat-card class="card">
-      <div class="card-img-container">
+      <div
+        class="card-img-container"
+        appEditable
+        [isEditable]="isEditable"
+        [iconTop]="29"
+        [iconRight]="29"
+      >
         <img
           class="card-img"
           [src]="
@@ -10,22 +16,46 @@
               : 'user.png'
           "
         />
-        <mat-icon svgIcon="edit-pencil" />
       </div>
       <div class="card-text-container">
         <mat-form-field
           class="displayName small transparent"
           appearance="outline"
+          appEditable
+          [isEditable]="isEditable"
+          (startEdit)="startEditing('displayName')"
+          (saveEdit)="saveEdit('displayName')"
+          (cancelEdit)="cancelEdit('displayName')"
         >
           <div class="card-title-container">
-            <input matInput [formControl]="displayNameControl" />
-            <mat-icon svgIcon="edit-pencil" />
+            <input
+              matInput
+              [formControl]="displayNameControl"
+              [readonly]="!isEditable"
+            />
           </div>
         </mat-form-field>
-        <mat-form-field class="tagline small transparent" appearance="outline">
-          <input matInput [formControl]="taglineControl" />
+        <mat-form-field
+          class="tagline small transparent"
+          appearance="outline"
+          appEditable
+          [isEditable]="isEditable"
+          (startEdit)="startEditing('tagline')"
+          (saveEdit)="saveEdit('tagline')"
+          (cancelEdit)="cancelEdit('tagline')"
+        >
+          <input
+            matInput
+            [formControl]="taglineControl"
+            [readonly]="!isEditable"
+          />
         </mat-form-field>
         <mat-form-field
+          appEditable
+          [isEditable]="isEditable"
+          (startEdit)="startEditing('description')"
+          (saveEdit)="saveEdit('description')"
+          (cancelEdit)="cancelEdit('description')"
           class="description small transparent"
           appearance="outline"
         >
@@ -33,6 +63,7 @@
             matInput
             rows="3"
             [formControl]="descriptionControl"
+            [readonly]="!isEditable"
           ></textarea>
         </mat-form-field>
       </div>
