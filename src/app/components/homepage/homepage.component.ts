@@ -12,6 +12,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../shared/components/server-error/server-error.component';
 import { environment } from '../../../environments/environment';
+import { ApplyReason } from '../../shared/models/data-tables/applyReason.class';
 
 @Component({
   selector: 'app-homepage',
@@ -37,9 +38,11 @@ export class HomepageComponent implements OnInit {
   itemsPerPageCount: number = 6;
   itemsPerPage: number;
   categories: Category[] = [];
+  applyReasons: ApplyReason[] = [];
 
   showCategoriesServerError = false;
   showUsersServerError = false;
+  showApplyReasonsServerError = false;
 
   isProduction = environment.production;
 
@@ -88,6 +91,17 @@ export class HomepageComponent implements OnInit {
       error: (error) => {
         if (!this.isProduction) console.error('Error fetching data:', error);
         this.showCategoriesServerError = true;
+      },
+    });
+
+    this.dataTableService.getApplyReasons().subscribe({
+      next: (response: ApplyReason[]) => {
+        this.applyReasons = response;
+      },
+
+      error: (error) => {
+        if (!this.isProduction) console.error(`Error fetching data:`, error);
+        this.showApplyReasonsServerError = true;
       },
     });
 
