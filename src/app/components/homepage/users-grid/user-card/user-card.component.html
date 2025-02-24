@@ -1,5 +1,12 @@
 <div class="card-container" [routerLink]="['/profile', user.id]">
-  <div class="avatar" [style.backgroundImage]="'url(' + 'user.png' + ')'"></div>
+  <div
+    class="avatar"
+    [style.backgroundImage]="
+      user.image !== 'avatar.png'
+        ? 'url(' + user.image + ')'
+        : 'url(' + 'user.png' + ')'
+    "
+  ></div>
   <mat-card [className]="getCategoryClass(user.categories[0])">
     <mat-card-title class="displayname">{{ user?.displayName }}</mat-card-title>
     <mat-card-subtitle class="tagline">{{ user?.tagline }}</mat-card-subtitle>
