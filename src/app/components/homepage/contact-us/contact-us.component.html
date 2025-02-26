@@ -54,6 +54,11 @@
           [disabled]="!contactUsForm.valid || isButtonDisabled"
         >
           יאללה לעבודה!
+          <mat-progress-spinner
+            *ngIf="isFormSubmitting"
+            [mode]="'indeterminate'"
+            [diameter]="15"
+          />
         </button>
       </div>
     </div>

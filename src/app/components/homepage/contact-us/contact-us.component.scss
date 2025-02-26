@@ -46,3 +46,14 @@
 mat-form-field {
   max-height: 49px !important;
 }
+
+button {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-progress-spinner {
+    margin-right: 10px;
+  }
+}

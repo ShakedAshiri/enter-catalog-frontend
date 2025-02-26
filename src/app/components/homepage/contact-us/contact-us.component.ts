@@ -3,7 +3,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ApplyReason } from '../../../shared/models/data-tables/applyReason.class';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import {
   FormBuilder,
   FormControl,
@@ -12,7 +12,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { ContactUsService } from '../../../shared/services/contact-us.service';
-import { ContactUsForm } from '../../../shared/models/contactUsForm.class';
+import { PopupModalService } from '../../../shared/services/popup-modal.service';
+import { SuccessModalComponent } from './success-modal/success-modal.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-contact-us',
@@ -20,7 +22,9 @@ import { ContactUsForm } from '../../../shared/models/contactUsForm.class';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
     NgFor,
+    NgIf,
     ReactiveFormsModule,
   ],
   templateUrl: './contact-us.component.html',
@@ -29,6 +33,7 @@ import { ContactUsForm } from '../../../shared/models/contactUsForm.class';
 export class ContactUsComponent {
   @Input({ required: true }) applyReasons!: ApplyReason[];
   isButtonDisabled = false;
+  isFormSubmitting = false;
 
   contactUsForm: FormGroup;
   nameControl = new FormControl('', [
@@ -44,6 +49,7 @@ export class ContactUsComponent {
 
   constructor(
     private contactUsService: ContactUsService,
+    private popupModalService: PopupModalService,
     private fb: FormBuilder
   ) {}
 
@@ -70,16 +76,20 @@ export class ContactUsComponent {
   }
 
   submit() {
+    this.isFormSubmitting = true;
     this.isButtonDisabled = true;
 
     const {
       value: { name, email, applyReasons },
     } = this.contactUsForm;
 
+    this.contactUsForm.reset();
+
     this.contactUsService
       .submitContactUsForm({ name, email, applyReasons })
       .subscribe(() => {
-        window.location.reload();
+        this.popupModalService.open(SuccessModalComponent);
+        this.isFormSubmitting = false;
       });
   }
 }
