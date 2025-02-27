@@ -15,6 +15,7 @@ import { ContactUsService } from '../../../shared/services/contact-us.service';
 import { PopupModalService } from '../../../shared/services/popup-modal.service';
 import { SuccessModalComponent } from './success-modal/success-modal.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 
 @Component({
   selector: 'app-contact-us',
@@ -87,9 +88,15 @@ export class ContactUsComponent {
 
     this.contactUsService
       .submitContactUsForm({ name, email, applyReasons })
-      .subscribe(() => {
-        this.popupModalService.open(SuccessModalComponent);
-        this.isFormSubmitting = false;
+      .subscribe({
+        next: () => {
+          this.popupModalService.open(SuccessModalComponent);
+          this.isFormSubmitting = false;
+        },
+        error: () => {
+          this.popupModalService.open(ServerErrorComponent);
+          this.isFormSubmitting = false;
+        },
       });
   }
 }
