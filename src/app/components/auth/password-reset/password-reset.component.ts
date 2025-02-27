@@ -1,11 +1,20 @@
 import { Component, inject } from '@angular/core';
 import { BaseModalComponent } from '../../../shared/components/base-modal/base-modal.component';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalWrapperComponent } from '../../../shared/components/modal-wrapper/modal-wrapper.component';
 import { MatInputModule } from '@angular/material/input';
+import { environment } from '../../../../environments/environment';
+import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
+import { HiddenSubmitComponent } from '../../../shared/components/hidden-submit/hidden-submit.component';
 
 @Component({
   selector: 'app-password-reset',
@@ -14,10 +23,12 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatDialogModule,
     ModalWrapperComponent,
-    MatInputModule
+    MatInputModule,
+    ServerErrorComponent,
+    HiddenSubmitComponent,
   ],
   templateUrl: './password-reset.component.html',
-  styleUrl: './password-reset.component.scss'
+  styleUrl: './password-reset.component.scss',
 })
 export class PasswordResetComponent extends BaseModalComponent {
   private fb = inject(FormBuilder);
@@ -26,30 +37,45 @@ export class PasswordResetComponent extends BaseModalComponent {
   newPassControl: FormControl;
   newPassConfirmControl: FormControl;
 
+  isProduction = environment.production;
+  showPasswordResetServerError = false;
+
   constructor(private authService: AuthService) {
     super();
 
     this.tempPassControl = this.fb.control('', [Validators.required]);
-    this.newPassControl = this.fb.control('', [Validators.required, Validators.minLength(5)]);
+    this.newPassControl = this.fb.control('', [
+      Validators.required,
+      Validators.minLength(5),
+    ]);
     this.newPassConfirmControl = this.fb.control('', [Validators.required]);
 
-    this.form = this.fb.group({
-      tempPass: this.tempPassControl,
-      newPass: this.newPassControl,
-      newPassConfirm: this.newPassConfirmControl
-    }, { validators: this.passwordMatchValidator });
+    this.form = this.fb.group(
+      {
+        tempPass: this.tempPassControl,
+        newPass: this.newPassControl,
+        newPassConfirm: this.newPassConfirmControl,
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
 
   submit(): void {
     if (this.form.valid) {
-      this.authService.resetPassword(this.form.value.tempPass, this.form.value.newPass).subscribe({
-        next: () => {
-          this.close(this.form.value);
-        },
-        error: (error) => {
-          console.error('Error fetching data:', error);
-        }
-      });
+      this.authService
+        .resetPassword(this.form.value.tempPass, this.form.value.newPass)
+        .subscribe({
+          next: () => {
+            this.close(this.form.value);
+          },
+          error: (error) => {
+            if (!this.isProduction) {
+              console.error('Error fetching data:', error);
+            }
+
+            this.showPasswordResetServerError = true;
+          },
+        });
     }
   }
 
@@ -67,11 +93,12 @@ export class PasswordResetComponent extends BaseModalComponent {
     // Clear the error if passwords match
     const currentErrors = confirmControl.errors;
     if (currentErrors) {
-      delete currentErrors["passwordMismatch"];
-      confirmControl.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+      delete currentErrors['passwordMismatch'];
+      confirmControl.setErrors(
+        Object.keys(currentErrors).length ? currentErrors : null
+      );
     }
 
     return null;
   }
 }
-

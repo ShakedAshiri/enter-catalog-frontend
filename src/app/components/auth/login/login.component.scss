@@ -7,4 +7,12 @@ form {
 .btn-login {
   padding: 5px 30px;
   font-size: 20px;
+  width: 112px;
+  height: 34px;
+}
+
+.login-server-error {
+  p {
+    color: red;
+  }
 }

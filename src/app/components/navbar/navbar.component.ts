@@ -13,19 +13,23 @@ import { PasswordResetComponent } from '../auth/password-reset/password-reset.co
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatToolbarModule,
-            MatButtonModule,
-            MatIconModule,
-            CommonModule,
-            RouterModule],
+  imports: [
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    CommonModule,
+    RouterModule,
+  ],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
   user$: Observable<User | null>;
 
-  constructor(private popupModalService: PopupModalService,
-              public authService: AuthService) {
+  constructor(
+    private popupModalService: PopupModalService,
+    public authService: AuthService
+  ) {
     this.user$ = this.authService.currentUser$;
   }
 
@@ -35,7 +39,10 @@ export class NavbarComponent {
     loginDialogRef.afterClosed().subscribe((result: User) => {
       if (result && result.isPasswordReset) {
         // Reset password
-        const resetDialogRef = this.popupModalService.open(PasswordResetComponent, {disableClose: true});
+        const resetDialogRef = this.popupModalService.open(
+          PasswordResetComponent,
+          { disableClose: true }
+        );
 
         resetDialogRef.afterClosed().subscribe(() => {
           // TODO: Show error if needed
