@@ -76,15 +76,15 @@ export class ContactUsComponent {
     return invalidNumbers ? { invalidNumber: true } : null;
   }
 
-  submit() {
+  onSubmit(form: FormGroup) {
     this.isFormSubmitting = true;
     this.isButtonDisabled = true;
 
     const {
       value: { name, email, applyReasons },
-    } = this.contactUsForm;
+    } = form;
 
-    this.contactUsForm.reset();
+    form.reset();
 
     this.contactUsService
       .submitContactUsForm({ name, email, applyReasons })
