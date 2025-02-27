@@ -26,6 +26,11 @@ export class ApiConstants {
       CATEGORIES: `${ApiConstants.BASE_URL}/data-table/categories`,
       APPLY_REASONS: `${ApiConstants.BASE_URL}/data-table/apply-reasons`,
     },
+
+    // Email endpoints
+    EMAIL: {
+      CONTACT_US: `${ApiConstants.BASE_URL}/email/contact-us`,
+    },
   } as const;
 
   static buildUrl(
