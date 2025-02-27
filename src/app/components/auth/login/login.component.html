@@ -35,7 +35,9 @@
       [disabled]="!form.valid"
       (click)="submit()"
     >
-      אישור
+      @if(isFormSubmitting) {
+      <mat-progress-spinner [mode]="'indeterminate'" [diameter]="15" />
+      } @else { אישור }
     </button>
   </ng-template>
 </app-modal-wrapper>

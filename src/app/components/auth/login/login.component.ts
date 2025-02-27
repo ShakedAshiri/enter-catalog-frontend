@@ -15,6 +15,7 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { environment } from '../../../../environments/environment';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { HiddenSubmitComponent } from '../../../shared/components/hidden-submit/hidden-submit.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +27,7 @@ import { HiddenSubmitComponent } from '../../../shared/components/hidden-submit/
     MatInputModule,
     ServerErrorComponent,
     HiddenSubmitComponent,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -44,6 +46,8 @@ export class LoginComponent extends BaseModalComponent {
 
   isProduction = environment.production;
   showLoginServerError = false;
+
+  isFormSubmitting = false;
   //TODO: set minLength
 
   constructor(private authService: AuthService) {
@@ -57,10 +61,13 @@ export class LoginComponent extends BaseModalComponent {
 
   submit(): void {
     if (this.form.valid) {
+      this.isFormSubmitting = true;
+
       this.authService
         .login(this.form.value.name, this.form.value.password)
         .subscribe({
           next: (result) => {
+            this.isFormSubmitting = false;
             this.close(result);
           },
           error: (error) => {
@@ -68,6 +75,7 @@ export class LoginComponent extends BaseModalComponent {
               console.error('Error fetching data:', error);
             }
 
+            this.isFormSubmitting = false;
             this.showLoginServerError = true;
           },
         });
