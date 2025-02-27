@@ -41,7 +41,7 @@
             >{{ applyReason.name }}</mat-option
           >
         </mat-select>
-        @if (applyReasonsControl.hasError('required')) {
+        @if(contactUsForm.get('applyReasons')?.invalid) {
         <mat-error>יש להזין סיבת פנייה</mat-error>
         }
       </mat-form-field>
