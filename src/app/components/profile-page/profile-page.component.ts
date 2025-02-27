@@ -9,6 +9,7 @@ import { UserWorksComponent } from './user-works/user-works.component';
 import { NgIf } from '@angular/common';
 import { ServerErrorComponent } from '../../shared/components/server-error/server-error.component';
 import { environment } from '../../../environments/environment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile-page',
@@ -17,6 +18,7 @@ import { environment } from '../../../environments/environment';
   styleUrl: './profile-page.component.scss',
 })
 export class ProfilePageComponent {
+  private subscriptions: Subscription[] = [];
   profileUser: User;
   isEditable: boolean = false;
 
@@ -33,11 +35,14 @@ export class ProfilePageComponent {
 
     if (id) {
       // If worker (for a different worker) or logged out user
+
+      let sub: Subscription;
+
       if (
         !this.authService.isLoggedIn() ||
         this.authService.getCurrentUser().userRole.id === Role.WORKER
       ) {
-        this.userService
+        sub = this.userService
           .getPublicUserById(+id)
           .subscribe(this.getUserProfile());
       }
@@ -46,16 +51,22 @@ export class ProfilePageComponent {
         this.authService.isLoggedIn() &&
         this.authService.getCurrentUser().id === +id
       ) {
-        this.userService.getUserProfile().subscribe(this.getUserProfile());
+        sub = this.userService
+          .getUserProfile()
+          .subscribe(this.getUserProfile());
       }
       // If admin or team-lead from the same branch
       else if (this.authService.isActionPermitted(+id)) {
-        this.userService
+        sub = this.userService
           .getSecureUserById(+id)
           .subscribe(this.getUserProfile());
       } else {
         if (!this.isProduction) console.error('error in getUserProfile');
         this.showUserProfileServerError = true;
+      }
+
+      if (sub) {
+        this.subscriptions.push(sub);
       }
     }
   }
@@ -72,5 +83,9 @@ export class ProfilePageComponent {
         this.showUserProfileServerError = true;
       },
     };
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

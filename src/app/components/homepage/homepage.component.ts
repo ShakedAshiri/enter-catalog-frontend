@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../shared/components/server-error/server-error.component';
 import { environment } from '../../../environments/environment';
 import { ApplyReason } from '../../shared/models/data-tables/applyReason.class';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-homepage',
@@ -30,6 +31,8 @@ import { ApplyReason } from '../../shared/models/data-tables/applyReason.class';
   styleUrl: './homepage.component.scss',
 })
 export class HomepageComponent implements OnInit {
+  private subscriptions: Subscription[] = [];
+
   private users: User[] = [];
   visibleUsers: User[] = [];
   private filteredUsers: User[] = [];
@@ -64,46 +67,52 @@ export class HomepageComponent implements OnInit {
   }
 
   loadInitialItems() {
-    this.userService.getWorkers().subscribe({
-      next: (response: User[]) => {
-        //Suffle users
-        // TODO: move to backend?
-        for (let i = response.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [response[i], response[j]] = [response[j], response[i]];
-        }
+    this.subscriptions.push(
+      this.userService.getWorkers().subscribe({
+        next: (response: User[]) => {
+          //Suffle users
+          // TODO: move to backend?
+          for (let i = response.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [response[i], response[j]] = [response[j], response[i]];
+          }
 
-        this.users = response;
+          this.users = response;
 
-        this.visibleUsers = this.users.slice(0, this.itemsPerPage);
-        this.filteredUsers = this.users;
-      },
-      error: (error) => {
-        if (!this.isProduction) console.error('Error fetching data:', error);
-        this.showUsersServerError = true;
-      },
-    });
+          this.visibleUsers = this.users.slice(0, this.itemsPerPage);
+          this.filteredUsers = this.users;
+        },
+        error: (error) => {
+          if (!this.isProduction) console.error('Error fetching data:', error);
+          this.showUsersServerError = true;
+        },
+      })
+    );
 
-    this.dataTableService.getCategories().subscribe({
-      next: (response: Category[]) => {
-        this.categories = response;
-      },
-      error: (error) => {
-        if (!this.isProduction) console.error('Error fetching data:', error);
-        this.showCategoriesServerError = true;
-      },
-    });
+    this.subscriptions.push(
+      this.dataTableService.getCategories().subscribe({
+        next: (response: Category[]) => {
+          this.categories = response;
+        },
+        error: (error) => {
+          if (!this.isProduction) console.error('Error fetching data:', error);
+          this.showCategoriesServerError = true;
+        },
+      })
+    );
 
-    this.dataTableService.getApplyReasons().subscribe({
-      next: (response: ApplyReason[]) => {
-        this.applyReasons = response;
-      },
+    this.subscriptions.push(
+      this.dataTableService.getApplyReasons().subscribe({
+        next: (response: ApplyReason[]) => {
+          this.applyReasons = response;
+        },
 
-      error: (error) => {
-        if (!this.isProduction) console.error(`Error fetching data:`, error);
-        this.showApplyReasonsServerError = true;
-      },
-    });
+        error: (error) => {
+          if (!this.isProduction) console.error(`Error fetching data:`, error);
+          this.showApplyReasonsServerError = true;
+        },
+      })
+    );
 
     this.itemsPerPage = this.itemsPerPageCount;
   }
@@ -176,5 +185,9 @@ export class HomepageComponent implements OnInit {
             user.displayName.includes(this.searchText) ||
             user.description.includes(this.searchText)
         );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
