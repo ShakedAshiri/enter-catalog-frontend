@@ -24,6 +24,7 @@ export class EditableDirective implements AfterViewInit, OnChanges {
   @Input() isEditable = true;
   @Input() iconTop: number = 5;
   @Input() iconRight: number = -5;
+  @Input() isMultiEdit: boolean = false;
   @Output() startEdit = new EventEmitter<void>();
   @Output() saveEdit = new EventEmitter<void>();
   @Output() cancelEdit = new EventEmitter<void>();
@@ -38,22 +39,20 @@ export class EditableDirective implements AfterViewInit, OnChanges {
 
     // Add click listener to host element
     this.renderer.listen(this.el.nativeElement, 'click', () => {
-      if (this.isEditable && !this.isEditing) {
+      if (this.isEditable && (this.isMultiEdit || !this.isEditing)) {
         this.enterEditMode();
       }
     });
 
     // Add hover listeners
     this.renderer.listen(this.el.nativeElement, 'mouseenter', () => {
-      if (this.isEditable && !this.isEditing) {
+      if (this.isEditable && (this.isMultiEdit || !this.isEditing)) {
         this.showEditIcon();
       }
     });
 
     this.renderer.listen(this.el.nativeElement, 'mouseleave', () => {
-      if (!this.isEditing) {
-        this.hideEditIcon();
-      }
+      this.hideEditIcon();
     });
   }
 
@@ -159,9 +158,17 @@ export class EditableDirective implements AfterViewInit, OnChanges {
   }
 
   private enterEditMode() {
-    this.isEditing = true;
-    this.hideEditIcon();
-    this.createActionButtons();
+    // Start editing if not already
+    if (!this.isEditing) {
+      this.isEditing = true;
+      this.createActionButtons();
+    }
+
+    // Hide edit button only if not multi edit
+    if (!this.isMultiEdit) {
+      this.hideEditIcon();
+    }
+
     this.startEdit.emit();
   }
 
