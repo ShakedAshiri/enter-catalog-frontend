@@ -6,7 +6,7 @@
 
   <ng-container *ngIf="user$ | async as user; else loginTemplate">
     <div class="logged-in">
-      <img [src]="user.image || 'user.png'" class="avatar">
+      <img [src]="user.image || 'avatar.png'" class="avatar">
       <span class="display-name">{{ user.displayName }}</span>
       <div class="actions">
         <a [routerLink]="['/profile', user.id]">ניהול גלריה</a> |
