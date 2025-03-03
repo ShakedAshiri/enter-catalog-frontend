@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ModalWrapperComponent } from '../../../shared/components/modal-wrapper/modal-wrapper.component';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../../shared/services/auth.service';
+import { Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { HiddenSubmitComponent } from '../../../shared/components/hidden-submit/hidden-submit.component';
@@ -33,6 +34,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent extends BaseModalComponent {
+  private subscriptions: Subscription[] = [];
+
   private fb = inject(FormBuilder);
   form: FormGroup;
   nameControl: FormControl = new FormControl('', [
@@ -62,7 +65,7 @@ export class LoginComponent extends BaseModalComponent {
     if (this.form.valid) {
       this.isFormSubmitting = true;
 
-      this.authService
+      const sub = this.authService
         .login(this.form.value.name, this.form.value.password)
         .subscribe({
           next: (result) => {
@@ -78,6 +81,11 @@ export class LoginComponent extends BaseModalComponent {
             this.showLoginServerError = true;
           },
         });
+      this.subscriptions.push(sub);
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

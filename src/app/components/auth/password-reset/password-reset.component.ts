@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalWrapperComponent } from '../../../shared/components/modal-wrapper/modal-wrapper.component';
 import { MatInputModule } from '@angular/material/input';
+import { Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { HiddenSubmitComponent } from '../../../shared/components/hidden-submit/hidden-submit.component';
@@ -33,6 +34,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './password-reset.component.scss',
 })
 export class PasswordResetComponent extends BaseModalComponent {
+  private subscriptions: Subscription[] = [];
+
   private fb = inject(FormBuilder);
   form: FormGroup;
   tempPassControl: FormControl;
@@ -68,7 +71,7 @@ export class PasswordResetComponent extends BaseModalComponent {
     if (this.form.valid) {
       this.isFormSubmitting = true;
 
-      this.authService
+      const sub = this.authService
         .resetPassword(this.form.value.tempPass, this.form.value.newPass)
         .subscribe({
           next: () => {
@@ -84,6 +87,7 @@ export class PasswordResetComponent extends BaseModalComponent {
             this.showPasswordResetServerError = true;
           },
         });
+      this.subscriptions.push(sub);
     }
   }
 
@@ -108,5 +112,9 @@ export class PasswordResetComponent extends BaseModalComponent {
     }
 
     return null;
+  }
+
+  ngOnDestory() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
