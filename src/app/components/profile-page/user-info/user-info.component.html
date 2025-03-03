@@ -5,17 +5,23 @@
         class="card-img-container"
         appEditable
         [isEditable]="isEditable"
-        [iconTop]="29"
-        [iconRight]="29"
+        [isMultiEdit]="true"
+        (startEdit)="fileInput.click()"
+        (saveEdit)="saveEdit('image')"
+        (cancelEdit)="cancelEdit('image')"
       >
-        <img
-          class="card-img"
-          [src]="
-            userInfoForm.get('image')?.value !== 'avatar.png'
-              ? userInfoForm.get('image')?.value
-              : 'user.png'
-          "
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          style="display: none"
+          (change)="onImageFileSelected($event)"
         />
+        <img class="card-img" [src]="imageControl.value || 'avatar.png'" />
+
+        <div *ngIf="imageErrorMessage" class="error-message">
+          {{ imageErrorMessage }}
+        </div>
       </div>
       <div class="card-text-container">
         <mat-form-field

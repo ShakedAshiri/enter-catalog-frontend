@@ -1,3 +1,4 @@
+import { PopupModalService } from './../../../shared/services/popup-modal.service';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { User } from '../../../shared/models/user.class';
 
@@ -17,6 +18,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { EditableDirective } from '../../../shared/directives/editable.directive';
 import { UserService } from '../../../shared/services/user.service';
 import { environment } from '../../../../environments/environment';
+import { NgIf } from '@angular/common';
+import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 
 @Component({
   selector: 'app-user-info',
@@ -28,6 +31,7 @@ import { environment } from '../../../../environments/environment';
     MatCardModule,
     MatIconModule,
     EditableDirective,
+    NgIf,
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
@@ -36,6 +40,7 @@ export class UserInfoComponent {
   @Input({ required: true }) user!: User;
   @Input() isEditable: boolean = false;
   previousValues: { [key: string]: any } = {};
+  imageErrorMessage: string | null = null;
 
   userInfoForm: FormGroup;
   usernameControl = new FormControl('', [
@@ -61,7 +66,11 @@ export class UserInfoComponent {
     Validators.maxLength(500),
   ]);
 
-  constructor(private fb: FormBuilder, private userService: UserService) {}
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private popupModalService: PopupModalService
+  ) {}
 
   ngOnInit() {
     this.userInfoForm = this.fb.group({
@@ -97,6 +106,8 @@ export class UserInfoComponent {
 
   saveEdit(fieldName: string) {
     if (this.userInfoForm.get(fieldName).valid) {
+      this.imageErrorMessage = null;
+
       const newValue = this.userInfoForm.get(fieldName).value;
       const updatedUserData = { [fieldName]: newValue };
 
@@ -107,7 +118,9 @@ export class UserInfoComponent {
         error: (error) => {
           if (!environment.production)
             console.error('Error fetching data:', error);
-          // TODO: show error to user
+
+          this.popupModalService.open(ServerErrorComponent);
+          this.cancelEdit(fieldName);
         },
       });
     }
@@ -118,5 +131,54 @@ export class UserInfoComponent {
     this.userInfoForm.get(fieldName).setValue(this.previousValues[fieldName]);
 
     delete this.previousValues[fieldName];
+
+    this.imageErrorMessage = null;
+  }
+
+  onImageFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+
+    // Check if file is an image
+    if (!file.type.match(/image\/*/)) {
+      this.imageErrorMessage = 'נא לבחור קובץ תמונה';
+      return;
+    }
+
+    // Check aspect ratio
+    this.checkAspectRatio(file).then((isValidRatio) => {
+      if (isValidRatio) {
+        this.imageErrorMessage = null;
+        const reader = new FileReader();
+
+        reader.onload = (e: any) => {
+          this.imageControl.setValue(e.target.result);
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        this.imageErrorMessage = 'יש לבחור תמונה בעלת יחס רוחב-גובה 1:1';
+        // Reset the file input
+        input.value = '';
+      }
+    });
+  }
+
+  private checkAspectRatio(file: File): Promise<boolean> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const aspectRatio = img.width / img.height;
+        // Allow a small tolerance for aspect ratio (e.g., 0.95 to 1.05)
+        const isValid = Math.abs(aspectRatio - 1) < 0.05;
+        resolve(isValid);
+      };
+      img.src = URL.createObjectURL(file);
+    });
   }
 }
