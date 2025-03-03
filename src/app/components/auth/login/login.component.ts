@@ -41,14 +41,13 @@ export class LoginComponent extends BaseModalComponent {
   ]);
   passwordControl: FormControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(3),
+    Validators.minLength(5),
   ]);
 
   isProduction = environment.production;
   showLoginServerError = false;
 
   isFormSubmitting = false;
-  //TODO: set minLength
 
   constructor(private authService: AuthService) {
     super();
