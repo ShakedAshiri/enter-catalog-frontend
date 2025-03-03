@@ -22,7 +22,6 @@ import { environment } from '../../../../environments/environment';
   selector: 'app-user-info',
   imports: [
     ReactiveFormsModule,
-    ReactiveFormsModule,
     MatFormFieldModule,
     MatDialogModule,
     MatInputModule,
