@@ -44,11 +44,8 @@ export class NavbarComponent {
           { disableClose: true }
         );
 
-        resetDialogRef.afterClosed().subscribe(() => {
-          // TODO: Show error if needed
-        });
+        resetDialogRef.afterClosed().subscribe(() => {});
       }
-      // TODO: Show error if needed
     });
   }
 
