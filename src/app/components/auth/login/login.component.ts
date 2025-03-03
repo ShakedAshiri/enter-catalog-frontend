@@ -26,7 +26,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatDialogModule,
     ModalWrapperComponent,
     MatInputModule,
-    bugfix/memory-leak,
     ServerErrorComponent,
     HiddenSubmitComponent,
     MatProgressSpinnerModule,
