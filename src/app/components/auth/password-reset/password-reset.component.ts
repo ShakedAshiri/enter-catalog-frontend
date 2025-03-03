@@ -13,6 +13,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ModalWrapperComponent } from '../../../shared/components/modal-wrapper/modal-wrapper.component';
 import { MatInputModule } from '@angular/material/input';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
+import { HiddenSubmitComponent } from '../../../shared/components/hidden-submit/hidden-submit.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-password-reset',
@@ -22,6 +26,9 @@ import { Subscription } from 'rxjs';
     MatDialogModule,
     ModalWrapperComponent,
     MatInputModule,
+    ServerErrorComponent,
+    HiddenSubmitComponent,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './password-reset.component.html',
   styleUrl: './password-reset.component.scss',
@@ -34,6 +41,11 @@ export class PasswordResetComponent extends BaseModalComponent {
   tempPassControl: FormControl;
   newPassControl: FormControl;
   newPassConfirmControl: FormControl;
+
+  isProduction = environment.production;
+  showPasswordResetServerError = false;
+
+  isFormSubmitting = false;
 
   constructor(private authService: AuthService) {
     super();
@@ -57,14 +69,22 @@ export class PasswordResetComponent extends BaseModalComponent {
 
   submit(): void {
     if (this.form.valid) {
+      this.isFormSubmitting = true;
+
       const sub = this.authService
         .resetPassword(this.form.value.tempPass, this.form.value.newPass)
         .subscribe({
           next: () => {
+            this.isFormSubmitting = false;
             this.close(this.form.value);
           },
           error: (error) => {
-            console.error('Error fetching data:', error);
+            if (!this.isProduction) {
+              console.error('Error fetching data:', error);
+            }
+
+            this.isFormSubmitting = false;
+            this.showPasswordResetServerError = true;
           },
         });
       this.subscriptions.push(sub);

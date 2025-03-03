@@ -13,6 +13,10 @@ import { ModalWrapperComponent } from '../../../shared/components/modal-wrapper/
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
+import { HiddenSubmitComponent } from '../../../shared/components/hidden-submit/hidden-submit.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +26,10 @@ import { Subscription } from 'rxjs';
     MatDialogModule,
     ModalWrapperComponent,
     MatInputModule,
+    bugfix/memory-leak,
+    ServerErrorComponent,
+    HiddenSubmitComponent,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -37,9 +45,13 @@ export class LoginComponent extends BaseModalComponent {
   ]);
   passwordControl: FormControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(3),
+    Validators.minLength(5),
   ]);
-  //TODO: set minLength
+
+  isProduction = environment.production;
+  showLoginServerError = false;
+
+  isFormSubmitting = false;
 
   constructor(private authService: AuthService) {
     super();
@@ -52,14 +64,22 @@ export class LoginComponent extends BaseModalComponent {
 
   submit(): void {
     if (this.form.valid) {
+      this.isFormSubmitting = true;
+
       const sub = this.authService
         .login(this.form.value.name, this.form.value.password)
         .subscribe({
           next: (result) => {
+            this.isFormSubmitting = false;
             this.close(result);
           },
           error: (error) => {
-            console.error('Error fetching data:', error);
+            if (!this.isProduction) {
+              console.error('Error fetching data:', error);
+            }
+
+            this.isFormSubmitting = false;
+            this.showLoginServerError = true;
           },
         });
       this.subscriptions.push(sub);

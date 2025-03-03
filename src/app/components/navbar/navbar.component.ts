@@ -46,13 +46,10 @@ export class NavbarComponent {
           { disableClose: true }
         );
 
-        const resetSub = resetDialogRef.afterClosed().subscribe(() => {
-          // TODO: Show error if needed
-        });
-
+        const resetSub = resetDialogRef.afterClosed().subscribe(() => {});
+        
         this.subscriptions.push(resetSub);
       }
-      // TODO: Show error if needed
     });
 
     this.subscriptions.push(loginSub);
