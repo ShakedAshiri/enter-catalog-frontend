@@ -77,7 +77,11 @@ export class AuthService {
 
   login(username: string, password: string): Observable<User> {
     return this.http
-      .post<User>(ApiConstants.ENDPOINTS.AUTH.LOGIN, { username, password })
+      .post<User>(
+        ApiConstants.ENDPOINTS.AUTH.LOGIN,
+        { username, password },
+        { withCredentials: true }
+      )
       .pipe(tap((response) => this.setSession(response)));
   }
 
@@ -87,7 +91,11 @@ export class AuthService {
 
     this.currentUserSubject.next(null);
 
-    this.http.post(ApiConstants.ENDPOINTS.AUTH.LOGOUT, {});
+    this.http.post(
+      ApiConstants.ENDPOINTS.AUTH.LOGOUT,
+      {},
+      { withCredentials: true }
+    );
   }
 
   resetPassword(
