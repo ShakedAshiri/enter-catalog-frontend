@@ -17,6 +17,9 @@ import { MatIcon } from '@angular/material/icon';
   selector: '[appEditable]',
 })
 export class EditableDirective implements AfterViewInit, OnChanges {
+  private unlistenToSaveButton: () => void;
+  private unlistenToCancelButton: () => void;
+
   private editIcon: ComponentRef<MatIcon>;
   private actionsContainer: HTMLElement;
   private isEditing = false;
@@ -123,11 +126,15 @@ export class EditableDirective implements AfterViewInit, OnChanges {
     this.renderer.addClass(saveButton, 'btn-small');
     this.renderer.addClass(saveButton, 'btn-primary');
     this.renderer.setProperty(saveButton, 'innerHTML', 'אישור');
-    this.renderer.listen(saveButton, 'click', (event: Event) => {
-      event.stopPropagation();
-      this.exitEditMode();
-      this.saveEdit.emit();
-    });
+    this.unlistenToSaveButton = this.renderer.listen(
+      saveButton,
+      'click',
+      (event: Event) => {
+        event.stopPropagation();
+        this.exitEditMode();
+        this.saveEdit.emit();
+      }
+    );
 
     // Create Cancel button
     const cancelButton = this.renderer.createElement('button');
@@ -135,11 +142,15 @@ export class EditableDirective implements AfterViewInit, OnChanges {
     this.renderer.addClass(cancelButton, 'btn-small');
     this.renderer.addClass(cancelButton, 'btn-primary');
     this.renderer.setProperty(cancelButton, 'innerHTML', 'ביטול');
-    this.renderer.listen(cancelButton, 'click', (event: Event) => {
-      event.stopPropagation();
-      this.exitEditMode();
-      this.cancelEdit.emit();
-    });
+    this.unlistenToCancelButton = this.renderer.listen(
+      cancelButton,
+      'click',
+      (event: Event) => {
+        event.stopPropagation();
+        this.exitEditMode();
+        this.cancelEdit.emit();
+      }
+    );
 
     // Add buttons to container
     this.renderer.appendChild(this.actionsContainer, saveButton);
@@ -177,6 +188,21 @@ export class EditableDirective implements AfterViewInit, OnChanges {
     if (this.actionsContainer) {
       this.renderer.removeChild(this.el.nativeElement, this.actionsContainer);
       this.actionsContainer = null;
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.unlistenToSaveButton) {
+      this.unlistenToSaveButton();
+    }
+
+    if (this.unlistenToCancelButton) {
+      this.unlistenToCancelButton();
+    }
+
+    if (this.editIcon) {
+      this.editIcon.destroy();
+      this.editIcon = null;
     }
   }
 }

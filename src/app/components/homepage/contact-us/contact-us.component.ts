@@ -16,6 +16,7 @@ import { PopupModalService } from '../../../shared/services/popup-modal.service'
 import { SuccessModalComponent } from './success-modal/success-modal.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact-us',
@@ -33,6 +34,8 @@ import { ServerErrorComponent } from '../../../shared/components/server-error/se
 })
 export class ContactUsComponent {
   @Input({ required: true }) applyReasons!: ApplyReason[];
+
+  private subscriptions: Subscription[] = []; // Store multiple subscriptions
   isButtonDisabled = false;
   isFormSubmitting = false;
 
@@ -86,7 +89,7 @@ export class ContactUsComponent {
 
     form.reset();
 
-    this.contactUsService
+    const sub = this.contactUsService
       .submitContactUsForm({ name, email, applyReasons })
       .subscribe({
         next: () => {
@@ -98,5 +101,11 @@ export class ContactUsComponent {
           this.isFormSubmitting = false;
         },
       });
+
+    this.subscriptions.push(sub);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

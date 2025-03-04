@@ -7,7 +7,7 @@ import { LoginComponent } from '../auth/login/login.component';
 import { AuthService } from '../../shared/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { User } from '../../shared/models/user.class';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { PasswordResetComponent } from '../auth/password-reset/password-reset.component';
 
@@ -24,6 +24,8 @@ import { PasswordResetComponent } from '../auth/password-reset/password-reset.co
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
+  private subscriptions: Subscription[] = [];
+
   user$: Observable<User | null>;
 
   constructor(
@@ -36,7 +38,7 @@ export class NavbarComponent {
   openLoginForm(): void {
     const loginDialogRef = this.popupModalService.open(LoginComponent);
 
-    loginDialogRef.afterClosed().subscribe((result: User) => {
+    const loginSub = loginDialogRef.afterClosed().subscribe((result: User) => {
       if (result && result.isPasswordReset) {
         // Reset password
         const resetDialogRef = this.popupModalService.open(
@@ -44,12 +46,20 @@ export class NavbarComponent {
           { disableClose: true }
         );
 
-        resetDialogRef.afterClosed().subscribe(() => {});
+        const resetSub = resetDialogRef.afterClosed().subscribe(() => {});
+        
+        this.subscriptions.push(resetSub);
       }
     });
+
+    this.subscriptions.push(loginSub);
   }
 
   logout(): void {
     this.authService.logout();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
