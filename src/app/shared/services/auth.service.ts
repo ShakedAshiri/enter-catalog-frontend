@@ -78,11 +78,7 @@ export class AuthService {
 
   login(username: string, password: string): Observable<User> {
     return this.http
-      .post<User>(
-        ApiConstants.ENDPOINTS.AUTH.LOGIN,
-        { username, password },
-        { withCredentials: true }
-      )
+      .post<User>(ApiConstants.ENDPOINTS.AUTH.LOGIN, { username, password })
       .pipe(tap((response) => this.setSession(response)));
   }
 
@@ -92,11 +88,7 @@ export class AuthService {
 
     this.currentUserSubject.next(null);
 
-    this.http.post(
-      ApiConstants.ENDPOINTS.AUTH.LOGOUT,
-      {},
-      { withCredentials: true }
-    );
+    this.http.post(ApiConstants.ENDPOINTS.AUTH.LOGOUT, {});
   }
 
   resetPassword(
@@ -133,21 +125,26 @@ export class AuthService {
     // for TEAMLEAD if:
     // teamlead is from the same branch as the user we want to perform action on
     return this.currentUserSubject.pipe(
-      switchMap(currentUser => {
+      switchMap((currentUser) => {
         if (!currentUser) return of(false);
 
-        if (currentUser.id === forUserId || currentUser.userRole.id === Role.ADMIN) {
+        if (
+          currentUser.id === forUserId ||
+          currentUser.userRole.id === Role.ADMIN
+        ) {
           return of(true);
         }
 
         if (currentUser.userRole.id === Role.TEAMLEAD) {
-          let isFromBranch = this.userService.isUserFromBranch(forUserId, currentUser.branch?.id);
+          let isFromBranch = this.userService.isUserFromBranch(
+            forUserId,
+            currentUser.branch?.id
+          );
           return of(isFromBranch);
         }
 
         return of(false);
       })
     );
-
   }
 }
