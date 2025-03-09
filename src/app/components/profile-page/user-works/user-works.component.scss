@@ -16,8 +16,18 @@ div.no-results {
   }
 }
 
+.works-header {
+  margin-right: 35px;
+  margin-top: 20px;
+
+  span {
+    margin: 20px;
+    font-size: larger;
+  }
+}
+
 mat-grid-list {
-  margin-top: 98px;
+  margin-top: 15px;
   margin-bottom: 47px;
   margin-right: 50px;
   margin-left: 50px;
