@@ -10,10 +10,17 @@ import { NgIf } from '@angular/common';
 import { ServerErrorComponent } from '../../shared/components/server-error/server-error.component';
 import { environment } from '../../../environments/environment';
 import { Subscription } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-profile-page',
-  imports: [UserInfoComponent, UserWorksComponent, NgIf, ServerErrorComponent],
+  imports: [
+    UserInfoComponent,
+    UserWorksComponent,
+    NgIf,
+    ServerErrorComponent,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
 })
@@ -75,8 +82,9 @@ export class ProfilePageComponent {
     return {
       next: (response: User) => {
         this.profileUser = response;
-        let a = this.authService.isActionPermitted(response.id);
-        this.isEditable = false;
+        this.authService.isActionPermitted(response.id).subscribe(isAllowed => {
+          this.isEditable = isAllowed;
+        });
       },
       error: (error) => {
         if (!this.isProduction) console.error('Error fetching data:', error);

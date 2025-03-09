@@ -7,6 +7,7 @@ import {
   map,
   Observable,
   of,
+  switchMap,
   tap,
 } from 'rxjs';
 import { User } from '../models/user.class';
@@ -77,11 +78,7 @@ export class AuthService {
 
   login(username: string, password: string): Observable<User> {
     return this.http
-      .post<User>(
-        ApiConstants.ENDPOINTS.AUTH.LOGIN,
-        { username, password },
-        { withCredentials: true }
-      )
+      .post<User>(ApiConstants.ENDPOINTS.AUTH.LOGIN, { username, password })
       .pipe(tap((response) => this.setSession(response)));
   }
 
@@ -91,11 +88,7 @@ export class AuthService {
 
     this.currentUserSubject.next(null);
 
-    this.http.post(
-      ApiConstants.ENDPOINTS.AUTH.LOGOUT,
-      {},
-      { withCredentials: true }
-    );
+    this.http.post(ApiConstants.ENDPOINTS.AUTH.LOGOUT, {});
   }
 
   resetPassword(
@@ -124,22 +117,34 @@ export class AuthService {
    * @param forUserId user to perform action on
    * @returns is permitted
    */
-  isActionPermitted(forUserId: number) {
+  isActionPermitted(forUserId: number): Observable<boolean> {
     // Action permitted for current user
     // -OR-
     // ADMIN
     // -OR-
     // for TEAMLEAD if:
     // teamlead is from the same branch as the user we want to perform action on
-    return (
-      this.isLoggedIn() &&
-      (this.getCurrentUser().id === forUserId ||
-        this.getCurrentUser().userRole.id === Role.ADMIN ||
-        (this.getCurrentUser().userRole.id === Role.TEAMLEAD &&
-          this.userService.isUserFromBranch(
+    return this.currentUserSubject.pipe(
+      switchMap((currentUser) => {
+        if (!currentUser) return of(false);
+
+        if (
+          currentUser.id === forUserId ||
+          currentUser.userRole.id === Role.ADMIN
+        ) {
+          return of(true);
+        }
+
+        if (currentUser.userRole.id === Role.TEAMLEAD) {
+          let isFromBranch = this.userService.isUserFromBranch(
             forUserId,
-            this.getCurrentUser().branch?.id
-          )))
+            currentUser.branch?.id
+          );
+          return of(isFromBranch);
+        }
+
+        return of(false);
+      })
     );
   }
 }

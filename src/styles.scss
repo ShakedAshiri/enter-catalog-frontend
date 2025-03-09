@@ -14,7 +14,12 @@ body::-webkit-scrollbar {
 
 @font-face {
   font-family: "open sans hebrew";
-  src: url('/fonts/OpenSansHebrew-Regular.ttf') format("opentype");
+  src: url("/fonts/OpenSansHebrew-Regular.ttf") format("opentype");
+}
+
+.spinner {
+  display: flex;
+  margin: auto;
 }
 
 mat-form-field.light {
@@ -30,8 +35,9 @@ mat-form-field.light {
     background-color: white;
   }
 
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded
-  .mdc-floating-label--float-above {
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+    .mdc-notched-outline--upgraded
+    .mdc-floating-label--float-above {
     transform: translateY(-25px) scale(0.7);
   }
 
@@ -80,7 +86,8 @@ mat-form-field.small {
   --mat-form-field-container-vertical-padding: 0.5vw;
   font-size: clamp(0.8rem, 1vw, 2vw);
 
-  .mat-mdc-form-field-icon-suffix, .mat-mdc-form-field-icon-prefix {
+  .mat-mdc-form-field-icon-suffix,
+  .mat-mdc-form-field-icon-prefix {
     padding: 0px 0px 0px 1px;
   }
 }
@@ -111,14 +118,20 @@ mat-form-field.smaller {
   --mat-select-panel-background-color: white;
 }
 
-button.btn-clear {
-  background: none;
-  border: none;
-}
-
 button.btn {
   border: none;
   padding: 16.5px 15px;
+  cursor: pointer;
+}
+
+button.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+button.btn-clear {
+  background: none;
+  border: none;
 }
 
 button.btn-small {
