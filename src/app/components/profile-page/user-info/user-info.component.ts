@@ -115,7 +115,9 @@ export class UserInfoComponent {
   saveEdit(fieldName: string) {
     if (this.userInfoForm.get(fieldName).valid) {
       this.imageErrorMessage = null;
-      this.imageValid = true;
+      // If the user wants to later change image,
+      // by default the save btn should be disabled
+      this.imageValid = false;
 
       const newValue = this.userInfoForm.get(fieldName).value;
       const updatedUserData = { [fieldName]: newValue };
@@ -142,7 +144,9 @@ export class UserInfoComponent {
     delete this.previousValues[fieldName];
 
     this.imageErrorMessage = null;
-    this.imageValid = true;
+    // If the user wants to later change image,
+    // by default the save btn should be disabled
+    this.imageValid = false;
   }
 
   onImageFileSelected(event: Event) {
