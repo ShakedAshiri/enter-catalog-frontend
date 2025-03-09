@@ -19,9 +19,15 @@
         <ng-template #imagePlaceHolder>
           <div class="image-placeholder"></div>
         </ng-template>
-        <div class="work-text">
+        <div
+          class="work-text"
+          [dir]="languageService.isHebrew(work.title) ? 'rtl' : 'ltr'"
+        >
           <p class="title">{{ work.title }}</p>
-          <p class="desc">
+          <p
+            class="desc"
+            [dir]="languageService.isHebrew(work.description) ? 'rtl' : 'ltr'"
+          >
             {{ work.description }}
           </p>
         </div>

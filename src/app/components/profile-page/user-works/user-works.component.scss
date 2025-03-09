@@ -85,18 +85,6 @@ mat-grid-list {
       line-clamp: 4;
       -webkit-box-orient: vertical;
       position: relative;
-
-      /* Fading effect */
-      mask-image: linear-gradient(
-        to left,
-        rgba(0, 0, 0, 1) 50%,
-        rgba(0, 0, 0, 0)
-      );
-      -webkit-mask-image: linear-gradient(
-        to left,
-        rgba(0, 0, 0, 1) 50%,
-        rgba(0, 0, 0, 0)
-      );
     }
   }
 }
