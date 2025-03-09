@@ -74,8 +74,8 @@ export class EditableDirective implements AfterViewInit, OnChanges {
     const inputElements = this.el.nativeElement.querySelectorAll('input');
     const textareaElements = this.el.nativeElement.querySelectorAll('textarea');
 
-    // Set pointer cursor if editable
     if (this.isEditable) {
+      // Set pointer cursor if editable
       if (inputElements && inputElements[0]) {
         this.renderer.setStyle(inputElements[0], 'cursor', 'pointer');
       } else if (textareaElements && textareaElements[0]) {
@@ -140,6 +140,8 @@ export class EditableDirective implements AfterViewInit, OnChanges {
       this.saveButton,
       'click',
       (event: Event) => {
+        console.log('SAVE');
+        this.saveButton.focus(); // Remove focus from host element
         event.stopPropagation();
         this.exitEditMode();
         this.saveEdit.emit();
@@ -196,6 +198,7 @@ export class EditableDirective implements AfterViewInit, OnChanges {
 
   private exitEditMode() {
     this.isEditing = false;
+
     if (this.actionsContainer) {
       this.renderer.removeChild(this.el.nativeElement, this.actionsContainer);
       this.actionsContainer = null;
