@@ -22,9 +22,21 @@
             <mat-icon svgIcon="edit-pencil" />
           </div>
         </mat-form-field>
+        @if(user.isAvailable) {
+        <div class="tagline-and-is-avaliable">
+          <div class="is-available">זמין.ה לעבודה</div>
+          <mat-form-field
+            class="tagline small transparent"
+            appearance="outline"
+          >
+            <input matInput [formControl]="taglineControl" />
+          </mat-form-field>
+        </div>
+        } @else {
         <mat-form-field class="tagline small transparent" appearance="outline">
           <input matInput [formControl]="taglineControl" />
         </mat-form-field>
+        }
         <mat-form-field
           class="description small transparent"
           appearance="outline"
