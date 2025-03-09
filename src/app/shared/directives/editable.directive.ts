@@ -140,7 +140,6 @@ export class EditableDirective implements AfterViewInit, OnChanges {
       this.saveButton,
       'click',
       (event: Event) => {
-        console.log('SAVE');
         this.saveButton.focus(); // Remove focus from host element
         event.stopPropagation();
         this.exitEditMode();
