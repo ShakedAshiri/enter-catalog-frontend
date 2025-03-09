@@ -4,27 +4,34 @@
   </div>
 </ng-template>
 
-<mat-grid-list
-  *ngIf="userWorks.length > 0; else fallback"
-  cols="2"
-  rowHeight="235px"
->
-  <mat-grid-tile class="work-tile" *ngFor="let work of userWorks">
-    <div class="work-container">
-      <img
-        *ngIf="work.images.length > 0; else imagePlaceHolder"
-        [src]="work.images[0].url"
-        alt=""
-      />
-      <ng-template #imagePlaceHolder>
-        <div class="image-placeholder"></div>
-      </ng-template>
-      <div class="work-text">
-        <p class="title">{{ work.title }}</p>
-        <p class="desc">
-          {{ work.description }}
-        </p>
+<section class="works" *ngIf="userWorks.length > 0; else fallback">
+  <div class="works-header">
+    <span>קטלוג עבודות:</span>
+  </div>
+  <mat-grid-list cols="2" rowHeight="235px">
+    <mat-grid-tile class="work-tile" *ngFor="let work of userWorks">
+      <div class="work-container">
+        <img
+          *ngIf="work.images.length > 0; else imagePlaceHolder"
+          [src]="work.images[0].url"
+          alt=""
+        />
+        <ng-template #imagePlaceHolder>
+          <div class="image-placeholder"></div>
+        </ng-template>
+        <div
+          class="work-text"
+          [dir]="languageService.isHebrew(work.title) ? 'rtl' : 'ltr'"
+        >
+          <p class="title">{{ work.title }}</p>
+          <p
+            class="desc"
+            [dir]="languageService.isHebrew(work.description) ? 'rtl' : 'ltr'"
+          >
+            {{ work.description }}
+          </p>
+        </div>
       </div>
-    </div>
-  </mat-grid-tile>
-</mat-grid-list>
+    </mat-grid-tile>
+  </mat-grid-list>
+</section>

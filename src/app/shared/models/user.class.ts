@@ -1,8 +1,8 @@
-import { Branch } from "./data-tables/branch.class";
-import { Category } from "./data-tables/category.class";
-import { Status } from "./data-tables/status.class";
-import { UserRole } from "./data-tables/userRole.class";
-import { UserWork } from "./userWork.class";
+import { Branch } from './data-tables/branch.class';
+import { Category } from './data-tables/category.class';
+import { Status } from './data-tables/status.class';
+import { UserRole } from './data-tables/userRole.class';
+import { UserWork } from './userWork.class';
 
 export class User {
   constructor(
@@ -13,6 +13,7 @@ export class User {
     public userRole: UserRole,
     public isPasswordReset: boolean,
     public status: Status,
+    public isAvailable: boolean,
     public tagline?: string,
     public description?: string,
     public image?: string,
@@ -21,7 +22,4 @@ export class User {
     public works?: UserWork[],
     public token?: string
   ) {}
-
 }
-
-

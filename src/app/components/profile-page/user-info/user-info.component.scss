@@ -79,3 +79,25 @@ mat-form-field.description {
     margin-top: -5px;
   }
 }
+
+.tagline-and-is-avaliable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .is-available {
+    width: 174px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 15px;
+    background-color: var(--primary-light-green-color);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 25px;
+    margin-left: -18px;
+  }
+}
