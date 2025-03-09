@@ -56,48 +56,46 @@
           <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
           }
         </mat-form-field>
-        @if(user.isAvailable) {
         <div class="tagline-and-is-avaliable">
+          @if(user.isAvailable) {
           <div class="is-available">זמין.ה לעבודה</div>
+          }
           <mat-form-field
             class="tagline small transparent"
             appearance="outline"
+            appEditable
+            [isEditable]="isEditable"
+            [isSaveDisabled]="!!taglineControl.errors"
+            [iconTop]="-5"
+            [iconRight]="17"
+            (startEdit)="startEditing('tagline')"
+            (saveEdit)="saveEdit('tagline')"
+            (cancelEdit)="cancelEdit('tagline')"
           >
-            <input matInput [formControl]="taglineControl" />
+            <input
+              matInput
+              [formControl]="taglineControl"
+              [readonly]="!isEditable"
+            />
+            @if (taglineControl.hasError('required') ||
+            taglineControl.hasError('noOnlySpaces')) {
+            <mat-error>יש להזין כותרת משנה</mat-error>
+            } @if (taglineControl.hasError('minlength')) {
+            <mat-error>כותרת משנה חייבת להיות באורך לפחות 2 תווים</mat-error>
+            } @if (taglineControl.hasError('maxlength')) {
+            <mat-error>כותרת משנה חייבת להיות עד 30 תווים</mat-error>
+            } @if (taglineControl.hasError('pattern')) {
+            <mat-error>כותרת משנה יכולה להזין אותיות בלבד</mat-error>
+            }
           </mat-form-field>
         </div>
-        } @else {
-        <mat-form-field
-          class="tagline small transparent"
-          appearance="outline"
-          appEditable
-          [isEditable]="isEditable"
-          [isSaveDisabled]="!!taglineControl.errors"
-          (startEdit)="startEditing('tagline')"
-          (saveEdit)="saveEdit('tagline')"
-          (cancelEdit)="cancelEdit('tagline')"
-        >
-          <input
-            matInput
-            [formControl]="taglineControl"
-            [readonly]="!isEditable"
-          />
-          @if (taglineControl.hasError('required') ||
-          taglineControl.hasError('noOnlySpaces')) {
-          <mat-error>יש להזין כותרת משנה</mat-error>
-          } @if (taglineControl.hasError('minlength')) {
-          <mat-error>כותרת משנה חייבת להיות באורך לפחות 2 תווים</mat-error>
-          } @if (taglineControl.hasError('maxlength')) {
-          <mat-error>כותרת משנה חייבת להיות עד 30 תווים</mat-error>
-          } @if (taglineControl.hasError('pattern')) {
-          <mat-error>כותרת משנה יכולה להזין אותיות בלבד</mat-error>
-          }
-        </mat-form-field>
-        }
+
         <mat-form-field
           appEditable
           [isEditable]="isEditable"
           [isSaveDisabled]="!!descriptionControl.errors"
+          [iconTop]="-5"
+          [iconRight]="6"
           (startEdit)="startEditing('description')"
           (saveEdit)="saveEdit('description')"
           (cancelEdit)="cancelEdit('description')"
