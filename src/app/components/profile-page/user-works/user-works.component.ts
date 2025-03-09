@@ -3,6 +3,7 @@ import { UserWork } from '../../../shared/models/userWork.class';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
+import { LanguageService } from '../../../shared/services/language.service';
 
 @Component({
   selector: 'app-user-works',
@@ -12,4 +13,6 @@ import { JsonPipe, NgFor, NgIf } from '@angular/common';
 })
 export class UserWorksComponent {
   @Input({ required: true }) userWorks!: UserWork[];
+
+  constructor(protected readonly languageService: LanguageService) {}
 }
