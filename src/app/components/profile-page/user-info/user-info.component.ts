@@ -8,6 +8,9 @@ import {
   ReactiveFormsModule,
   Validators,
   FormControl,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 
 import { MatDialogModule } from '@angular/material/dialog';
@@ -43,7 +46,12 @@ export class UserInfoComponent {
   imageErrorMessage: string | null = null;
   imageValid: boolean = false;
 
-  private allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+  private allowedFileTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+  ];
 
   userInfoForm: FormGroup;
   usernameControl = new FormControl('', [
@@ -56,17 +64,23 @@ export class UserInfoComponent {
     Validators.required,
     Validators.minLength(2),
     Validators.maxLength(30),
+    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
+    this.noOnlySpacesValidator(),
   ]);
   imageControl = new FormControl('avatar.png', Validators.required);
   taglineControl = new FormControl('', [
     Validators.required,
     Validators.minLength(2),
     Validators.maxLength(30),
+    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-]+$"),
+    this.noOnlySpacesValidator(),
   ]);
   descriptionControl = new FormControl('', [
     Validators.required,
     Validators.minLength(2),
     Validators.maxLength(500),
+    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e0-9\n '-]+$"),
+    this.noOnlySpacesValidator(),
   ]);
 
   constructor(
@@ -143,12 +157,11 @@ export class UserInfoComponent {
 
     // Check if file is an image
     if (!this.isFileTypeAllowed(file)) {
-      this.imageErrorMessage = "נא לבחור קובץ תמונה (JPEG, PNG, GIF, או WebP)";
+      this.imageErrorMessage = 'נא לבחור קובץ תמונה (JPEG, PNG, GIF, או WebP)';
       this.imageValid = false;
       input.value = '';
       return;
     }
-
 
     // Check aspect ratio
     this.checkAspectRatio(file).then((isValidRatio) => {
@@ -186,5 +199,14 @@ export class UserInfoComponent {
 
   private isFileTypeAllowed(file: File): boolean {
     return this.allowedFileTypes.includes(file.type);
+  }
+
+  noOnlySpacesValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value && control.value.trim().length === 0) {
+        return { noOnlySpaces: true };
+      }
+      return null;
+    };
   }
 }

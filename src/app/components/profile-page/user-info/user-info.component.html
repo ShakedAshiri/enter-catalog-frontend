@@ -19,6 +19,7 @@
           accept="image/jpeg,image/png,image/gif,image/webp"
           style="display: none"
           (change)="onImageFileSelected($event)"
+          [readonly]="true"
         />
         <img class="card-img" [src]="imageControl.value || 'avatar.png'" />
 
@@ -32,6 +33,7 @@
           appearance="outline"
           appEditable
           [isEditable]="isEditable"
+          [isSaveDisabled]="!!displayNameControl.errors"
           (startEdit)="startEditing('displayName')"
           (saveEdit)="saveEdit('displayName')"
           (cancelEdit)="cancelEdit('displayName')"
@@ -43,12 +45,23 @@
               [readonly]="!isEditable"
             />
           </div>
+          @if (displayNameControl.hasError('required') ||
+          displayNameControl.hasError('noOnlySpaces')) {
+          <mat-error>יש להזין שם משתמש</mat-error>
+          } @if (displayNameControl.hasError('minlength')) {
+          <mat-error>שם משתמש חייב להיות באורך לפחות 2 תווים</mat-error>
+          } @if (displayNameControl.hasError('maxlength')) {
+          <mat-error>שם משתמש חייב להיות עד 30 תווים</mat-error>
+          } @if (displayNameControl.hasError('pattern')) {
+          <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
+          }
         </mat-form-field>
         <mat-form-field
           class="tagline small transparent"
           appearance="outline"
           appEditable
           [isEditable]="isEditable"
+          [isSaveDisabled]="!!taglineControl.errors"
           (startEdit)="startEditing('tagline')"
           (saveEdit)="saveEdit('tagline')"
           (cancelEdit)="cancelEdit('tagline')"
@@ -58,10 +71,21 @@
             [formControl]="taglineControl"
             [readonly]="!isEditable"
           />
+          @if (taglineControl.hasError('required') ||
+          taglineControl.hasError('noOnlySpaces')) {
+          <mat-error>יש להזין כותרת משנה</mat-error>
+          } @if (taglineControl.hasError('minlength')) {
+          <mat-error>כותרת משנה חייבת להיות באורך לפחות 2 תווים</mat-error>
+          } @if (taglineControl.hasError('maxlength')) {
+          <mat-error>כותרת משנה חייבת להיות עד 30 תווים</mat-error>
+          } @if (taglineControl.hasError('pattern')) {
+          <mat-error>כותרת משנה יכולה להזין אותיות בלבד</mat-error>
+          }
         </mat-form-field>
         <mat-form-field
           appEditable
           [isEditable]="isEditable"
+          [isSaveDisabled]="!!descriptionControl.errors"
           (startEdit)="startEditing('description')"
           (saveEdit)="saveEdit('description')"
           (cancelEdit)="cancelEdit('description')"
@@ -74,6 +98,16 @@
             [formControl]="descriptionControl"
             [readonly]="!isEditable"
           ></textarea>
+          @if (descriptionControl.hasError('required') ||
+          descriptionControl.hasError('noOnlySpaces')) {
+          <mat-error>יש להזין תיאור</mat-error>
+          } @if (descriptionControl.hasError('minlength')) {
+          <mat-error>תיאור חייב להיות באורך לפחות 2 תווים</mat-error>
+          } @if (descriptionControl.hasError('maxlength')) {
+          <mat-error>תיאור חייב להיות עד 30 תווים</mat-error>
+          } @if (descriptionControl.hasError('pattern')) {
+          <mat-error>תיאור יכול להזין אותיות ומספרים בלבד</mat-error>
+          }
         </mat-form-field>
       </div>
     </mat-card>
