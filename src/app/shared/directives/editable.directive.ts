@@ -22,12 +22,14 @@ export class EditableDirective implements AfterViewInit, OnChanges {
 
   private editIcon: ComponentRef<MatIcon>;
   private actionsContainer: HTMLElement;
+  private saveButton: HTMLButtonElement;
   private isEditing = false;
 
   @Input() isEditable = true;
   @Input() iconTop: number = 5;
   @Input() iconRight: number = -5;
   @Input() isMultiEdit: boolean = false;
+  @Input() isSaveDisabled: boolean = false;
   @Output() startEdit = new EventEmitter<void>();
   @Output() saveEdit = new EventEmitter<void>();
   @Output() cancelEdit = new EventEmitter<void>();
@@ -62,6 +64,10 @@ export class EditableDirective implements AfterViewInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     // Create edit icon - only after receiving input
     this.createEditIcon();
+
+    if (changes['isSaveDisabled'] && this.actionsContainer) {
+      this.updateSaveButtonState();
+    }
   }
 
   ngAfterViewInit() {
@@ -121,13 +127,17 @@ export class EditableDirective implements AfterViewInit, OnChanges {
     });
 
     // Create Save button
-    const saveButton = this.renderer.createElement('button');
-    this.renderer.addClass(saveButton, 'mat-button');
-    this.renderer.addClass(saveButton, 'btn-small');
-    this.renderer.addClass(saveButton, 'btn-primary');
-    this.renderer.setProperty(saveButton, 'innerHTML', 'אישור');
+    this.saveButton = this.renderer.createElement('button');
+    this.renderer.addClass(this.saveButton, 'mat-button');
+    this.renderer.addClass(this.saveButton, 'btn');
+    this.renderer.addClass(this.saveButton, 'btn-small');
+    this.renderer.addClass(this.saveButton, 'btn-primary');
+    this.renderer.setProperty(this.saveButton, 'innerHTML', 'אישור');
+
+    this.updateSaveButtonState();
+
     this.unlistenToSaveButton = this.renderer.listen(
-      saveButton,
+      this.saveButton,
       'click',
       (event: Event) => {
         event.stopPropagation();
@@ -139,6 +149,7 @@ export class EditableDirective implements AfterViewInit, OnChanges {
     // Create Cancel button
     const cancelButton = this.renderer.createElement('button');
     this.renderer.addClass(cancelButton, 'mat-button');
+    this.renderer.addClass(cancelButton, 'btn');
     this.renderer.addClass(cancelButton, 'btn-small');
     this.renderer.addClass(cancelButton, 'btn-primary');
     this.renderer.setProperty(cancelButton, 'innerHTML', 'ביטול');
@@ -153,7 +164,7 @@ export class EditableDirective implements AfterViewInit, OnChanges {
     );
 
     // Add buttons to container
-    this.renderer.appendChild(this.actionsContainer, saveButton);
+    this.renderer.appendChild(this.actionsContainer, this.saveButton);
     this.renderer.appendChild(this.actionsContainer, cancelButton);
 
     // Add container to host element
@@ -188,6 +199,7 @@ export class EditableDirective implements AfterViewInit, OnChanges {
     if (this.actionsContainer) {
       this.renderer.removeChild(this.el.nativeElement, this.actionsContainer);
       this.actionsContainer = null;
+      this.saveButton = null;
     }
   }
 
@@ -204,5 +216,9 @@ export class EditableDirective implements AfterViewInit, OnChanges {
       this.editIcon.destroy();
       this.editIcon = null;
     }
+  }
+
+  private updateSaveButtonState() {
+    this.renderer.setProperty(this.saveButton, 'disabled', this.isSaveDisabled);
   }
 }
