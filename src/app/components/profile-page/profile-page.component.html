@@ -1,6 +1,6 @@
 <div>
-  <section class="show-user-profile" *ngIf="!showUserProfileServerError">
-    <app-user-info [user]="profileUser" />
+  <section class="show-user-profile" *ngIf="!showUserProfileServerError && profileUser">
+    <app-user-info [user]="profileUser" [isEditable]="isEditable"/>
     <app-user-works [userWorks]="profileUser.works" />
   </section>
   <section
@@ -8,5 +8,8 @@
     *ngIf="showUserProfileServerError"
   >
     <app-server-error />
+  </section>
+  <section *ngIf="!profileUser && !showUserProfileServerError">
+    <mat-spinner class="spinner page-mid"></mat-spinner>
   </section>
 </div>

@@ -5,8 +5,10 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
   Renderer2,
+  SimpleChanges,
   ViewContainerRef,
 } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
@@ -14,15 +16,20 @@ import { MatIcon } from '@angular/material/icon';
 @Directive({
   selector: '[appEditable]',
 })
-export class EditableDirective implements AfterViewInit {
+export class EditableDirective implements AfterViewInit, OnChanges {
   private unlistenToSaveButton: () => void;
   private unlistenToCancelButton: () => void;
 
   private editIcon: ComponentRef<MatIcon>;
   private actionsContainer: HTMLElement;
+  private saveButton: HTMLButtonElement;
   private isEditing = false;
 
   @Input() isEditable = true;
+  @Input() iconTop: number = 5;
+  @Input() iconRight: number = -5;
+  @Input() isMultiEdit: boolean = false;
+  @Input() isSaveDisabled: boolean = false;
   @Output() startEdit = new EventEmitter<void>();
   @Output() saveEdit = new EventEmitter<void>();
   @Output() cancelEdit = new EventEmitter<void>();
@@ -35,40 +42,58 @@ export class EditableDirective implements AfterViewInit {
     // Setup host element
     this.renderer.setStyle(this.el.nativeElement, 'position', 'relative');
 
-    // Create edit icon
-    this.createEditIcon();
-
     // Add click listener to host element
     this.renderer.listen(this.el.nativeElement, 'click', () => {
-      if (this.isEditable && !this.isEditing) {
+      if (this.isEditable && (this.isMultiEdit || !this.isEditing)) {
         this.enterEditMode();
       }
     });
 
     // Add hover listeners
     this.renderer.listen(this.el.nativeElement, 'mouseenter', () => {
-      if (this.isEditable && !this.isEditing) {
+      // Show edit icon if editable and
+      // either not yet editing
+      // or already editing & in multi edit mode
+      if (
+        this.isEditable &&
+        ((this.isMultiEdit && this.isEditing) || !this.isEditing)
+      ) {
         this.showEditIcon();
       }
     });
 
     this.renderer.listen(this.el.nativeElement, 'mouseleave', () => {
-      if (!this.isEditing) {
-        this.hideEditIcon();
-      }
+      console.log('hide me');
+      this.hideEditIcon();
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Create edit icon - only after receiving input
+    this.createEditIcon();
+
+    if (changes['isSaveDisabled'] && this.actionsContainer) {
+      this.updateSaveButtonState();
+    }
   }
 
   ngAfterViewInit() {
     const inputElements = this.el.nativeElement.querySelectorAll('input');
+    const textareaElements = this.el.nativeElement.querySelectorAll('textarea');
 
-    // Set pointer cursor if editable
-    if (inputElements && inputElements[0] && this.isEditable) {
-      this.renderer.setStyle(inputElements[0], 'cursor', 'pointer');
+    if (this.isEditable) {
+      // Set pointer cursor if editable
+      if (inputElements && inputElements[0]) {
+        this.renderer.setStyle(inputElements[0], 'cursor', 'pointer');
+      } else if (textareaElements && textareaElements[0]) {
+        this.renderer.setStyle(textareaElements[0], 'cursor', 'pointer');
+      }
     }
   }
 
   private createEditIcon() {
+    if (this.editIcon) return;
+
     this.editIcon = this.viewContainerRef.createComponent(MatIcon);
 
     // Set the icon name
@@ -78,8 +103,8 @@ export class EditableDirective implements AfterViewInit {
 
     // Set styles
     this.renderer.setStyle(iconElement, 'position', 'absolute');
-    this.renderer.setStyle(iconElement, 'top', '5px');
-    this.renderer.setStyle(iconElement, 'right', '-5px');
+    this.renderer.setStyle(iconElement, 'top', this.iconTop + 'px');
+    this.renderer.setStyle(iconElement, 'right', this.iconRight + 'px');
     this.renderer.setStyle(iconElement, 'opacity', '0');
     this.renderer.setStyle(iconElement, 'overflow', 'visible');
     this.renderer.setStyle(
@@ -111,15 +136,20 @@ export class EditableDirective implements AfterViewInit {
     });
 
     // Create Save button
-    const saveButton = this.renderer.createElement('button');
-    this.renderer.addClass(saveButton, 'mat-button');
-    this.renderer.addClass(saveButton, 'btn-small');
-    this.renderer.addClass(saveButton, 'btn-primary');
-    this.renderer.setProperty(saveButton, 'innerHTML', 'אישור');
+    this.saveButton = this.renderer.createElement('button');
+    this.renderer.addClass(this.saveButton, 'mat-button');
+    this.renderer.addClass(this.saveButton, 'btn');
+    this.renderer.addClass(this.saveButton, 'btn-small');
+    this.renderer.addClass(this.saveButton, 'btn-primary');
+    this.renderer.setProperty(this.saveButton, 'innerHTML', 'אישור');
+
+    this.updateSaveButtonState();
+
     this.unlistenToSaveButton = this.renderer.listen(
-      saveButton,
+      this.saveButton,
       'click',
       (event: Event) => {
+        this.saveButton.focus(); // Remove focus from host element
         event.stopPropagation();
         this.exitEditMode();
         this.saveEdit.emit();
@@ -129,6 +159,7 @@ export class EditableDirective implements AfterViewInit {
     // Create Cancel button
     const cancelButton = this.renderer.createElement('button');
     this.renderer.addClass(cancelButton, 'mat-button');
+    this.renderer.addClass(cancelButton, 'btn');
     this.renderer.addClass(cancelButton, 'btn-small');
     this.renderer.addClass(cancelButton, 'btn-primary');
     this.renderer.setProperty(cancelButton, 'innerHTML', 'ביטול');
@@ -143,7 +174,7 @@ export class EditableDirective implements AfterViewInit {
     );
 
     // Add buttons to container
-    this.renderer.appendChild(this.actionsContainer, saveButton);
+    this.renderer.appendChild(this.actionsContainer, this.saveButton);
     this.renderer.appendChild(this.actionsContainer, cancelButton);
 
     // Add container to host element
@@ -159,17 +190,29 @@ export class EditableDirective implements AfterViewInit {
   }
 
   private enterEditMode() {
-    this.isEditing = true;
-    this.hideEditIcon();
-    this.createActionButtons();
+    // Start editing if not already
+    if (!this.isEditing) {
+      this.isEditing = true;
+      this.createActionButtons();
+    }
+
+    // Hide edit button only if not multi edit
+    if (!this.isMultiEdit) {
+      this.hideEditIcon();
+    }
+
     this.startEdit.emit();
   }
 
   private exitEditMode() {
     this.isEditing = false;
+
+    if (this.isMultiEdit) this.hideEditIcon();
+
     if (this.actionsContainer) {
       this.renderer.removeChild(this.el.nativeElement, this.actionsContainer);
       this.actionsContainer = null;
+      this.saveButton = null;
     }
   }
 
@@ -186,5 +229,9 @@ export class EditableDirective implements AfterViewInit {
       this.editIcon.destroy();
       this.editIcon = null;
     }
+  }
+
+  private updateSaveButtonState() {
+    this.renderer.setProperty(this.saveButton, 'disabled', this.isSaveDisabled);
   }
 }

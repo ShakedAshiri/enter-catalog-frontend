@@ -1,43 +1,104 @@
 <div>
-  <form [formGroup]="userInfoForm" (ngSubmit)="onSubmit(userInfoForm)">
+  <form [formGroup]="userInfoForm">
     <mat-card class="card">
-      <div class="card-img-container">
-        <img
-          class="card-img"
-          [src]="
-            userInfoForm.get('image')?.value !== 'avatar.png'
-              ? userInfoForm.get('image')?.value
-              : 'user.png'
-          "
+      <div
+        class="card-img-container"
+        appEditable
+        [isEditable]="isEditable"
+        [isMultiEdit]="true"
+        (startEdit)="startEditing('image'); fileInput.click()"
+        (saveEdit)="saveEdit('image')"
+        (cancelEdit)="cancelEdit('image')"
+        [isSaveDisabled]="!imageValid"
+        [iconRight]="10"
+        [iconTop]="10"
+      >
+        <input
+          #fileInput
+          type="file"
+          accept="image/jpeg,image/png,image/gif,image/webp"
+          style="display: none"
+          (change)="onImageFileSelected($event)"
+          [readonly]="true"
         />
-        <mat-icon svgIcon="edit-pencil" />
+        <img class="card-img" [src]="imageControl.value || 'avatar.png'" />
+
+        <div *ngIf="imageErrorMessage" class="error-message">
+          {{ imageErrorMessage }}
+        </div>
       </div>
       <div class="card-text-container">
         <mat-form-field
           class="displayName small transparent"
           appearance="outline"
+          appEditable
+          [isEditable]="isEditable"
+          [isSaveDisabled]="!!displayNameControl.errors"
+          (startEdit)="startEditing('displayName')"
+          (saveEdit)="saveEdit('displayName')"
+          (cancelEdit)="cancelEdit('displayName')"
         >
           <div class="card-title-container">
-            <input matInput [formControl]="displayNameControl" />
-            <mat-icon svgIcon="edit-pencil" />
+            <input
+              matInput
+              [formControl]="displayNameControl"
+              [readonly]="!isEditable"
+            />
           </div>
+          @if (displayNameControl.hasError('required') ||
+          displayNameControl.hasError('noOnlySpaces')) {
+          <mat-error>יש להזין שם משתמש</mat-error>
+          } @if (displayNameControl.hasError('minlength')) {
+          <mat-error>שם משתמש חייב להיות באורך לפחות 2 תווים</mat-error>
+          } @if (displayNameControl.hasError('maxlength')) {
+          <mat-error>שם משתמש חייב להיות עד 30 תווים</mat-error>
+          } @if (displayNameControl.hasError('pattern')) {
+          <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
+          }
         </mat-form-field>
-        @if(user.isAvailable) {
         <div class="tagline-and-is-avaliable">
+          @if(user.isAvailable) {
           <div class="is-available">זמין.ה לעבודה</div>
+          }
           <mat-form-field
             class="tagline small transparent"
             appearance="outline"
+            appEditable
+            [isEditable]="isEditable"
+            [isSaveDisabled]="!!taglineControl.errors"
+            [iconTop]="-5"
+            [iconRight]="17"
+            (startEdit)="startEditing('tagline')"
+            (saveEdit)="saveEdit('tagline')"
+            (cancelEdit)="cancelEdit('tagline')"
           >
-            <input matInput [formControl]="taglineControl" />
+            <input
+              matInput
+              [formControl]="taglineControl"
+              [readonly]="!isEditable"
+            />
+            @if (taglineControl.hasError('required') ||
+            taglineControl.hasError('noOnlySpaces')) {
+            <mat-error>יש להזין כותרת משנה</mat-error>
+            } @if (taglineControl.hasError('minlength')) {
+            <mat-error>כותרת משנה חייבת להיות באורך לפחות 2 תווים</mat-error>
+            } @if (taglineControl.hasError('maxlength')) {
+            <mat-error>כותרת משנה חייבת להיות עד 30 תווים</mat-error>
+            } @if (taglineControl.hasError('pattern')) {
+            <mat-error>כותרת משנה יכולה להזין אותיות בלבד</mat-error>
+            }
           </mat-form-field>
         </div>
-        } @else {
-        <mat-form-field class="tagline small transparent" appearance="outline">
-          <input matInput [formControl]="taglineControl" />
-        </mat-form-field>
-        }
+
         <mat-form-field
+          appEditable
+          [isEditable]="isEditable"
+          [isSaveDisabled]="!!descriptionControl.errors"
+          [iconTop]="-5"
+          [iconRight]="6"
+          (startEdit)="startEditing('description')"
+          (saveEdit)="saveEdit('description')"
+          (cancelEdit)="cancelEdit('description')"
           class="description small transparent"
           appearance="outline"
         >
@@ -45,7 +106,18 @@
             matInput
             rows="3"
             [formControl]="descriptionControl"
+            [readonly]="!isEditable"
           ></textarea>
+          @if (descriptionControl.hasError('required') ||
+          descriptionControl.hasError('noOnlySpaces')) {
+          <mat-error>יש להזין תיאור</mat-error>
+          } @if (descriptionControl.hasError('minlength')) {
+          <mat-error>תיאור חייב להיות באורך לפחות 2 תווים</mat-error>
+          } @if (descriptionControl.hasError('maxlength')) {
+          <mat-error>תיאור חייב להיות עד 30 תווים</mat-error>
+          } @if (descriptionControl.hasError('pattern')) {
+          <mat-error>תיאור יכול להזין אותיות ומספרים בלבד</mat-error>
+          }
         </mat-form-field>
       </div>
     </mat-card>

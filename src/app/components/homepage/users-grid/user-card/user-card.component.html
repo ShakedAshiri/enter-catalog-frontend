@@ -2,9 +2,9 @@
   <div
     class="avatar"
     [style.backgroundImage]="
-      user.image !== 'avatar.png'
+      user.image
         ? 'url(' + user.image + ')'
-        : 'url(' + 'user.png' + ')'
+        : 'url(' + 'avatar.png' + ')'
     "
   >
     @if(user.isAvailable) {
