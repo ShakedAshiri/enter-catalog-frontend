@@ -51,12 +51,19 @@ export class EditableDirective implements AfterViewInit, OnChanges {
 
     // Add hover listeners
     this.renderer.listen(this.el.nativeElement, 'mouseenter', () => {
-      if (this.isEditable && (this.isMultiEdit || !this.isEditing)) {
+      // Show edit icon if editable and
+      // either not yet editing
+      // or already editing & in multi edit mode
+      if (
+        this.isEditable &&
+        ((this.isMultiEdit && this.isEditing) || !this.isEditing)
+      ) {
         this.showEditIcon();
       }
     });
 
     this.renderer.listen(this.el.nativeElement, 'mouseleave', () => {
+      console.log('hide me');
       this.hideEditIcon();
     });
   }
@@ -85,6 +92,8 @@ export class EditableDirective implements AfterViewInit, OnChanges {
   }
 
   private createEditIcon() {
+    if (this.editIcon) return;
+
     this.editIcon = this.viewContainerRef.createComponent(MatIcon);
 
     // Set the icon name
@@ -197,6 +206,8 @@ export class EditableDirective implements AfterViewInit, OnChanges {
 
   private exitEditMode() {
     this.isEditing = false;
+
+    if (this.isMultiEdit) this.hideEditIcon();
 
     if (this.actionsContainer) {
       this.renderer.removeChild(this.el.nativeElement, this.actionsContainer);
