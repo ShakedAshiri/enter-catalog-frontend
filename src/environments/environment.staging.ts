@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: ''
+  // TODO: add staging server
+  apiUrl: '',
 };
