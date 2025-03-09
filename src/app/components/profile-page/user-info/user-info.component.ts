@@ -41,6 +41,9 @@ export class UserInfoComponent {
   @Input() isEditable: boolean = false;
   previousValues: { [key: string]: any } = {};
   imageErrorMessage: string | null = null;
+  imageValid: boolean = false;
+
+  private allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
   userInfoForm: FormGroup;
   usernameControl = new FormControl('', [
@@ -90,15 +93,6 @@ export class UserInfoComponent {
     });
   }
 
-  onSubmit(form: FormGroup) {
-    console.log('Valid?', form.valid); // true or false
-    console.log('Username', form.value.username);
-    console.log('Display Name', form.value.displayName);
-    console.log('Image', form.value.image);
-    console.log('Tagline', form.value.tagline);
-    console.log('Description', form.value.description);
-  }
-
   startEditing(fieldName: string) {
     // Store the current value in case we need to cancel
     this.previousValues[fieldName] = this.userInfoForm.get(fieldName).value;
@@ -107,6 +101,7 @@ export class UserInfoComponent {
   saveEdit(fieldName: string) {
     if (this.userInfoForm.get(fieldName).valid) {
       this.imageErrorMessage = null;
+      this.imageValid = true;
 
       const newValue = this.userInfoForm.get(fieldName).value;
       const updatedUserData = { [fieldName]: newValue };
@@ -133,27 +128,34 @@ export class UserInfoComponent {
     delete this.previousValues[fieldName];
 
     this.imageErrorMessage = null;
+    this.imageValid = true;
   }
 
   onImageFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
 
     if (!input.files || input.files.length === 0) {
+      this.imageValid = false;
       return;
     }
 
     const file = input.files[0];
 
     // Check if file is an image
-    if (!file.type.match(/image\/*/)) {
-      this.imageErrorMessage = 'נא לבחור קובץ תמונה';
+    if (!this.isFileTypeAllowed(file)) {
+      this.imageErrorMessage = "נא לבחור קובץ תמונה (JPEG, PNG, GIF, או WebP)";
+      this.imageValid = false;
+      input.value = '';
       return;
     }
+
 
     // Check aspect ratio
     this.checkAspectRatio(file).then((isValidRatio) => {
       if (isValidRatio) {
         this.imageErrorMessage = null;
+        this.imageValid = true;
+
         const reader = new FileReader();
 
         reader.onload = (e: any) => {
@@ -163,7 +165,7 @@ export class UserInfoComponent {
         reader.readAsDataURL(file);
       } else {
         this.imageErrorMessage = 'יש לבחור תמונה בעלת יחס רוחב-גובה 1:1';
-        // Reset the file input
+        this.imageValid = false;
         input.value = '';
       }
     });
@@ -180,5 +182,9 @@ export class UserInfoComponent {
       };
       img.src = URL.createObjectURL(file);
     });
+  }
+
+  private isFileTypeAllowed(file: File): boolean {
+    return this.allowedFileTypes.includes(file.type);
   }
 }

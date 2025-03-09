@@ -1,19 +1,22 @@
 <div>
-  <form [formGroup]="userInfoForm" (ngSubmit)="onSubmit(userInfoForm)">
+  <form [formGroup]="userInfoForm">
     <mat-card class="card">
       <div
         class="card-img-container"
         appEditable
         [isEditable]="isEditable"
         [isMultiEdit]="true"
-        (startEdit)="fileInput.click()"
+        (startEdit)="startEditing('image'); fileInput.click()"
         (saveEdit)="saveEdit('image')"
         (cancelEdit)="cancelEdit('image')"
+        [isSaveDisabled]="!imageValid"
+        [iconRight]="10"
+        [iconTop]="10"
       >
         <input
           #fileInput
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/gif,image/webp"
           style="display: none"
           (change)="onImageFileSelected($event)"
         />
