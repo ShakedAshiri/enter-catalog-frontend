@@ -23,6 +23,7 @@ import { UserService } from '../../../shared/services/user.service';
 import { environment } from '../../../../environments/environment';
 import { NgIf } from '@angular/common';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
+import noOnlySpacesValidator from '../../../shared/validators/no-only-spaces.validator';
 
 @Component({
   selector: 'app-user-info',
@@ -65,7 +66,7 @@ export class UserInfoComponent {
     Validators.minLength(2),
     Validators.maxLength(30),
     Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
-    this.noOnlySpacesValidator(),
+    noOnlySpacesValidator(),
   ]);
   imageControl = new FormControl('avatar.png', Validators.required);
   taglineControl = new FormControl('', [
@@ -73,14 +74,14 @@ export class UserInfoComponent {
     Validators.minLength(2),
     Validators.maxLength(30),
     Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-]+$"),
-    this.noOnlySpacesValidator(),
+    noOnlySpacesValidator(),
   ]);
   descriptionControl = new FormControl('', [
     Validators.required,
     Validators.minLength(2),
     Validators.maxLength(500),
-    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-,.!?;]+$"),
-    this.noOnlySpacesValidator(),
+    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '-,.!?;]+$"),
+    noOnlySpacesValidator(),
   ]);
 
   constructor(
@@ -203,14 +204,5 @@ export class UserInfoComponent {
 
   private isFileTypeAllowed(file: File): boolean {
     return this.allowedFileTypes.includes(file.type);
-  }
-
-  noOnlySpacesValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (control.value && control.value.trim().length === 0) {
-        return { noOnlySpaces: true };
-      }
-      return null;
-    };
   }
 }
