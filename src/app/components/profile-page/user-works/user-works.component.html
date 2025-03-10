@@ -1,10 +1,17 @@
+<div *ngIf="isEditable" class="add-work">
+  <button (click)="openWorkModal()" class="btn-clear btn-search" matSuffix mat-icon-button aria-label="Clear">
+    <mat-icon>work</mat-icon>
+    <mat-icon>add_circle_outline</mat-icon>
+  </button>
+</div>
+
 <ng-template #fallback>
   <div class="no-results">
     <span class="text">לא קיימות עבודות למשתמש זה...</span>
   </div>
 </ng-template>
 
-<section class="works" *ngIf="userWorks.length > 0; else fallback">
+<section class="works" *ngIf="userWorks && userWorks.length > 0; else fallback">
   <div class="works-header">
     <span>קטלוג עבודות:</span>
   </div>
