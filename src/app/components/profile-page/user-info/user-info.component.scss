@@ -1,3 +1,5 @@
+@use "../../../../colors";
+
 mat-card.card {
   display: flex;
   flex-direction: row;
@@ -5,6 +7,12 @@ mat-card.card {
   padding-left: 30px;
   padding-top: 50px;
   padding-bottom: 50px;
+
+  @each $category, $color in colors.$category-colors {
+    &.category--#{$category} {
+      background-color: $color;
+    }
+  }
 }
 
 mat-form-field {
