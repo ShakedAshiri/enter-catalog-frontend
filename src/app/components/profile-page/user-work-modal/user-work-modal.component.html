@@ -1,7 +1,7 @@
 <app-modal-wrapper
   title="הוספת פרויקט לגלריה שלי"
   [closeOption]="false"
-  [form]="userWorkForm"
+  [disableSubmit]="!userWorkForm.valid"
 >
   @if(showServerError) {
   <section class="login-server-error">
