@@ -1,7 +1,12 @@
 <div class="modal-container" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   <h2 mat-dialog-title class="modal-title">
     {{ title }}
-    <button *ngIf="closeOption" mat-icon-button class="close-button btn-clear" (click)="close()">
+    <button
+      *ngIf="closeOption"
+      mat-icon-button
+      class="close-button btn-clear"
+      (click)="close()"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </h2>
@@ -17,8 +22,20 @@
 </div>
 
 <ng-template #defaultActions>
-  <button mat-raised-button color="primary" class="btn btn-primary btn-login" (click)="submit()">
+  <button
+    [disabled]="disableSubmit"
+    mat-raised-button
+    color="primary"
+    class="btn btn-secondary btn-login"
+    (click)="submit()"
+  >
     אישור
   </button>
-  <button mat-button (click)="close()" class="btn btn-light btn-login btn-cancel">ביטול</button>
+  <button
+    mat-button
+    (click)="close()"
+    class="btn btn-light btn-login btn-cancel"
+  >
+    ביטול
+  </button>
 </ng-template>

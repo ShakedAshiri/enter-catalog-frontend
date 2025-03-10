@@ -14,6 +14,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 export class ModalWrapperComponent extends BaseModalComponent {
   @Input() title: string = '';
   @Input() closeOption: boolean = true;
+  @Input() disableSubmit: boolean = false;
   @ContentChild('actions') actionsTemplate!: TemplateRef<any>;
 
   submit(): void {
