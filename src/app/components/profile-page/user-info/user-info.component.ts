@@ -23,6 +23,7 @@ import { UserService } from '../../../shared/services/user.service';
 import { environment } from '../../../../environments/environment';
 import { NgIf } from '@angular/common';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
+import { Category } from '../../../shared/models/data-tables/category.class';
 
 @Component({
   selector: 'app-user-info',
@@ -45,6 +46,10 @@ export class UserInfoComponent {
   previousValues: { [key: string]: any } = {};
   imageErrorMessage: string | null = null;
   imageValid: boolean = false;
+
+  getCategoryClass(category: Category): string {
+    return `category--${category.name || 'default'}`;
+  }
 
   private allowedFileTypes = [
     'image/jpeg',

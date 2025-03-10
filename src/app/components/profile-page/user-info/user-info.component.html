@@ -1,6 +1,6 @@
 <div>
   <form [formGroup]="userInfoForm">
-    <mat-card class="card">
+    <mat-card [class]="'card ' + getCategoryClass(user.categories[0])">
       <div
         class="card-img-container"
         appEditable
