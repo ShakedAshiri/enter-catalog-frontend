@@ -4,11 +4,8 @@
 }
 
 mat-grid-tile {
-  height: 208px;
-}
-
-.left-section {
-  margin-right: 15px;
+  height: 11vw;
+  max-height: 170px;
 }
 
 img {
@@ -25,14 +22,22 @@ img {
   cursor: pointer;
 }
 
-.rolling-text {
-  font-size: clamp(0.9rem, 1.5vw, 1.8vw);
-  line-height: 0.8;
-  color: black;
-  padding: 3px;
-  max-width: 230px;
+.left-section {
+  padding-right: 10px;
+  background-color: #aa6ed9d9;
+  height: 100%;
 
-  b {
-    color: var(--secondary-theme-color-light);
+  .rolling-text {
+    font-size: clamp(1.5rem, 1.5vw, 1.8vw);
+    line-height: 0.8;
+    color: var(--primary-white-color);
+    padding: 3px;
+    max-width: 230px;
+    line-height: 44px;
+
+    b {
+      color: var(--secondary-theme-color-light);
+      font-weight: bold;
+    }
   }
 }
