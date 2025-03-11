@@ -1,5 +1,5 @@
 import { UserService } from './user.service';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
@@ -14,81 +14,51 @@ import { User } from '../models/user.class';
 import { ApiConstants } from '../constants/api.constants';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Role } from '../constants/role';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
+  private localStorageKey = 'user_info';
+  private currentUserSubject = new BehaviorSubject<User | null>(
+    this.getCurrentUser()
+  );
+  public currentUser$ = this.getUserAsObservable();
 
-  private accessToken: string | null = null;
-
-  constructor(private http: HttpClient, private userService: UserService) {
-    this.restoreSession();
-  }
-
-  private async restoreSession() {
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (refreshToken) {
-      try {
-        // Using firstValueFrom instead of toPromise()
-        await firstValueFrom(this.refreshUserSession());
-      } catch {
-        // If refresh fails, clear any stored data
-        this.clearSession();
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private ngZone: NgZone,
+    private router: Router
+  ) {
+    // This listens to changes accross tabs
+    window.addEventListener('storage', (event) => {
+      if (event.key === this.localStorageKey) {
+        this.ngZone.run(() => {
+          this.currentUserSubject.next(JSON.parse(event.newValue));
+        });
       }
-    }
-  }
-
-  private setSession(response: User) {
-    // Store refresh token only in localStorage
-    //localStorage.setItem('refreshToken', response.refreshToken);
-    // TODO
-
-    // Keep access token in memory only
-    this.accessToken = response.token;
-
-    // Keep user data in memory only
-    this.currentUserSubject.next(response);
-  }
-
-  private clearSession() {
-    localStorage.removeItem('refreshToken');
-    this.accessToken = null;
-    this.currentUserSubject.next(null);
-  }
-
-  refreshUserSession(): Observable<User> {
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (!refreshToken) {
-      return of(null);
-    }
-
-    return this.http
-      .post<User>(ApiConstants.ENDPOINTS.AUTH.REFRESH, { refreshToken })
-      .pipe(
-        tap((response) => this.setSession(response)),
-        catchError((error) => {
-          this.clearSession();
-          throw error;
-        })
-      );
+    });
   }
 
   login(username: string, password: string): Observable<User> {
-    return this.http
+    const response = this.http
       .post<User>(ApiConstants.ENDPOINTS.AUTH.LOGIN, { username, password })
-      .pipe(tap((response) => this.setSession(response)));
+      .pipe(
+        tap((response) => {
+          localStorage.setItem(this.localStorageKey, JSON.stringify(response));
+          this.currentUserSubject.next(response); // This updates in the same tab
+        })
+      );
+
+    return response;
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('token');
-
-    this.currentUserSubject.next(null);
-
     this.http.post(ApiConstants.ENDPOINTS.AUTH.LOGOUT, {});
+    localStorage.removeItem(this.localStorageKey);
+    window.location.reload();
   }
 
   resetPassword(
@@ -101,15 +71,15 @@ export class AuthService {
   }
 
   getCurrentUser(): User | null {
-    return this.currentUserSubject.value;
+    return JSON.parse(localStorage.getItem(this.localStorageKey));
+  }
+
+  getUserAsObservable(): Observable<User | null> {
+    return this.currentUserSubject.asObservable();
   }
 
   isLoggedIn(): boolean {
-    return !!this.currentUserSubject.value && !!this.accessToken;
-  }
-
-  getAccessToken(): string | null {
-    return this.accessToken;
+    return Boolean(localStorage.getItem(this.localStorageKey));
   }
 
   /**
