@@ -42,6 +42,13 @@ export class PasswordResetComponent extends BaseModalComponent {
   newPassControl: FormControl;
   newPassConfirmControl: FormControl;
 
+  private newPassControlValidators = [
+    Validators.required,
+    Validators.minLength(8),
+    Validators.maxLength(100),
+    Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/),
+  ];
+
   isProduction = environment.production;
   showPasswordResetServerError = false;
 
@@ -51,11 +58,11 @@ export class PasswordResetComponent extends BaseModalComponent {
     super();
 
     this.tempPassControl = this.fb.control('', [Validators.required]);
-    this.newPassControl = this.fb.control('', [
-      Validators.required,
-      Validators.minLength(5),
-    ]);
-    this.newPassConfirmControl = this.fb.control('', [Validators.required]);
+    this.newPassControl = this.fb.control('', this.newPassControlValidators);
+    this.newPassConfirmControl = this.fb.control(
+      '',
+      this.newPassControlValidators,
+    );
 
     this.form = this.fb.group(
       {
@@ -63,7 +70,7 @@ export class PasswordResetComponent extends BaseModalComponent {
         newPass: this.newPassControl,
         newPassConfirm: this.newPassConfirmControl,
       },
-      { validators: this.passwordMatchValidator }
+      { validators: this.passwordMatchValidator },
     );
   }
 
@@ -107,7 +114,7 @@ export class PasswordResetComponent extends BaseModalComponent {
     if (currentErrors) {
       delete currentErrors['passwordMismatch'];
       confirmControl.setErrors(
-        Object.keys(currentErrors).length ? currentErrors : null
+        Object.keys(currentErrors).length ? currentErrors : null,
       );
     }
 
