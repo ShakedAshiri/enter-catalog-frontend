@@ -56,9 +56,8 @@ export class AuthService {
   }
 
   logout() {
-    this.http.post(ApiConstants.ENDPOINTS.AUTH.LOGOUT, {});
     localStorage.removeItem(this.localStorageKey);
-    window.location.reload();
+    return this.http.post(ApiConstants.ENDPOINTS.AUTH.LOGOUT, {});
   }
 
   resetPassword(
