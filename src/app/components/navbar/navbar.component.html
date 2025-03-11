@@ -9,7 +9,9 @@
       <img [src]="user.image || 'avatar.png'" class="avatar">
       <span class="display-name">{{ user.displayName }}</span>
       <div class="actions">
-        <a [routerLink]="['/profile', user.id]">ניהול גלריה</a> |
+        <span *ngIf="user.userRole.id === 3">
+          <a [routerLink]="['/profile', user.id]">ניהול גלריה</a>&nbsp;|&nbsp;
+        </span>
         <a (click)="logout()">יציאה</a>
       </div>
     </div>
