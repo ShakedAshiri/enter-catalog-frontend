@@ -47,7 +47,7 @@ export class NavbarComponent {
         );
 
         const resetSub = resetDialogRef.afterClosed().subscribe(() => {});
-        
+
         this.subscriptions.push(resetSub);
       }
     });
@@ -56,7 +56,11 @@ export class NavbarComponent {
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authService.logout().subscribe({
+      next: () => {
+        window.location.reload();
+      },
+    });
   }
 
   ngOnDestroy() {
