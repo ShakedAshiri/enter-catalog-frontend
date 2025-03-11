@@ -113,6 +113,16 @@ mat-form-field.smaller {
   }
 }
 
+mat-form-field.hidden {
+  .mat-mdc-text-field-wrapper.mdc-text-field {
+    .mat-mdc-form-field-flex {
+      .mat-mdc-form-field-infix {
+        width: 0px !important;
+      }
+    }
+  }
+}
+
 // Select option list
 .cdk-overlay-pane .white-select {
   --mat-select-panel-background-color: white;
