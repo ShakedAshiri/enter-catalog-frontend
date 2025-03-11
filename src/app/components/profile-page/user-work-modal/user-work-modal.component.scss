@@ -11,6 +11,10 @@ form {
 
   .card-img-container {
     flex: 33%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    min-height: auto;
 
     .add-icon {
       width: 100%;
@@ -21,6 +25,15 @@ form {
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    .work-image {
+      width: 100%;
+      height: auto;
+    }
+
+    mat-error {
+      width: 101px;
     }
   }
 

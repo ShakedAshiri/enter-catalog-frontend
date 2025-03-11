@@ -3,35 +3,72 @@
   [closeOption]="false"
   [disableSubmit]="!userWorkForm.valid"
 >
-  @if(showServerError) {
-  <section class="login-server-error">
-    <app-server-error />
-  </section>
+  @if (showServerError) {
+    <section class="login-server-error">
+      <app-server-error />
+    </section>
   }
   <form [formGroup]="userWorkForm">
     <div class="card">
       <div class="card-img-container">
-        <img
-          *ngIf="imageControl.value"
-          class="card-img"
-          [src]="imageControl.value"
-        />
-        <mat-icon class="add-icon">add_circle_outline</mat-icon>
+        <mat-form-field appearance="outline" class="transparent hidden">
+          <input
+            matInput
+            [formControl]="imageControl"
+            class="hidden-input"
+            [class.cdk-visually-hidden]="true"
+          />
+
+          <input
+            #fileInput
+            type="file"
+            accept="image/jpeg,image/png,image/gif,image/webp"
+            style="display: none"
+            (change)="onImageFileSelected($event)"
+            [readonly]="true"
+          />
+
+          <div matSuffix (click)="fileInput.click()">
+            <ng-container *ngIf="isImageLoading; else imageContent">
+              <mat-spinner class="spinner"></mat-spinner>
+            </ng-container>
+
+            <ng-template #imageContent>
+              <img
+                *ngIf="imageControl.value; else emptyImage"
+                [src]="imageControl.value"
+                class="work-image"
+              />
+              <ng-template #emptyImage>
+                <mat-icon class="add-icon">add_circle_outline</mat-icon>
+              </ng-template>
+            </ng-template>
+          </div>
+
+          @if (imageControl.hasError("invalidFileType")) {
+            <mat-error>נא לבחור קובץ תמונה (JPEG, PNG, GIF, או WebP)</mat-error>
+          }
+        </mat-form-field>
       </div>
       <div class="card-text-container">
         <mat-form-field class="small light" appearance="outline">
           <mat-label>כותרת עבודה</mat-label>
           <input matInput [formControl]="titleControl" />
 
-          @if (titleControl.hasError('required') ||
-          titleControl.hasError('noOnlySpaces')) {
-          <mat-error>יש להזין כותרת</mat-error>
-          } @if (titleControl.hasError('minlength')) {
-          <mat-error>כותרת חייבת להיות באורך לפחות 2 תווים</mat-error>
-          } @if (titleControl.hasError('maxlength')) {
-          <mat-error>כותרת חייבת להיות עד 100 תווים</mat-error>
-          } @if (titleControl.hasError('pattern')) {
-          <mat-error>כותרת יכולה להזין אותיות בלבד</mat-error>
+          @if (
+            titleControl.hasError("required") ||
+            titleControl.hasError("noOnlySpaces")
+          ) {
+            <mat-error>יש להזין כותרת</mat-error>
+          }
+          @if (titleControl.hasError("minlength")) {
+            <mat-error>כותרת חייבת להיות באורך לפחות 2 תווים</mat-error>
+          }
+          @if (titleControl.hasError("maxlength")) {
+            <mat-error>כותרת חייבת להיות עד 100 תווים</mat-error>
+          }
+          @if (titleControl.hasError("pattern")) {
+            <mat-error>כותרת יכולה להזין אותיות בלבד</mat-error>
           }
         </mat-form-field>
         <mat-form-field class="small light" appearance="outline">
@@ -41,15 +78,20 @@
             rows="3"
             [formControl]="descriptionControl"
           ></textarea>
-          @if (descriptionControl.hasError('required') ||
-          descriptionControl.hasError('noOnlySpaces')) {
-          <mat-error>יש להזין תיאור</mat-error>
-          } @if (descriptionControl.hasError('minlength')) {
-          <mat-error>תיאור חייב להיות באורך לפחות 2 תווים</mat-error>
-          } @if (descriptionControl.hasError('maxlength')) {
-          <mat-error>תיאור חייב להיות עד 30 תווים</mat-error>
-          } @if (descriptionControl.hasError('pattern')) {
-          <mat-error>תיאור יכול להזין אותיות ומספרים בלבד</mat-error>
+          @if (
+            descriptionControl.hasError("required") ||
+            descriptionControl.hasError("noOnlySpaces")
+          ) {
+            <mat-error>יש להזין תיאור</mat-error>
+          }
+          @if (descriptionControl.hasError("minlength")) {
+            <mat-error>תיאור חייב להיות באורך לפחות 2 תווים</mat-error>
+          }
+          @if (descriptionControl.hasError("maxlength")) {
+            <mat-error>תיאור חייב להיות עד 30 תווים</mat-error>
+          }
+          @if (descriptionControl.hasError("pattern")) {
+            <mat-error>תיאור יכול להזין אותיות ומספרים בלבד</mat-error>
           }
         </mat-form-field>
       </div>
