@@ -25,6 +25,7 @@ import { NgIf } from '@angular/common';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { Category } from '../../../shared/models/data-tables/category.class';
 import noOnlySpacesValidator from '../../../shared/validators/no-only-spaces.validator';
+import { ImageService } from '../../../shared/services/image.service';
 
 @Component({
   selector: 'app-user-info',
@@ -51,13 +52,6 @@ export class UserInfoComponent {
   getCategoryClass(category: Category): string {
     return `category--${category.name || 'default'}`;
   }
-
-  private allowedFileTypes = [
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-  ];
 
   userInfoForm: FormGroup;
   usernameControl = new FormControl('', [
@@ -92,7 +86,8 @@ export class UserInfoComponent {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private popupModalService: PopupModalService
+    private popupModalService: PopupModalService,
+    private imageService: ImageService
   ) {}
 
   ngOnInit() {
@@ -166,7 +161,7 @@ export class UserInfoComponent {
     const file = input.files[0];
 
     // Check if file is an image
-    if (!this.isFileTypeAllowed(file)) {
+    if (!this.imageService.isFileTypeAllowed(file)) {
       this.imageErrorMessage = 'נא לבחור קובץ תמונה (JPEG, PNG, GIF, או WebP)';
       this.imageValid = false;
       input.value = '';
@@ -205,9 +200,5 @@ export class UserInfoComponent {
       };
       img.src = URL.createObjectURL(file);
     });
-  }
-
-  private isFileTypeAllowed(file: File): boolean {
-    return this.allowedFileTypes.includes(file.type);
   }
 }
