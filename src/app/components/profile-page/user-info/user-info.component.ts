@@ -73,7 +73,7 @@ export class UserInfoComponent {
     this.noOnlySpacesValidator(),
   ]);
   imageControl = new FormControl('avatar.png', Validators.required);
-  taglineControl = new FormControl('', [
+  categoriesControl = new FormControl('', [
     Validators.required,
     Validators.minLength(2),
     Validators.maxLength(30),
@@ -91,7 +91,7 @@ export class UserInfoComponent {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private popupModalService: PopupModalService
+    private popupModalService: PopupModalService,
   ) {}
 
   ngOnInit() {
@@ -99,7 +99,7 @@ export class UserInfoComponent {
       username: this.usernameControl,
       displayName: this.displayNameControl,
       image: this.imageControl,
-      tagline: this.taglineControl,
+      categories: this.categoriesControl,
       description: this.descriptionControl,
     });
 
@@ -107,7 +107,9 @@ export class UserInfoComponent {
       username: this.user.username,
       displayName: this.user.displayName,
       image: this.user.image,
-      tagline: this.user.tagline,
+      categories: this.user.categories
+        .map((category) => category.displayName)
+        .join(', '),
       description: this.user.description,
     });
   }
