@@ -4,9 +4,7 @@
   [disableSubmit]="!userWorkForm.valid"
 >
   @if (showServerError) {
-    <section class="login-server-error">
-      <app-server-error />
-    </section>
+    <app-server-error />
   }
   <form [formGroup]="userWorkForm">
     <div class="card">
@@ -96,10 +94,24 @@
         </mat-form-field>
       </div>
     </div>
-
-    <app-hidden-submit
-      (submission)="submit()"
-      [disabled]="!userWorkForm.valid"
-    />
   </form>
+
+  <ng-template #actions>
+    <button
+      mat-raised-button
+      color="primary"
+      class="btn btn-secondary btn-modal-action"
+      [disabled]="!userWorkForm.valid"
+      (click)="submit()"
+    >
+      אישור
+    </button>
+    <button
+      mat-button
+      (click)="close()"
+      class="btn btn-underline btn-clear btn-modal-action"
+    >
+      ביטול
+    </button>
+  </ng-template>
 </app-modal-wrapper>

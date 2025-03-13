@@ -1,6 +1,5 @@
 import { Component, Inject, inject } from '@angular/core';
 import { ModalWrapperComponent } from '../../../shared/components/modal-wrapper/modal-wrapper.component';
-import { BaseModalComponent } from '../../../shared/components/base-modal/base-modal.component';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import {
   FormBuilder,
@@ -9,10 +8,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { HiddenSubmitComponent } from '../../../shared/components/hidden-submit/hidden-submit.component';
 import { UserWork } from '../../../shared/models/userWork.class';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -30,7 +27,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatDialogModule,
-    HiddenSubmitComponent,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -41,7 +37,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   templateUrl: './user-work-modal.component.html',
   styleUrl: './user-work-modal.component.scss',
 })
-export class UserWorkModalComponent extends BaseModalComponent {
+export class UserWorkModalComponent extends ModalWrapperComponent {
   showServerError: boolean = false;
   isFormSubmitting: boolean = false;
   isImageLoading: boolean = false;
@@ -63,29 +59,21 @@ export class UserWorkModalComponent extends BaseModalComponent {
     this.userWork = data?.userWork ?? null;
 
     // Create form controls
-    this.titleControl = this.fb.control(
-      this.userWork ? this.userWork.title : '',
-      [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(100),
-        Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-]+$"),
-        noOnlySpacesValidator(),
-      ],
-    );
-    this.descriptionControl = this.fb.control(
-      this.userWork ? this.userWork.description : '',
-      [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(500),
-        Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '-,.!?;]+$"),
-        noOnlySpacesValidator(),
-      ],
-    );
-    this.imageControl = this.fb.control(
-      this.userWork && this.userWork.images ? this.userWork.images[0].url : '',
-    );
+    this.titleControl = this.fb.control('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(100),
+      Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-]+$"),
+      noOnlySpacesValidator(),
+    ]);
+    this.descriptionControl = this.fb.control('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(500),
+      Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '-,.!?;]+$"),
+      noOnlySpacesValidator(),
+    ]);
+    this.imageControl = this.fb.control('');
 
     // Create form
     this.userWorkForm = this.fb.group({
@@ -93,10 +81,19 @@ export class UserWorkModalComponent extends BaseModalComponent {
       description: this.descriptionControl,
       image: this.imageControl,
     });
+
+    if (this.userWork) {
+      this.userWorkForm.patchValue(this.userWork);
+    }
   }
 
-  submit() {
-    this.dialogRef.close(this.userWork);
+  override submit() {
+    const updatedUserWork: UserWork = {
+      ...this.userWork,
+      ...this.userWorkForm.value,
+    };
+
+    this.close(updatedUserWork);
   }
 
   onImageFileSelected(event: Event) {
