@@ -20,11 +20,13 @@ export class UserWorksComponent {
 
   constructor(
     protected readonly languageService: LanguageService,
-    private popupModalService: PopupModalService
+    private popupModalService: PopupModalService,
   ) {}
 
   openWorkModal(userWork?: UserWork) {
-    let dialogRef = this.popupModalService.open(UserWorkModalComponent);
+    let dialogRef = this.popupModalService.open(UserWorkModalComponent, {
+      disableClose: true,
+    });
 
     // TODO: save result
     dialogRef.afterClosed().subscribe((result) => {
