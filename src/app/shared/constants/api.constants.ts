@@ -11,7 +11,12 @@ export class ApiConstants {
       PUBLIC_USER: `${ApiConstants.BASE_URL}/user/public/:id`,
       SECURE_USER: `${ApiConstants.BASE_URL}/user/:id`,
       PROFILE: `${ApiConstants.BASE_URL}/user/profile`,
-      UPDATE: `${ApiConstants.BASE_URL}/user/update/:id`
+      UPDATE: `${ApiConstants.BASE_URL}/user/update/:id`,
+    },
+
+    // User works endpoints
+    WORKS: {
+      CREATE: `${ApiConstants.BASE_URL}/work/create`,
     },
 
     // Authentication endpoints
@@ -36,7 +41,7 @@ export class ApiConstants {
 
   static buildUrl(
     url: string,
-    params: Record<string, string | number>
+    params: Record<string, string | number>,
   ): string {
     let result = url;
     Object.keys(params).forEach((key) => {

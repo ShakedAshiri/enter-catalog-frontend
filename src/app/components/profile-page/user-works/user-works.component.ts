@@ -4,9 +4,12 @@ import { Component, Input } from '@angular/core';
 import { UserWork } from '../../../shared/models/userWork.class';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
-import { JsonPipe, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { LanguageService } from '../../../shared/services/language.service';
 import { UserWorkModalComponent } from '../user-work-modal/user-work-modal.component';
+import { UserWorksService } from '../../../shared/services/user-works.service';
+import { environment } from '../../../../environments/environment';
+import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 
 @Component({
   selector: 'app-user-works',
@@ -18,9 +21,12 @@ export class UserWorksComponent {
   @Input({ required: true }) userWorks!: UserWork[];
   @Input() isEditable: boolean = false;
 
+  isProduction = environment.production;
+
   constructor(
     protected readonly languageService: LanguageService,
     private popupModalService: PopupModalService,
+    private worksService: UserWorksService,
   ) {}
 
   openWorkModal(userWork?: UserWork) {
@@ -28,9 +34,20 @@ export class UserWorksComponent {
       disableClose: true,
     });
 
-    // TODO: save result
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`); // Pizza!
+    dialogRef.afterClosed().subscribe((newUserWork: UserWork) => {
+      this.worksService.createUserWork(newUserWork).subscribe({
+        next: (response: UserWork) => {
+          this.userWorks.push(response);
+        },
+        error: (error) => {
+          if (!this.isProduction) console.error('Error fetching data:', error);
+          this.popupModalService.open(
+            ServerErrorComponent,
+            {},
+            { text: 'אירעה שגיאה בעת שמירת העבודה.' },
+          );
+        },
+      });
     });
   }
 }
