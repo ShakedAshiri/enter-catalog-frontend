@@ -1,6 +1,6 @@
 <div>
   <form [formGroup]="userInfoForm">
-    <mat-card [class]="'card ' + getCategoryClass(user.categories[0])">
+    <mat-card [class]="'card ' + selectedCategoryClasses">
       <div
         class="card-img-container"
         appEditable
@@ -23,9 +23,11 @@
         />
         <img class="card-img" [src]="imageControl.value || 'avatar.png'" />
 
-        <div *ngIf="imageErrorMessage" class="error-message">
-          {{ imageErrorMessage }}
-        </div>
+        @if (imageErrorMessage) {
+          <div class="error-message">
+            {{ imageErrorMessage }}
+          </div>
+        }
       </div>
       <div class="card-text-container">
         <mat-form-field
@@ -73,29 +75,19 @@
             [isSaveDisabled]="!!categoriesControl.errors"
             [iconTop]="-5"
             [iconRight]="17"
-            (startEdit)="startEditing('tagline')"
-            (saveEdit)="saveEdit('tagline')"
-            (cancelEdit)="cancelEdit('tagline')"
+            (startEdit)="startEditing('categories')"
+            (saveEdit)="saveEdit('categories')"
+            (cancelEdit)="cancelEdit('categories')"
           >
-            <input
-              matInput
-              [formControl]="categoriesControl"
-              [readonly]="!isEditable"
-            />
-            @if (
-              categoriesControl.hasError("required") ||
-              categoriesControl.hasError("noOnlySpaces")
-            ) {
-              <mat-error>יש להזין כותרת משנה</mat-error>
-            }
-            @if (categoriesControl.hasError("minlength")) {
-              <mat-error>כותרת משנה חייבת להיות באורך לפחות 2 תווים</mat-error>
-            }
-            @if (categoriesControl.hasError("maxlength")) {
-              <mat-error>כותרת משנה חייבת להיות עד 30 תווים</mat-error>
-            }
-            @if (categoriesControl.hasError("pattern")) {
-              <mat-error>כותרת משנה יכולה להזין אותיות בלבד</mat-error>
+            <mat-select [formControl]="categoriesControl" multiple>
+              @for (category of categories; track category.id) {
+                <mat-option [value]="category.id">{{
+                  category.displayName
+                }}</mat-option>
+              }
+            </mat-select>
+            @if (categoriesControl.hasError("required")) {
+              <mat-error>יש להזין לפחות קטגוריה אחת</mat-error>
             }
           </mat-form-field>
         </div>

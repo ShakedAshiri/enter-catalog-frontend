@@ -21,9 +21,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { EditableDirective } from '../../../shared/directives/editable.directive';
 import { UserService } from '../../../shared/services/user.service';
 import { environment } from '../../../../environments/environment';
-import { NgIf } from '@angular/common';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { Category } from '../../../shared/models/data-tables/category.class';
+import { DataTableService } from '../../../shared/services/data-table.service';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-user-info',
@@ -34,8 +35,9 @@ import { Category } from '../../../shared/models/data-tables/category.class';
     MatInputModule,
     MatCardModule,
     MatIconModule,
+    MatSelect,
+    MatOption,
     EditableDirective,
-    NgIf,
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
@@ -46,6 +48,8 @@ export class UserInfoComponent {
   previousValues: { [key: string]: any } = {};
   imageErrorMessage: string | null = null;
   imageValid: boolean = false;
+  categories: Category[] = [];
+  selectedCategoryClasses: string[] = [];
 
   getCategoryClass(category: Category): string {
     return `category--${category.name || 'default'}`;
@@ -73,13 +77,7 @@ export class UserInfoComponent {
     this.noOnlySpacesValidator(),
   ]);
   imageControl = new FormControl('avatar.png', Validators.required);
-  categoriesControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(2),
-    Validators.maxLength(30),
-    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-]+$"),
-    this.noOnlySpacesValidator(),
-  ]);
+  categoriesControl = new FormControl([], [Validators.required]);
   descriptionControl = new FormControl('', [
     Validators.required,
     Validators.minLength(2),
@@ -92,25 +90,38 @@ export class UserInfoComponent {
     private fb: FormBuilder,
     private userService: UserService,
     private popupModalService: PopupModalService,
+    private dataTableService: DataTableService,
   ) {}
 
   ngOnInit() {
-    this.userInfoForm = this.fb.group({
-      username: this.usernameControl,
-      displayName: this.displayNameControl,
-      image: this.imageControl,
-      categories: this.categoriesControl,
-      description: this.descriptionControl,
+    this.dataTableService.getCategories().subscribe((categories) => {
+      this.categories = categories;
+
+      // Initialize form after categories are loaded
+      this.userInfoForm = this.fb.group({
+        username: this.usernameControl,
+        displayName: this.displayNameControl,
+        image: this.imageControl,
+        categories: this.categoriesControl,
+        description: this.descriptionControl,
+      });
+
+      // Set initial values only after categories are available
+      this.userInfoForm.setValue({
+        username: this.user.username,
+        displayName: this.user.displayName,
+        image: this.user.image,
+        categories: this.user.categories.map((category) => category.id),
+        description: this.user.description,
+      });
+
+      // Now update category classes
+      this.updateSelectedCategoryClasses(this.categoriesControl.value);
     });
 
-    this.userInfoForm.setValue({
-      username: this.user.username,
-      displayName: this.user.displayName,
-      image: this.user.image,
-      categories: this.user.categories
-        .map((category) => category.displayName)
-        .join(', '),
-      description: this.user.description,
+    // Listen for category changes dynamically
+    this.categoriesControl.valueChanges.subscribe((selectedIds) => {
+      this.updateSelectedCategoryClasses(selectedIds);
     });
   }
 
@@ -219,5 +230,11 @@ export class UserInfoComponent {
       }
       return null;
     };
+  }
+
+  updateSelectedCategoryClasses(selectedIds: number[]) {
+    this.selectedCategoryClasses = this.categories
+      .filter((category) => selectedIds.includes(category.id))
+      .map((category) => `category--${category.name} `);
   }
 }
