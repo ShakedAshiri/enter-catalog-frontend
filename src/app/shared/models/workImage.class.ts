@@ -1,6 +1,6 @@
 export class WorkImage {
   constructor(
-    public id: string,
-    public url: string // thumbnail // file
+    public url: string, // thumbnail // file
+    public id?: string,
   ) {}
 }
