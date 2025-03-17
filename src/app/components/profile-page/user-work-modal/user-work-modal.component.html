@@ -1,18 +1,15 @@
 <app-modal-wrapper
-  title="הוספת פרויקט לגלריה שלי"
+  [title]="title"
   [closeOption]="true"
   [disableSubmit]="!userWorkForm.valid"
 >
-  @if (showServerError) {
-    <app-server-error />
-  }
   <form [formGroup]="userWorkForm">
     <div class="card">
       <div class="card-img-container">
         <mat-form-field appearance="outline" class="transparent hidden">
           <input
             matInput
-            [formControl]="imageControl"
+            [formControl]="imagesControl.at(0)"
             class="hidden-input"
             [class.cdk-visually-hidden]="true"
           />
@@ -26,27 +23,50 @@
             [readonly]="true"
           />
 
-          <div matSuffix (click)="fileInput.click()">
+          <div matSuffix>
             <ng-container *ngIf="isImageLoading; else imageContent">
               <mat-spinner class="spinner"></mat-spinner>
             </ng-container>
 
             <ng-template #imageContent>
               <img
-                *ngIf="imageControl.value; else emptyImage"
-                [src]="imageControl.value"
+                *ngIf="images.length > 0; else emptyImage"
+                [src]="selectedImage.url"
                 class="work-image"
               />
               <ng-template #emptyImage>
-                <mat-icon class="add-icon">add_circle_outline</mat-icon>
+                <mat-icon class="add-icon" (click)="fileInput.click()"
+                  >add_circle_outline</mat-icon
+                >
               </ng-template>
             </ng-template>
           </div>
 
-          @if (imageControl.hasError("invalidFileType")) {
+          @if (imagesControl.hasError("invalidFileType")) {
             <mat-error>נא לבחור קובץ תמונה (JPEG, PNG, GIF, או WebP)</mat-error>
           }
         </mat-form-field>
+
+        <!-- Thumbnail strip -->
+        <div class="thumbnail-container" *ngIf="images.length > 0">
+          <cdk-virtual-scroll-viewport
+            orientation="horizontal"
+            itemSize="40"
+            class="thumbnail-viewport"
+          >
+            <mat-icon class="add-icon-thumbnail" (click)="fileInput.click()"
+              >add_circle_outline</mat-icon
+            >
+            <div
+              *cdkVirtualFor="let img of images; let i = index"
+              class="thumbnail"
+              [class.active]="selectedImage === img"
+              (click)="selectedImage = img"
+            >
+              <img [src]="img.url" />
+            </div>
+          </cdk-virtual-scroll-viewport>
+        </div>
       </div>
       <div class="card-text-container">
         <mat-form-field class="small light" appearance="outline">
@@ -73,7 +93,7 @@
           <mat-label>תיאור</mat-label>
           <textarea
             matInput
-            rows="3"
+            rows="5"
             [formControl]="descriptionControl"
           ></textarea>
           @if (

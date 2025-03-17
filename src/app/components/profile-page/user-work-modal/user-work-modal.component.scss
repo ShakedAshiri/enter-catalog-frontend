@@ -11,10 +11,10 @@ form {
 
   .card-img-container {
     flex: 33%;
-    cursor: pointer;
     display: flex;
     align-items: center;
     min-height: auto;
+    flex-direction: column;
 
     .add-icon {
       width: 100%;
@@ -25,11 +25,22 @@ form {
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
+    }
+
+    .add-icon-thumbnail {
+      cursor: pointer;
+      color: white;
+      font-size: 2.1rem;
+      height: 50px;
+      width: 31px;
+      margin: 0px 2px;
     }
 
     .work-image {
       width: 100%;
-      height: auto;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
     }
 
     mat-error {
@@ -47,4 +58,42 @@ form {
       resize: none;
     }
   }
+}
+
+.thumbnail-container {
+  width: 100%;
+}
+
+.thumbnail-viewport {
+  width: calc(40px * 3 + 10px * 2);
+  height: 78px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.thumbnail {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  margin: 5px 1px;
+}
+
+.thumbnail.active {
+  border-color: #007bff;
+  transform: scale(1.05);
+}
+
+.thumbnail:hover:not(.active) {
+  border-color: #dee2e6;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
