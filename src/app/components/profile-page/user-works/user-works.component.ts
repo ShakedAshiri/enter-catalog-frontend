@@ -10,6 +10,7 @@ import { UserWorkModalComponent } from '../user-work-modal/user-work-modal.compo
 import { UserWorksService } from '../../../shared/services/user-works.service';
 import { environment } from '../../../../environments/environment';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
+import { User } from '../../../shared/models/user.class';
 
 @Component({
   selector: 'app-user-works',
@@ -19,6 +20,7 @@ import { ServerErrorComponent } from '../../../shared/components/server-error/se
 })
 export class UserWorksComponent {
   @Input({ required: true }) userWorks!: UserWork[];
+  @Input({ required: true }) user: User;
   @Input() isEditable: boolean = false;
 
   isProduction = environment.production;
@@ -30,24 +32,55 @@ export class UserWorksComponent {
   ) {}
 
   openWorkModal(userWork?: UserWork) {
-    let dialogRef = this.popupModalService.open(UserWorkModalComponent, {
-      disableClose: true,
-    });
+    let dialogRef = this.popupModalService.open(
+      UserWorkModalComponent,
+      {
+        disableClose: true,
+      },
+      {
+        userWork,
+        title: userWork
+          ? 'עדכון פרויקט מהגלריה שלי'
+          : 'הוספת פרויקט לגלריה שלי',
+      },
+    );
 
-    dialogRef.afterClosed().subscribe((newUserWork: UserWork) => {
-      this.worksService.createUserWork(newUserWork).subscribe({
-        next: (response: UserWork) => {
-          this.userWorks.push(response);
-        },
-        error: (error) => {
-          if (!this.isProduction) console.error('Error fetching data:', error);
-          this.popupModalService.open(
-            ServerErrorComponent,
-            {},
-            { text: 'אירעה שגיאה בעת שמירת העבודה.' },
-          );
-        },
-      });
+    dialogRef.afterClosed().subscribe((userWork: UserWork) => {
+      // If id exists == update userWork
+      if (userWork && userWork.id) {
+        this.worksService.updateUserWork(this.user.id, userWork).subscribe({
+          next: (response: UserWork) => {
+            this.userWorks.push(response);
+          },
+          error: (error) => {
+            if (!this.isProduction)
+              console.error('Error fetching data:', error);
+            this.popupModalService.open(
+              ServerErrorComponent,
+              {},
+              { text: 'אירעה שגיאה בעת עדכון העבודה.' },
+            );
+          },
+        });
+        // If id doesn't exist == create userWork
+      } else if (userWork) {
+        userWork.user = this.user.id;
+
+        this.worksService.createUserWork(userWork).subscribe({
+          next: (response: UserWork) => {
+            this.userWorks.push(response);
+          },
+          error: (error) => {
+            if (!this.isProduction)
+              console.error('Error fetching data:', error);
+            this.popupModalService.open(
+              ServerErrorComponent,
+              {},
+              { text: 'אירעה שגיאה בעת שמירת העבודה.' },
+            );
+          },
+        });
+      }
     });
   }
 }

@@ -16,7 +16,7 @@
     <span>קטלוג עבודות:</span>
   </div>
   <mat-grid-list cols="2" rowHeight="235px">
-    <mat-grid-tile class="work-tile" *ngFor="let work of userWorks">
+    <mat-grid-tile class="work-tile" *ngFor="let work of userWorks" (click)="openWorkModal(work)">
       <div class="work-container">
         <img
           *ngIf="work.images.length > 0; else imagePlaceHolder"
