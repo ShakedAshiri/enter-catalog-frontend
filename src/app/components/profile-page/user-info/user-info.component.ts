@@ -94,20 +94,20 @@ export class UserInfoComponent {
   ) {}
 
   ngOnInit() {
+    // Initialize the form first to avoid NG01052 error
+    this.userInfoForm = this.fb.group({
+      username: this.usernameControl,
+      displayName: this.displayNameControl,
+      image: this.imageControl,
+      categories: this.categoriesControl,
+      description: this.descriptionControl,
+    });
+
     this.dataTableService.getCategories().subscribe((categories) => {
       this.categories = categories;
 
-      // Initialize form after categories are loaded
-      this.userInfoForm = this.fb.group({
-        username: this.usernameControl,
-        displayName: this.displayNameControl,
-        image: this.imageControl,
-        categories: this.categoriesControl,
-        description: this.descriptionControl,
-      });
-
-      // Set initial values only after categories are available
-      this.userInfoForm.setValue({
+      // Now update form values once categories are available
+      this.userInfoForm.patchValue({
         username: this.user.username,
         displayName: this.user.displayName,
         image: this.user.image,
@@ -115,7 +115,7 @@ export class UserInfoComponent {
         description: this.user.description,
       });
 
-      // Now update category classes
+      // Update category classes
       this.updateSelectedCategoryClasses(this.categoriesControl.value);
     });
 
