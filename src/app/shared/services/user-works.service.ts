@@ -16,4 +16,11 @@ export class UserWorksService {
       userWork,
     );
   }
+
+  public updateUserWork(id: number, userWork: UserWork) {
+    const url = ApiConstants.buildUrl(ApiConstants.ENDPOINTS.WORKS.UPDATE, {
+      id: id,
+    });
+    return this.http.patch<UserWork>(url, userWork);
+  }
 }
