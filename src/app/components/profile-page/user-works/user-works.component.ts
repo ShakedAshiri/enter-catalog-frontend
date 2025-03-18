@@ -4,17 +4,28 @@ import { Component, Input } from '@angular/core';
 import { UserWork } from '../../../shared/models/userWork.class';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { LanguageService } from '../../../shared/services/language.service';
 import { UserWorkModalComponent } from '../user-work-modal/user-work-modal.component';
 import { UserWorksService } from '../../../shared/services/user-works.service';
 import { environment } from '../../../../environments/environment';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { User } from '../../../shared/models/user.class';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-user-works',
-  imports: [MatGridListModule, MatCardModule, NgFor, NgIf, MatIconModule],
+  imports: [
+    MatGridListModule,
+    MatCardModule,
+    NgFor,
+    NgIf,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    NgTemplateOutlet,
+    MatTooltipModule,
+  ],
   templateUrl: './user-works.component.html',
   styleUrl: './user-works.component.scss',
 })
@@ -24,6 +35,7 @@ export class UserWorksComponent {
   @Input() isEditable: boolean = false;
 
   isProduction = environment.production;
+  loadingWorkIndex: number = null;
 
   constructor(
     protected readonly languageService: LanguageService,
@@ -46,32 +58,53 @@ export class UserWorksComponent {
       },
     );
 
-    dialogRef.afterClosed().subscribe((userWork?: UserWork) => {
-      // If id exists == update userWork
-      if (userWork && userWork.id) {
-        this.worksService.updateUserWork(this.user.id, userWork).subscribe({
-          next: (response: UserWork) => {
-            this.userWorks.push(response);
-          },
-          error: (error) => {
-            if (!this.isProduction)
-              console.error('Error fetching data:', error);
-            this.popupModalService.open(
-              ServerErrorComponent,
-              {},
-              { text: 'אירעה שגיאה בעת עדכון העבודה.' },
-            );
-          },
-        });
-        // If id doesn't exist == create userWork
-      } else if (userWork) {
-        userWork.user = this.user.id;
+    dialogRef.afterClosed().subscribe((updatedUserWork?: Partial<UserWork>) => {
+      // If id exists == UPDATE userWork
+      if (userWork && userWork.id && updatedUserWork) {
+        this.loadingWorkIndex = userWork.id;
 
-        this.worksService.createUserWork(userWork).subscribe({
+        this.worksService
+          .updateUserWork(userWork.id, updatedUserWork)
+          .subscribe({
+            next: (response: UserWork) => {
+              // Add updated values to the updated work
+              this.userWorks = this.userWorks.map((work) =>
+                work.id === userWork.id
+                  ? {
+                      ...work,
+                      ...response,
+                      images: [...work.images, ...response.images],
+                    }
+                  : work,
+              );
+
+              this.loadingWorkIndex = null;
+            },
+            error: (error) => {
+              this.loadingWorkIndex = null;
+
+              if (!this.isProduction)
+                console.error('Error fetching data:', error);
+              this.popupModalService.open(
+                ServerErrorComponent,
+                {},
+                { text: 'אירעה שגיאה בעת עדכון העבודה.' },
+              );
+            },
+          });
+        // If id doesn't exist == CREATE userWork
+      } else if (updatedUserWork) {
+        updatedUserWork.user = this.user.id;
+        this.loadingWorkIndex = -1;
+
+        this.worksService.createUserWork(updatedUserWork).subscribe({
           next: (response: UserWork) => {
-            this.userWorks.push(response);
+            this.loadingWorkIndex = null;
+            this.userWorks.unshift(response);
           },
           error: (error) => {
+            this.loadingWorkIndex = null;
+
             if (!this.isProduction)
               console.error('Error fetching data:', error);
             this.popupModalService.open(
