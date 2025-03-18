@@ -53,6 +53,7 @@ export class UserWorkModalComponent extends ModalWrapperComponent {
   userWork: UserWork;
   selectedImage: WorkImage;
   images: WorkImage[] = [];
+  addedImages: string[] = [];
 
   isEditable: boolean = false;
 
@@ -114,9 +115,9 @@ export class UserWorkModalComponent extends ModalWrapperComponent {
       this.close();
     } else {
       const updatedUserWork: UserWork = {
-        ...this.userWork,
         ...this.userWorkForm.value,
         workFiles: [], // TODO - update so editable in form
+        images: this.addedImages, // TODO: change so all images are sent. this is just for the poc
       };
 
       this.close(updatedUserWork);
@@ -160,6 +161,9 @@ export class UserWorkModalComponent extends ModalWrapperComponent {
       this.images = [...this.imagesControl.value];
 
       this.isImageLoading = false;
+
+      // TODO: change so all images are sent. this is just for the poc
+      this.addedImages.push(newImg.url);
     };
 
     reader.readAsDataURL(file);
