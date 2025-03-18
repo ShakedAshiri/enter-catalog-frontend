@@ -38,6 +38,7 @@ export class UserWorksComponent {
         disableClose: true,
       },
       {
+        isEditable: this.isEditable,
         userWork,
         title: userWork
           ? 'עדכון פרויקט מהגלריה שלי'
@@ -45,7 +46,7 @@ export class UserWorksComponent {
       },
     );
 
-    dialogRef.afterClosed().subscribe((userWork: UserWork) => {
+    dialogRef.afterClosed().subscribe((userWork?: UserWork) => {
       // If id exists == update userWork
       if (userWork && userWork.id) {
         this.worksService.updateUserWork(this.user.id, userWork).subscribe({

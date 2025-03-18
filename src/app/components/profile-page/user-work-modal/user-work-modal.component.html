@@ -21,6 +21,7 @@
             style="display: none"
             (change)="onImageFileSelected($event)"
             [readonly]="true"
+            [disabled]="!isEditable"
           />
 
           <div matSuffix>
@@ -35,7 +36,10 @@
                 class="work-image"
               />
               <ng-template #emptyImage>
-                <mat-icon class="add-icon" (click)="fileInput.click()"
+                <mat-icon
+                  class="add-icon"
+                  [class.clickable]="isEditable"
+                  (click)="fileInput.click()"
                   >add_circle_outline</mat-icon
                 >
               </ng-template>
@@ -48,13 +52,22 @@
         </mat-form-field>
 
         <!-- Thumbnail strip -->
-        <div class="thumbnail-container" *ngIf="images.length > 0">
+        <div
+          class="thumbnail-container"
+          *ngIf="
+            (isEditable && images.length > 0) ||
+            (!isEditable && images.length > 1)
+          "
+        >
           <cdk-virtual-scroll-viewport
             orientation="horizontal"
             itemSize="40"
             class="thumbnail-viewport"
           >
-            <mat-icon class="add-icon-thumbnail" (click)="fileInput.click()"
+            <mat-icon
+              *ngIf="isEditable"
+              class="add-icon-thumbnail"
+              (click)="fileInput.click()"
               >add_circle_outline</mat-icon
             >
             <div
@@ -69,7 +82,11 @@
         </div>
       </div>
       <div class="card-text-container">
-        <mat-form-field class="small light" appearance="outline">
+        <mat-form-field
+          *ngIf="isEditable"
+          class="small light"
+          appearance="outline"
+        >
           <mat-label>כותרת עבודה</mat-label>
           <input matInput [formControl]="titleControl" />
 
@@ -93,7 +110,7 @@
           <mat-label>תיאור</mat-label>
           <textarea
             matInput
-            rows="5"
+            [rows]="isEditable ? 5 : 7"
             [formControl]="descriptionControl"
           ></textarea>
           @if (
@@ -127,6 +144,7 @@
       אישור
     </button>
     <button
+      *ngIf="isEditable"
       mat-button
       (click)="close()"
       class="btn btn-underline btn-clear btn-modal-action"

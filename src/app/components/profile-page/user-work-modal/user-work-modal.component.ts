@@ -1,10 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  inject,
-  ViewChild,
-} from '@angular/core';
+import { Component, Inject, inject, ViewChild } from '@angular/core';
 import { ModalWrapperComponent } from '../../../shared/components/modal-wrapper/modal-wrapper.component';
 import {
   FormArray,
@@ -25,10 +19,7 @@ import noOnlySpacesValidator from '../../../shared/validators/no-only-spaces.val
 import { ImageService } from '../../../shared/services/image.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { WorkImage } from '../../../shared/models/workImage.class';
-import {
-  CdkVirtualScrollViewport,
-  ScrollingModule,
-} from '@angular/cdk/scrolling';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-user-work-modal',
@@ -63,37 +54,43 @@ export class UserWorkModalComponent extends ModalWrapperComponent {
   selectedImage: WorkImage;
   images: WorkImage[] = [];
 
-  @ViewChild(CdkVirtualScrollViewport) viewport!: CdkVirtualScrollViewport;
+  isEditable: boolean = false;
 
   constructor(
     private imageService: ImageService,
-    private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data?: any,
   ) {
     super();
 
-    this.title = data?.title;
     this.userWork = data?.userWork ?? null;
+    this.isEditable = data?.isEditable ?? false;
+    this.title = this.isEditable ? data?.title : this.userWork?.title;
 
     // For thumbnail scroll
     this.selectedImage = this.userWork?.images[0] ?? null;
     this.images = this.userWork?.images ?? [];
 
     // Create form controls
-    this.titleControl = this.fb.control('', [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(100),
-      Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-]+$"),
-      noOnlySpacesValidator(),
-    ]);
-    this.descriptionControl = this.fb.control('', [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(500),
-      Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '-,.!?;]+$"),
-      noOnlySpacesValidator(),
-    ]);
+    this.titleControl = this.fb.control(
+      { value: '', disabled: !this.isEditable },
+      [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(100),
+        Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-]+$"),
+        noOnlySpacesValidator(),
+      ],
+    );
+    this.descriptionControl = this.fb.control(
+      { value: '', disabled: !this.isEditable },
+      [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(500),
+        Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '-,.!?;]+$"),
+        noOnlySpacesValidator(),
+      ],
+    );
     this.imagesControl = this.fb.array(
       this.userWork?.images.map((image) => this.fb.control(image)) || [
         this.fb.control(null),
@@ -113,17 +110,17 @@ export class UserWorkModalComponent extends ModalWrapperComponent {
   }
 
   override submit() {
-    const updatedUserWork: UserWork = {
-      ...this.userWork,
-      ...this.userWorkForm.value,
-      workFiles: [], // TODO - update so editable in form
-      // TODO: images - should send to backend as workImage array
-      images: this.userWorkForm.value.images.map(
-        (workImg: WorkImage) => workImg.url,
-      ),
-    };
+    if (!this.isEditable) {
+      this.close();
+    } else {
+      const updatedUserWork: UserWork = {
+        ...this.userWork,
+        ...this.userWorkForm.value,
+        workFiles: [], // TODO - update so editable in form
+      };
 
-    this.close(updatedUserWork);
+      this.close(updatedUserWork);
+    }
   }
 
   onImageFileSelected(event: Event) {
@@ -155,7 +152,7 @@ export class UserWorkModalComponent extends ModalWrapperComponent {
 
       const newImg = new WorkImage(e.target.result);
 
-      this.imagesControl.push(this.fb.control(newImg));
+      this.imagesControl.insert(0, this.fb.control(newImg));
 
       this.selectedImage = newImg;
 
