@@ -1,4 +1,4 @@
-@use '../../../../colors';
+@use "../../../../colors";
 @use "sass:map";
 
 .container {
@@ -14,7 +14,12 @@
 
 .category-buttons {
   display: flex;
+  flex-wrap: wrap; // Allow wrapping to new rows
   justify-content: flex-start;
+  margin-right: 55px;
+  width: 1000px; // Fixed width for the container
+  gap: clamp(2px, 1vw, 10px); // Spacing between buttons
+  row-gap: 20px; // Space between rows
 
   .btn-close {
     padding: 0px;
@@ -24,13 +29,18 @@
     @each $category, $color in colors.$category-colors {
       &--#{$category} {
         border-radius: 5px;
-        padding: 5px 4px;
         font-size: clamp(1rem, 1.5vw, 1.5rem);
-        margin-left: clamp(2px, 1vw, 5px);
         border: none;
         background-color: $color;
         position: relative;
+        padding: 10px 15px; // Adjust padding for better spacing
+        width: auto; // Ensure buttons only take up the width of their text
+        display: inline-flex; // Keeps buttons inline with proper spacing
+        align-items: center; // Center text vertically
+        justify-content: center; // Center text horizontally
+        white-space: nowrap; // Prevents text wrapping
       }
+
       &--#{$category}.active::after {
         content: "";
         border-radius: 5px;
@@ -50,7 +60,6 @@
   margin-left: 10px;
 
   .prefix {
-
     .btn-search {
       padding: 0px 8px 0px 0px;
       display: flex;
