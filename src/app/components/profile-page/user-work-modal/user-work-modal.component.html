@@ -110,7 +110,7 @@
           <mat-label>תיאור</mat-label>
           <textarea
             matInput
-            [rows]="isEditable ? 5 : 7"
+            [rows]="images.length > 2 ? 6 : 5"
             [formControl]="descriptionControl"
           ></textarea>
           @if (
