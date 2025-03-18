@@ -237,4 +237,10 @@ export class UserInfoComponent {
       .filter((category) => selectedIds.includes(category.id))
       .map((category) => `category--${category.name} `);
   }
+
+  get userCategoriesDisplayNames() {
+    return this.user.categories
+      ?.reverse()
+      .map((category) => category.displayName);
+  }
 }

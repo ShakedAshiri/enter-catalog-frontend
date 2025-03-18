@@ -79,19 +79,28 @@
             (saveEdit)="saveEdit('categories')"
             (cancelEdit)="cancelEdit('categories')"
           >
-            <mat-select
-              [formControl]="categoriesControl"
-              multiple
-              panelClass="white-select"
-            >
-              @for (category of categories; track category.id) {
-                <mat-option [value]="category.id">{{
-                  category.displayName
-                }}</mat-option>
+            @if (!isEditable) {
+              <input
+                matInput
+                [value]="userCategoriesDisplayNames.join(', ')"
+                readonly
+              />
+            } @else {
+              <mat-select
+                [formControl]="categoriesControl"
+                multiple
+                panelClass="white-select"
+              >
+                @for (category of categories; track category.id) {
+                  <mat-option [value]="category.id">{{
+                    category.displayName
+                  }}</mat-option>
+                }
+              </mat-select>
+
+              @if (categoriesControl.hasError("required")) {
+                <mat-error>יש להזין לפחות קטגוריה אחת</mat-error>
               }
-            </mat-select>
-            @if (categoriesControl.hasError("required")) {
-              <mat-error>יש להזין לפחות קטגוריה אחת</mat-error>
             }
           </mat-form-field>
         </div>
