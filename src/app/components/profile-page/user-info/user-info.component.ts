@@ -21,9 +21,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { EditableDirective } from '../../../shared/directives/editable.directive';
 import { UserService } from '../../../shared/services/user.service';
 import { environment } from '../../../../environments/environment';
-import { NgIf } from '@angular/common';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { Category } from '../../../shared/models/data-tables/category.class';
+import { DataTableService } from '../../../shared/services/data-table.service';
+import { MatOption, MatSelect } from '@angular/material/select';
 import noOnlySpacesValidator from '../../../shared/validators/no-only-spaces.validator';
 import { ImageService } from '../../../shared/services/image.service';
 
@@ -36,8 +37,9 @@ import { ImageService } from '../../../shared/services/image.service';
     MatInputModule,
     MatCardModule,
     MatIconModule,
+    MatSelect,
+    MatOption,
     EditableDirective,
-    NgIf,
   ],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
@@ -48,6 +50,8 @@ export class UserInfoComponent {
   previousValues: { [key: string]: any } = {};
   imageErrorMessage: string | null = null;
   imageValid: boolean = false;
+  categories: Category[] = [];
+  selectedCategoryClasses: string[] = [];
 
   getCategoryClass(category: Category): string {
     return `category--${category.name || 'default'}`;
@@ -68,13 +72,7 @@ export class UserInfoComponent {
     noOnlySpacesValidator(),
   ]);
   imageControl = new FormControl('avatar.png', Validators.required);
-  taglineControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(2),
-    Validators.maxLength(30),
-    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-]+$"),
-    noOnlySpacesValidator(),
-  ]);
+  categoriesControl = new FormControl([], [Validators.required]);
   descriptionControl = new FormControl('', [
     Validators.required,
     Validators.minLength(2),
@@ -87,24 +85,39 @@ export class UserInfoComponent {
     private fb: FormBuilder,
     private userService: UserService,
     private popupModalService: PopupModalService,
+    private dataTableService: DataTableService,,
     private imageService: ImageService
   ) {}
 
   ngOnInit() {
+    // Initialize the form first to avoid NG01052 error
     this.userInfoForm = this.fb.group({
       username: this.usernameControl,
       displayName: this.displayNameControl,
       image: this.imageControl,
-      tagline: this.taglineControl,
+      categories: this.categoriesControl,
       description: this.descriptionControl,
     });
 
-    this.userInfoForm.setValue({
-      username: this.user.username,
-      displayName: this.user.displayName,
-      image: this.user.image,
-      tagline: this.user.tagline,
-      description: this.user.description,
+    this.dataTableService.getCategories().subscribe((categories) => {
+      this.categories = categories;
+
+      // Now update form values once categories are available
+      this.userInfoForm.patchValue({
+        username: this.user.username,
+        displayName: this.user.displayName,
+        image: this.user.image,
+        categories: this.user.categories.map((category) => category.id),
+        description: this.user.description,
+      });
+
+      // Update category classes
+      this.updateSelectedCategoryClasses(this.categoriesControl.value);
+    });
+
+    // Listen for category changes dynamically
+    this.categoriesControl.valueChanges.subscribe((selectedIds) => {
+      this.updateSelectedCategoryClasses(selectedIds);
     });
   }
 
@@ -200,5 +213,17 @@ export class UserInfoComponent {
       };
       img.src = URL.createObjectURL(file);
     });
+  }
+
+  updateSelectedCategoryClasses(selectedIds: number[]) {
+    this.selectedCategoryClasses = this.categories
+      .filter((category) => selectedIds.includes(category.id))
+      .map((category) => `category--${category.name} `);
+  }
+
+  get userCategoriesDisplayNames() {
+    return this.user.categories
+      ?.reverse()
+      .map((category) => category.displayName);
   }
 }

@@ -37,7 +37,7 @@ export class EditableDirective implements AfterViewInit, OnChanges {
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
   ) {
     // Setup host element
     this.renderer.setStyle(this.el.nativeElement, 'position', 'relative');
@@ -109,13 +109,13 @@ export class EditableDirective implements AfterViewInit, OnChanges {
     this.renderer.setStyle(
       iconElement,
       'transition',
-      'opacity 0.2s ease-in-out'
+      'opacity 0.2s ease-in-out',
     );
 
     this.renderer.insertBefore(
       this.el.nativeElement,
       iconElement,
-      this.el.nativeElement.firstChild
+      this.el.nativeElement.firstChild,
     );
   }
 
@@ -152,7 +152,7 @@ export class EditableDirective implements AfterViewInit, OnChanges {
         event.stopPropagation();
         this.exitEditMode();
         this.saveEdit.emit();
-      }
+      },
     );
 
     // Create Cancel button
@@ -169,7 +169,7 @@ export class EditableDirective implements AfterViewInit, OnChanges {
         event.stopPropagation();
         this.exitEditMode();
         this.cancelEdit.emit();
-      }
+      },
     );
 
     // Add buttons to container
