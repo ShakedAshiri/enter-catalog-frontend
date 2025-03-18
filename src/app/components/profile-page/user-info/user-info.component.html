@@ -1,6 +1,6 @@
 <div>
   <form [formGroup]="userInfoForm">
-    <mat-card [class]="'card ' + getCategoryClass(user.categories[0])">
+    <mat-card [class]="'card ' + selectedCategoryClasses">
       <div
         class="card-img-container"
         appEditable
@@ -23,9 +23,11 @@
         />
         <img class="card-img" [src]="imageControl.value || 'avatar.png'" />
 
-        <div *ngIf="imageErrorMessage" class="error-message">
-          {{ imageErrorMessage }}
-        </div>
+        @if (imageErrorMessage) {
+          <div class="error-message">
+            {{ imageErrorMessage }}
+          </div>
+        }
       </div>
       <div class="card-text-container">
         <mat-form-field
@@ -45,47 +47,60 @@
               [readonly]="!isEditable"
             />
           </div>
-          @if (displayNameControl.hasError('required') ||
-          displayNameControl.hasError('noOnlySpaces')) {
-          <mat-error>יש להזין שם משתמש</mat-error>
-          } @if (displayNameControl.hasError('minlength')) {
-          <mat-error>שם משתמש חייב להיות באורך לפחות 2 תווים</mat-error>
-          } @if (displayNameControl.hasError('maxlength')) {
-          <mat-error>שם משתמש חייב להיות עד 30 תווים</mat-error>
-          } @if (displayNameControl.hasError('pattern')) {
-          <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
+          @if (
+            displayNameControl.hasError("required") ||
+            displayNameControl.hasError("noOnlySpaces")
+          ) {
+            <mat-error>יש להזין שם משתמש</mat-error>
+          }
+          @if (displayNameControl.hasError("minlength")) {
+            <mat-error>שם משתמש חייב להיות באורך לפחות 2 תווים</mat-error>
+          }
+          @if (displayNameControl.hasError("maxlength")) {
+            <mat-error>שם משתמש חייב להיות עד 30 תווים</mat-error>
+          }
+          @if (displayNameControl.hasError("pattern")) {
+            <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
           }
         </mat-form-field>
-        <div class="tagline-and-is-avaliable">
-          @if(user.isAvailable) {
-          <div class="is-available">זמין.ה לעבודה</div>
+        <div class="categories-and-is-avaliable">
+          @if (user.isAvailable) {
+            <div class="is-available">זמין.ה לעבודה</div>
           }
           <mat-form-field
-            class="tagline small transparent"
+            class="categories small transparent"
             appearance="outline"
             appEditable
             [isEditable]="isEditable"
-            [isSaveDisabled]="!!taglineControl.errors"
+            [isSaveDisabled]="!!categoriesControl.errors"
             [iconTop]="-5"
             [iconRight]="17"
-            (startEdit)="startEditing('tagline')"
-            (saveEdit)="saveEdit('tagline')"
-            (cancelEdit)="cancelEdit('tagline')"
+            (startEdit)="startEditing('categories')"
+            (saveEdit)="saveEdit('categories')"
+            (cancelEdit)="cancelEdit('categories')"
           >
-            <input
-              matInput
-              [formControl]="taglineControl"
-              [readonly]="!isEditable"
-            />
-            @if (taglineControl.hasError('required') ||
-            taglineControl.hasError('noOnlySpaces')) {
-            <mat-error>יש להזין כותרת משנה</mat-error>
-            } @if (taglineControl.hasError('minlength')) {
-            <mat-error>כותרת משנה חייבת להיות באורך לפחות 2 תווים</mat-error>
-            } @if (taglineControl.hasError('maxlength')) {
-            <mat-error>כותרת משנה חייבת להיות עד 30 תווים</mat-error>
-            } @if (taglineControl.hasError('pattern')) {
-            <mat-error>כותרת משנה יכולה להזין אותיות בלבד</mat-error>
+            @if (!isEditable) {
+              <input
+                matInput
+                [value]="userCategoriesDisplayNames.join(', ')"
+                readonly
+              />
+            } @else {
+              <mat-select
+                [formControl]="categoriesControl"
+                multiple
+                panelClass="white-select"
+              >
+                @for (category of categories; track category.id) {
+                  <mat-option [value]="category.id">{{
+                    category.displayName
+                  }}</mat-option>
+                }
+              </mat-select>
+
+              @if (categoriesControl.hasError("required")) {
+                <mat-error>יש להזין לפחות קטגוריה אחת</mat-error>
+              }
             }
           </mat-form-field>
         </div>
@@ -108,15 +123,20 @@
             [formControl]="descriptionControl"
             [readonly]="!isEditable"
           ></textarea>
-          @if (descriptionControl.hasError('required') ||
-          descriptionControl.hasError('noOnlySpaces')) {
-          <mat-error>יש להזין תיאור</mat-error>
-          } @if (descriptionControl.hasError('minlength')) {
-          <mat-error>תיאור חייב להיות באורך לפחות 2 תווים</mat-error>
-          } @if (descriptionControl.hasError('maxlength')) {
-          <mat-error>תיאור חייב להיות עד 30 תווים</mat-error>
-          } @if (descriptionControl.hasError('pattern')) {
-          <mat-error>תיאור יכול להזין אותיות ומספרים בלבד</mat-error>
+          @if (
+            descriptionControl.hasError("required") ||
+            descriptionControl.hasError("noOnlySpaces")
+          ) {
+            <mat-error>יש להזין תיאור</mat-error>
+          }
+          @if (descriptionControl.hasError("minlength")) {
+            <mat-error>תיאור חייב להיות באורך לפחות 2 תווים</mat-error>
+          }
+          @if (descriptionControl.hasError("maxlength")) {
+            <mat-error>תיאור חייב להיות עד 30 תווים</mat-error>
+          }
+          @if (descriptionControl.hasError("pattern")) {
+            <mat-error>תיאור יכול להזין אותיות ומספרים בלבד</mat-error>
           }
         </mat-form-field>
       </div>
