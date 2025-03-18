@@ -85,7 +85,7 @@ export class UserInfoComponent {
     private fb: FormBuilder,
     private userService: UserService,
     private popupModalService: PopupModalService,
-    private dataTableService: DataTableService,,
+    private dataTableService: DataTableService,
     private imageService: ImageService
   ) {}
 
