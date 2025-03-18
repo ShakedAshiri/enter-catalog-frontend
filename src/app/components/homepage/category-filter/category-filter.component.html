@@ -1,22 +1,38 @@
 <div class="container">
-  <mat-form-field class="input-field small" appearance="outline">
-    <span matPrefix class="prefix">
-      <button class="btn-clear btn-search" matSuffix mat-icon-button aria-label="Clear">
-        <mat-icon>search</mat-icon>
-      </button>
-    </span>
-
-    <input matInput type="text" [(ngModel)]="searchText" (input)="searchTextFilter()">
-
-    @if (searchText) {
-      <button class="btn-clear" matSuffix mat-icon-button aria-label="Clear" (click)="clearText()">
-        <mat-icon>close</mat-icon>
-      </button>
-    }
-  </mat-form-field>
-
   <div class="category-buttons">
-    <button mat-button
+    <mat-form-field class="input-field small" appearance="outline">
+      <span matPrefix class="prefix">
+        <button
+          class="btn-clear btn-search"
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </span>
+
+      <input
+        matInput
+        type="text"
+        [(ngModel)]="searchText"
+        (input)="searchTextFilter()"
+      />
+
+      @if (searchText) {
+        <button
+          class="btn-clear"
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="clearText()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+    <button
+      mat-button
       *ngFor="let category of categories"
       (click)="toggleCategory(category)"
       [class.active]="selectedCategories.has(category)"
