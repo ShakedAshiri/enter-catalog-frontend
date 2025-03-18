@@ -35,13 +35,16 @@ mat-grid-list {
 
 .work-container {
   display: flex;
-  gap: 30px;
+  gap: 15px;
+  padding: 8px;
+  box-sizing: border-box;
 
   img {
     min-width: 200px;
     min-height: 185px;
     max-width: 200px;
     max-height: 185px;
+    object-fit: contain;
   }
 
   .image-placeholder {
@@ -68,16 +71,17 @@ mat-grid-list {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      width: calc(53px + 142px + 77px);
+      width: 100%;
+      max-width: 100%;
     }
 
     .desc {
       font-size: 24px;
       font-weight: 400;
       line-height: 34px;
-
       height: 6em; /* 2 lines x 1.5em per line */
-      width: 285px;
+      width: 100%;
+      max-width: 100%;
       overflow: hidden;
       display: -webkit-box;
       text-overflow: ellipsis;
@@ -87,4 +91,17 @@ mat-grid-list {
       position: relative;
     }
   }
+}
+
+.add-work {
+  margin-top: 20px;
+
+  button {
+    cursor: pointer;
+  }
+}
+
+.work-tile:hover {
+  background-color: #dcedee;
+  cursor: pointer;
 }

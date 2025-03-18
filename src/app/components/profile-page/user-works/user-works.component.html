@@ -1,16 +1,41 @@
+<div *ngIf="isEditable" class="add-work">
+  <button
+    (click)="openWorkModal()"
+    class="btn-clear btn-search"
+    matSuffix
+    mat-icon-button
+    aria-label="Clear"
+  >
+    <mat-icon>work</mat-icon>
+    <mat-icon>add_circle_outline</mat-icon>
+  </button>
+</div>
+
 <ng-template #fallback>
   <div class="no-results">
     <span class="text">לא קיימות עבודות למשתמש זה...</span>
   </div>
 </ng-template>
 
-<section class="works" *ngIf="userWorks.length > 0; else fallback">
+<section class="works" *ngIf="userWorks && userWorks.length > 0; else fallback">
   <div class="works-header">
     <span>קטלוג עבודות:</span>
   </div>
-  <mat-grid-list cols="2" rowHeight="235px">
-    <mat-grid-tile class="work-tile" *ngFor="let work of userWorks">
-      <div class="work-container">
+  <mat-grid-list cols="2" rowHeight="235px" gutterSize="30px" rowHeight="2:1.1">
+    <!-- Display loading spinner when creating new work -->
+    <mat-grid-tile class="work-tile" *ngIf="loadingWorkIndex === -1">
+      <ng-container [ngTemplateOutlet]="loadingWork"></ng-container>
+    </mat-grid-tile>
+
+    <mat-grid-tile
+      class="work-tile"
+      *ngFor="let work of userWorks"
+      (click)="openWorkModal(work)"
+    >
+      <div
+        class="work-container"
+        *ngIf="loadingWorkIndex !== work.id; else loadingWork"
+      >
         <img
           *ngIf="work.images.length > 0; else imagePlaceHolder"
           [src]="work.images[0].url"
@@ -23,9 +48,19 @@
           class="work-text"
           [dir]="languageService.isHebrew(work.title) ? 'rtl' : 'ltr'"
         >
-          <p class="title">{{ work.title }}</p>
+          <p
+            class="title"
+            [matTooltip]="work.title"
+            matTooltipPosition="above"
+            matTooltipShowDelay="100"
+          >
+            {{ work.title }}
+          </p>
           <p
             class="desc"
+            [matTooltip]="work.description"
+            matTooltipPosition="above"
+            matTooltipShowDelay="100"
             [dir]="languageService.isHebrew(work.description) ? 'rtl' : 'ltr'"
           >
             {{ work.description }}
@@ -35,3 +70,9 @@
     </mat-grid-tile>
   </mat-grid-list>
 </section>
+
+<ng-template #loadingWork>
+  <div class="work-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

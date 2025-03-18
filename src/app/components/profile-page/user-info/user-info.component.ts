@@ -25,6 +25,8 @@ import { ServerErrorComponent } from '../../../shared/components/server-error/se
 import { Category } from '../../../shared/models/data-tables/category.class';
 import { DataTableService } from '../../../shared/services/data-table.service';
 import { MatOption, MatSelect } from '@angular/material/select';
+import noOnlySpacesValidator from '../../../shared/validators/no-only-spaces.validator';
+import { ImageService } from '../../../shared/services/image.service';
 
 @Component({
   selector: 'app-user-info',
@@ -55,13 +57,6 @@ export class UserInfoComponent {
     return `category--${category.name || 'default'}`;
   }
 
-  private allowedFileTypes = [
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-  ];
-
   userInfoForm: FormGroup;
   usernameControl = new FormControl('', [
     Validators.required,
@@ -74,7 +69,7 @@ export class UserInfoComponent {
     Validators.minLength(2),
     Validators.maxLength(30),
     Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
-    this.noOnlySpacesValidator(),
+    noOnlySpacesValidator(),
   ]);
   imageControl = new FormControl('avatar.png', Validators.required);
   categoriesControl = new FormControl([], [Validators.required]);
@@ -82,8 +77,8 @@ export class UserInfoComponent {
     Validators.required,
     Validators.minLength(2),
     Validators.maxLength(500),
-    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-,.!?;]+$"),
-    this.noOnlySpacesValidator(),
+    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '-,.!?;]+$"),
+    noOnlySpacesValidator(),
   ]);
 
   constructor(
@@ -91,6 +86,7 @@ export class UserInfoComponent {
     private userService: UserService,
     private popupModalService: PopupModalService,
     private dataTableService: DataTableService,
+    private imageService: ImageService
   ) {}
 
   ngOnInit() {
@@ -178,7 +174,7 @@ export class UserInfoComponent {
     const file = input.files[0];
 
     // Check if file is an image
-    if (!this.isFileTypeAllowed(file)) {
+    if (!this.imageService.isFileTypeAllowed(file)) {
       this.imageErrorMessage = 'נא לבחור קובץ תמונה (JPEG, PNG, GIF, או WebP)';
       this.imageValid = false;
       input.value = '';
@@ -217,19 +213,6 @@ export class UserInfoComponent {
       };
       img.src = URL.createObjectURL(file);
     });
-  }
-
-  private isFileTypeAllowed(file: File): boolean {
-    return this.allowedFileTypes.includes(file.type);
-  }
-
-  noOnlySpacesValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (control.value && control.value.trim().length === 0) {
-        return { noOnlySpaces: true };
-      }
-      return null;
-    };
   }
 
   updateSelectedCategoryClasses(selectedIds: number[]) {

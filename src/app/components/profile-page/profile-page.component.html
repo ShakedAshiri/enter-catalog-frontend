@@ -4,7 +4,7 @@
     *ngIf="!showUserProfileServerError && profileUser"
   >
     <app-user-info [user]="profileUser" [isEditable]="isEditable" />
-    <app-user-works [userWorks]="profileUser.works" />
+    <app-user-works [userWorks]="profileUser?.works" [isEditable]="isEditable" [user]="profileUser"/>
   </section>
   <section
     class="show-user-profile-server-error"

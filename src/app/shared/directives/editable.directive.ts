@@ -63,7 +63,6 @@ export class EditableDirective implements AfterViewInit, OnChanges {
     });
 
     this.renderer.listen(this.el.nativeElement, 'mouseleave', () => {
-      console.log('hide me');
       this.hideEditIcon();
     });
   }

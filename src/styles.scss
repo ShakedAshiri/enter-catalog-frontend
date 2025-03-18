@@ -113,6 +113,20 @@ mat-form-field.smaller {
   }
 }
 
+mat-form-field.hidden {
+  .mat-mdc-text-field-wrapper.mdc-text-field {
+    .mat-mdc-form-field-flex {
+      .mat-mdc-form-field-infix {
+        width: 0px !important;
+      }
+    }
+  }
+
+  .mat-mdc-text-field-wrapper {
+    padding-right: 0px;
+  }
+}
+
 // Select option list
 .cdk-overlay-pane .white-select {
   --mat-select-panel-background-color: white;
@@ -152,10 +166,23 @@ button.btn-secondary {
   background-color: var(--secondary-theme-color);
 }
 
+button.btn-underline {
+  text-decoration: underline;
+}
+
+button.btn-modal-action {
+  padding: 5px 30px;
+  font-size: 20px;
+  width: 112px;
+  height: 34px;
+}
+
 mat-grid-tile.work-tile {
   display: flex;
+  border-radius: 10px;
 
   div.mat-grid-tile-content {
     align-items: start !important;
+    justify-content: start;
   }
 }
