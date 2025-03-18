@@ -17,7 +17,7 @@ export class ApiConstants {
     // User works endpoints
     WORKS: {
       CREATE: `${ApiConstants.BASE_URL}/work`,
-      UPDATE: `${ApiConstants.BASE_URL}/work/update/:id`
+      UPDATE: `${ApiConstants.BASE_URL}/work/:id`
     },
 
     // Authentication endpoints
