@@ -24,6 +24,7 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/_redirects",
               {
                 "glob": "**/*",
                 "input": "public"
@@ -108,7 +109,6 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/_redirects",
               {
                 "glob": "**/*",
                 "input": "public"
