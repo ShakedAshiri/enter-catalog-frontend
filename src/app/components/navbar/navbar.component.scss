@@ -68,3 +68,13 @@ mat-toolbar {
     }
   }
 }
+
+.btn-dashboard {
+  margin: 10px;
+  font-size: large;
+  border-radius: 20px;
+  padding: 9px;
+}
+.btn-dashboard:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
