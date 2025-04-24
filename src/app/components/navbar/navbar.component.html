@@ -1,12 +1,19 @@
 <mat-toolbar>
   <div class="logo-container" [routerLink]="['/']">
-    <img src="logo.svg" alt="Logo">
+    <img src="logo.svg" alt="Logo" />
   </div>
   <span class="spacer"></span>
 
   <ng-container *ngIf="user$ | async as user; else loginTemplate">
+    <button
+      class="btn btn-primary btn-dashboard"
+      *ngIf="[1, 2].includes(user.userRole.id)"
+      [routerLink]="['/dashboard']"
+    >
+      מסך ניהול
+    </button>
     <div class="logged-in">
-      <img [src]="user.image || 'avatar.png'" class="avatar">
+      <img [src]="user.image || 'avatar.png'" class="avatar" />
       <span class="display-name">{{ user.displayName }}</span>
       <div class="actions">
         <span *ngIf="user.userRole.id === 3">
