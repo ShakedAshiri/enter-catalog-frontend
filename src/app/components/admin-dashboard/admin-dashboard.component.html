@@ -1,1 +1,14 @@
-<p>admin-dashboard works!</p>
+<div class="parent-container">
+  <!-- Navigation links -->
+  <nav>
+    <ul>
+      <li><a routerLink="control-panel" routerLinkActive="active">לוח בקרה</a></li>
+      <li><a routerLink="user-management" routerLinkActive="active">ניהול משתמשים</a></li>
+    </ul>
+  </nav>
+
+  <!-- Router outlet for child components -->
+  <div class="content-container">
+    <router-outlet></router-outlet>
+  </div>
+</div>

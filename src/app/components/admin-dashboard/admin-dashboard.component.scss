@@ -1,0 +1,33 @@
+nav {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+nav ul {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+
+nav li + li:before{
+  content: "|";
+  padding: 0 10px;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+  font-size: larger;
+  color: black;
+}
+
+.active {
+  font-weight: bold;
+  color: var(--primary-theme-color-dark);
+  text-decoration: underline;
+}
+
+.content-container {
+  padding: 15px;
+}
