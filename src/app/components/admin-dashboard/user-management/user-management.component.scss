@@ -1,0 +1,42 @@
+table {
+  width: 100%;
+}
+
+.avatar-container {
+  padding: 5px 0;
+}
+
+.avatar-image {
+  width: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: #00b6ff;
+}
+
+.blue:hover {
+  color: #0480b1;
+}
+
+.mat-mdc-table .mat-column-image,
+.mat-mdc-table .mat-column-isAvailable {
+  text-align: center !important;
+}
+
+.delete {
+  cursor: pointer;
+}
+
+.delete:hover {
+  color: rgb(184, 4, 4)
+}

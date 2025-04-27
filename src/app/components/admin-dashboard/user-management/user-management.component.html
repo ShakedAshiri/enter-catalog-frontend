@@ -1,1 +1,79 @@
 <h1>ניהול משתמשים</h1>
+
+<div *ngIf="!isUsersLoaded; else data" class="spinner">
+  <mat-spinner></mat-spinner>
+</div>
+
+<ng-template #data>
+  <section *ngIf="showUsersServerError; else workerTable">
+    <app-server-error />
+  </section>
+
+  <ng-template #workerTable>
+    <div class="mat-elevation-z8">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="mat-elevation-z8"
+      >
+        <!-- Image Column -->
+        <ng-container matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let row">
+            <div class="avatar-container">
+              <img class="avatar-image" [src]="row.image" alt="User avatar" />
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="displayName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            שם מקבל שירות
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.displayName }}</td>
+        </ng-container>
+
+        <!-- IsAvailable Column -->
+        <ng-container matColumnDef="isAvailable">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            זמין לעבודה?
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-icon [ngClass]="row.isAvailable ? 'green' : 'red'">{{
+              row.isAvailable ? "check_circle" : "cancel"
+            }}</mat-icon>
+          </td>
+        </ng-container>
+
+        <!-- Branch Column -->
+        <ng-container matColumnDef="branch">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>חממה</th>
+          <td mat-cell *matCellDef="let row">{{ row.branch?.name }}</td>
+        </ng-container>
+
+        <!-- Categories Column -->
+        <ng-container matColumnDef="categories">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>תחומי עיסוק</th>
+          <td mat-cell *matCellDef="let row">
+            {{ getCatagories(row.categories) }}
+          </td>
+        </ng-container>
+
+        <!-- Delete Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let row">
+            <mat-icon class="blue">remove_red_eye</mat-icon>
+            <mat-icon class="blue">edit</mat-icon>
+            <mat-icon class="red delete">delete</mat-icon>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </ng-template>
+</ng-template>
