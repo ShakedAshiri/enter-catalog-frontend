@@ -8,16 +8,22 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-category-filter',
-  imports: [CommonModule, FormsModule, MatIconModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './category-filter.component.html',
-  styleUrl: './category-filter.component.scss'
+  styleUrl: './category-filter.component.scss',
 })
 export class CategoryFilterComponent {
   @Input() categories: Category[];
   @Output() categoryFilterChange = new EventEmitter<Set<Category>>();
   @Output() textFilterChange = new EventEmitter<string>();
   selectedCategories = new Set<Category>();
-  searchText : string;
+  searchText: string;
 
   toggleCategory(category: Category) {
     if (this.selectedCategories.has(category)) {
@@ -39,7 +45,7 @@ export class CategoryFilterComponent {
   }
 
   clearText() {
-    this.searchText = "";
+    this.searchText = '';
     this.textFilterChange.emit(this.searchText);
   }
 }
