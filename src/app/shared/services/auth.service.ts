@@ -12,17 +12,18 @@ import {
 } from 'rxjs';
 import { User } from '../models/user.class';
 import { ApiConstants } from '../constants/api.constants';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Role } from '../constants/role';
 import { Router } from '@angular/router';
+import { LocalStorageKeys } from '../constants/localStorage.constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private localStorageKey = 'user_info';
+  private localStorageKey = LocalStorageKeys.USER_INFO;
   private currentUserSubject = new BehaviorSubject<User | null>(
-    this.getCurrentUser()
+    this.getCurrentUser(),
   );
   public currentUser$ = this.getUserAsObservable();
 
@@ -30,7 +31,6 @@ export class AuthService {
     private http: HttpClient,
     private userService: UserService,
     private ngZone: NgZone,
-    private router: Router
   ) {
     // This listens to changes accross tabs
     window.addEventListener('storage', (event) => {
@@ -49,7 +49,7 @@ export class AuthService {
         tap((response) => {
           localStorage.setItem(this.localStorageKey, JSON.stringify(response));
           this.currentUserSubject.next(response); // This updates in the same tab
-        })
+        }),
       );
 
     return response;
@@ -62,7 +62,7 @@ export class AuthService {
 
   resetPassword(
     currentPassword: string,
-    newPassword: string
+    newPassword: string,
   ): Observable<User> {
     return this.http.patch<User>(ApiConstants.ENDPOINTS.AUTH.RESET_PASSWORD, {
       password: newPassword,
@@ -107,13 +107,13 @@ export class AuthService {
         if (currentUser.userRole.id === Role.TEAMLEAD) {
           let isFromBranch = this.userService.isUserFromBranch(
             forUserId,
-            currentUser.branch?.id
+            currentUser.branch?.id,
           );
           return of(isFromBranch);
         }
 
         return of(false);
-      })
+      }),
     );
   }
 }
