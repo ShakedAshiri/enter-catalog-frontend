@@ -8,7 +8,8 @@
   margin-bottom: 14px;
 }
 
-.input-field.small {
+.input-field.small,
+.input-field.big {
   width: clamp(116px, 30vw, 310px);
 }
 
@@ -20,6 +21,10 @@
   width: 1000px; // Fixed width for the container
   gap: clamp(2px, 1vw, 10px); // Spacing between buttons
   row-gap: 20px; // Space between rows
+
+  mat-form-field.input-field.small {
+    height: 49px;
+  }
 
   .btn-close {
     padding: 0px;
