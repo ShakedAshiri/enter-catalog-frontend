@@ -65,7 +65,9 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
           <td mat-cell *matCellDef="let row">
-            <mat-icon class="blue">remove_red_eye</mat-icon>
+            <mat-icon class="blue" (click)="navigateToProfilePage(row.id)"
+              >remove_red_eye</mat-icon
+            >
             <mat-icon class="blue">edit</mat-icon>
             <mat-icon class="red delete">delete</mat-icon>
           </td>

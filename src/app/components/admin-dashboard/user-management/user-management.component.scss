@@ -33,10 +33,14 @@ table {
   text-align: center !important;
 }
 
+mat-icon {
+  cursor: pointer;
+}
+
 .delete {
   cursor: pointer;
 }
 
 .delete:hover {
-  color: rgb(184, 4, 4)
+  color: rgb(184, 4, 4);
 }
