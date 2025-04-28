@@ -10,6 +10,7 @@ import { NgClass, NgIf } from '@angular/common';
 import { Category } from '../../../shared/models/data-tables/category.class';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-management',
@@ -43,7 +44,10 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   isUsersLoaded = false;
   showUsersServerError = false;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -59,6 +63,10 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
         },
       }),
     );
+  }
+
+  navigateToProfilePage(profileId: number) {
+    this.router.navigateByUrl(`/profile/${profileId}`);
   }
 
   ngOnDestroy() {
