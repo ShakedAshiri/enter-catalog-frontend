@@ -3,7 +3,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ApplyReason } from '../../../shared/models/data-tables/applyReason.class';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor } from '@angular/common';
 import {
   FormBuilder,
   FormControl,
@@ -26,7 +26,6 @@ import { Subscription } from 'rxjs';
     MatSelectModule,
     MatProgressSpinnerModule,
     NgFor,
-    NgIf,
     ReactiveFormsModule,
   ],
   templateUrl: './contact-us.component.html',
@@ -48,13 +47,13 @@ export class ContactUsComponent {
   emailControl = new FormControl('', [Validators.required, Validators.email]);
   applyReasonsControl = new FormControl(
     [],
-    [Validators.required, this.arrayOfNumbersValidator]
+    [Validators.required, this.arrayOfNumbersValidator],
   );
 
   constructor(
     private contactUsService: ContactUsService,
     private popupModalService: PopupModalService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit() {
@@ -66,14 +65,14 @@ export class ContactUsComponent {
   }
 
   arrayOfNumbersValidator(
-    control: FormControl
+    control: FormControl,
   ): { [key: string]: boolean } | null {
     if (!control.value || !Array.isArray(control.value)) {
       return { notAnArray: true }; // Ensure it's an array
     }
 
     const invalidNumbers = control.value.some(
-      (num) => typeof num !== 'number' || isNaN(num)
+      (num) => typeof num !== 'number' || isNaN(num),
     );
 
     return invalidNumbers ? { invalidNumber: true } : null;
