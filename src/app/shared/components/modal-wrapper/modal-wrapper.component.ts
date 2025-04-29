@@ -9,7 +9,7 @@ import { A11yModule } from '@angular/cdk/a11y';
   selector: 'app-modal-wrapper',
   imports: [MatDialogModule, MatIconModule, CommonModule, A11yModule],
   templateUrl: './modal-wrapper.component.html',
-  styleUrl: './modal-wrapper.component.scss'
+  styleUrl: './modal-wrapper.component.scss',
 })
 export class ModalWrapperComponent extends BaseModalComponent {
   @Input() title: string = '';
@@ -17,8 +17,12 @@ export class ModalWrapperComponent extends BaseModalComponent {
   @Input() disableSubmit: boolean = false;
   @ContentChild('actions') actionsTemplate!: TemplateRef<any>;
 
-  submit(): void {
-    // Can be overridden by child components
-    this.close(true);
+  @Input() childSubmit!: () => void;
+
+  override submit(): void {
+    // Default submit or rely on child's override
+    const result = this.childSubmit?.();
+
+    this.close(result !== undefined ? result : true);
   }
 }
