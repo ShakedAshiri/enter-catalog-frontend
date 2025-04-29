@@ -1,0 +1,22 @@
+<app-modal-wrapper
+  title="יצירת מקבל שירות חדש"
+  [disableSubmit]="!form.valid"
+  [childSubmit]="submit.bind(this)"
+>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="light">
+      <mat-label>שם מקבל שירות</mat-label>
+      <input matInput [formControl]="displayNameControl" />
+      @if (displayNameControl.hasError("required")) {
+        <mat-error>יש להזין שם מקבל שירות</mat-error>
+      }
+      @if (displayNameControl.hasError("pattern")) {
+        <mat-error>שם מקבל שירות יכול להזין אותיות בלבד</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-checkbox [formControl]="isAvailableControl">האם זמין לעבודה?</mat-checkbox>
+
+    <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
+  </form>
+</app-modal-wrapper>

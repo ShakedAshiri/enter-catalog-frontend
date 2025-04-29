@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { PopupModalService } from './../../../shared/services/popup-modal.service';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatTable, MatTableModule } from '@angular/material/table';
 import { User } from '../../../shared/models/user.class';
 import { UserService } from '../../../shared/services/user.service';
 import { Subscription } from 'rxjs';
@@ -11,6 +12,7 @@ import { Category } from '../../../shared/models/data-tables/category.class';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { Router } from '@angular/router';
+import { UserDetailsComponent } from './user-details/user-details.component';
 
 @Component({
   selector: 'app-user-management',
@@ -38,8 +40,10 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
     'categories',
     'actions',
   ];
-  dataSource: MatTableDataSource<User>;
-  users: User[];
+  @ViewChild(MatTable) table: MatTable<User>;
+
+  dataSource: User[];
+  workers: User[];
 
   isUsersLoaded = false;
   showUsersServerError = false;
@@ -47,14 +51,15 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private router: Router,
+    private popupModalService: PopupModalService,
   ) {}
 
   ngOnInit() {
     this.subscriptions.push(
       this.userService.getWorkers().subscribe({
         next: (response: User[]) => {
-          this.users = response;
-          this.dataSource = new MatTableDataSource(this.users);
+          this.workers = response;
+          this.dataSource = [...this.workers];
           this.isUsersLoaded = true;
         },
         error: (error) => {
@@ -75,5 +80,28 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
 
   getCatagories(catagories?: Category[]): string {
     return catagories?.map((c) => c.displayName).join(', ') || '';
+  }
+
+  createWorker(): void {
+    const workerDialogRef = this.popupModalService.open(UserDetailsComponent);
+
+    const workerDetailsSub = workerDialogRef
+      .afterClosed()
+      .subscribe((result: User) => {
+        if (result) {
+          // Update worker
+          if (result.id) {
+          } else {
+            // TODO: Save new worker
+
+            // Add to workers table
+            this.workers.push(result);
+            this.dataSource.push(result);
+            this.table.renderRows();
+          }
+        }
+      });
+
+    this.subscriptions.push(workerDetailsSub);
   }
 }
