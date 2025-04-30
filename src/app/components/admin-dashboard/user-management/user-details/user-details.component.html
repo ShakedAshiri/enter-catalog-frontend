@@ -45,6 +45,17 @@
         }
       </mat-form-field>
 
+      <mat-form-field appearance="outline" class="light">
+        <mat-label>שם משתמש (אנגלית בלבד)</mat-label>
+        <input matInput [formControl]="usernameControl" />
+        @if (usernameControl.hasError("required")) {
+          <mat-error>יש להזין שם משתמש</mat-error>
+        }
+        @if (usernameControl.hasError("pattern")) {
+          <mat-error>שם משתמש יכול להזין אותיות באנגלית בלבד</mat-error>
+        }
+      </mat-form-field>
+
       <mat-checkbox [formControl]="isAvailableControl"
         >האם זמין לעבודה?</mat-checkbox
       >

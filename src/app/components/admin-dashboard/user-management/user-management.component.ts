@@ -36,6 +36,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'image',
     'displayName',
+    'username',
     'isAvailable',
     'branch',
     'categories',

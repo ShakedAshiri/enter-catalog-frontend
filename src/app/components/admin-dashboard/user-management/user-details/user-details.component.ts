@@ -61,6 +61,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   previousImage: string;
 
   imageControl = new FormControl('', Validators.required);
+  usernameControl: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.pattern("^[a-zA-Z']+$"),
+    Validators.minLength(2),
+  ]);
   displayNameControl: FormControl = new FormControl('', [
     Validators.required,
     Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
@@ -80,6 +85,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       image: this.imageControl,
       displayName: this.displayNameControl,
+      username: this.usernameControl,
       isAvailable: this.isAvailableControl,
       branch: this.branchControl,
       categories: this.categoriesControl,
