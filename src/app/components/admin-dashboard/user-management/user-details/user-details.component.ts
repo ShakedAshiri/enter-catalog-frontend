@@ -25,6 +25,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Role } from '../../../../shared/constants/role';
 import { EditableDirective } from '../../../../shared/directives/editable.directive';
 import { UserRole } from '../../../../shared/models/data-tables/userRole.class';
+import noOnlySpacesValidator from '../../../../shared/validators/no-only-spaces.validator';
 
 @Component({
   selector: 'app-user-details',
@@ -71,6 +72,14 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
     Validators.minLength(2),
   ]);
+  descriptionControl: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(2),
+    Validators.maxLength(500),
+    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '\\-\"`,.!?;]+$"),
+    noOnlySpacesValidator(),
+  ]);
+
   isAvailableControl: FormControl = new FormControl('');
   branchControl: FormControl = new FormControl('', [Validators.required]);
   categoriesControl: FormControl = new FormControl('', [Validators.required]);
@@ -86,6 +95,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       image: this.imageControl,
       displayName: this.displayNameControl,
       username: this.usernameControl,
+      description: this.descriptionControl,
       isAvailable: this.isAvailableControl,
       branch: this.branchControl,
       categories: this.categoriesControl,

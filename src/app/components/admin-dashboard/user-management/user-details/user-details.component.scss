@@ -1,27 +1,41 @@
 .user-details-form {
   display: flex;
-  flex-direction: row;
-}
-
-.img-container {
-  flex: 33%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  padding: 0 10px;
-
-  .card-img {
-    border-radius: 50%;
-    width: 100%;
-    height: auto;
-  }
-}
-
-.fields-container {
-  flex: 67%;
-  display: flex;
   flex-direction: column;
   gap: 10px;
+
+  .top-row {
+    display: flex;
+    flex-direction: row;
+
+    .img-container {
+      flex: 33%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 0 10px;
+
+      .card-img {
+        border-radius: 50%;
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    .name-fields-container {
+      flex: 67%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      textarea {
+        resize: none;
+      }
+    }
+  }
+
+  .general-fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 }
