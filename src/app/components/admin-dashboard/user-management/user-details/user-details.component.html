@@ -43,6 +43,9 @@
         @if (displayNameControl.hasError("pattern")) {
           <mat-error>שם מקבל שירות יכול להזין אותיות בלבד</mat-error>
         }
+        @if (displayNameControl.hasError("minlength")) {
+          <mat-error>שם מקבל שירות חייב להיות באורך מינימום 2 תווים</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="light">
@@ -53,6 +56,9 @@
         }
         @if (usernameControl.hasError("pattern")) {
           <mat-error>שם משתמש יכול להזין אותיות באנגלית בלבד</mat-error>
+        }
+        @if (usernameControl.hasError("minlength")) {
+          <mat-error>שם משתמש חייב להיות באורך מינימום 2 תווים</mat-error>
         }
       </mat-form-field>
 
@@ -95,7 +101,10 @@
             }
           </mat-select>
 
-          @if (branchControl.hasError("required")) {
+          @if (
+            branchControl.hasError("required") &&
+            (branchControl.touched || branchControl.dirty)
+          ) {
             <mat-error>יש לבחור חממה</mat-error>
           }
         }

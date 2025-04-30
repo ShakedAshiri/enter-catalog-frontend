@@ -72,8 +72,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     Validators.minLength(2),
   ]);
   isAvailableControl: FormControl = new FormControl('');
-  branchControl: FormControl = new FormControl('');
-  categoriesControl: FormControl = new FormControl('');
+  branchControl: FormControl = new FormControl('', [Validators.required]);
+  categoriesControl: FormControl = new FormControl('', [Validators.required]);
 
   isProduction = environment.production;
 
@@ -140,7 +140,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
           this.form.addControl(
             'userRole',
-            this.fb.control(this.userRoles.find(role => role.id === Role.WORKER)),
+            this.fb.control(
+              this.userRoles.find((role) => role.id === Role.WORKER),
+            ),
           );
         },
         error: (error) => {
