@@ -64,8 +64,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   imageValid: boolean = false;
   imageErrorMessage: string | null = null;
   previousImage: string;
+  defaultAvatar: string;
 
-  imageControl = new FormControl('', Validators.required);
+  imageControl = new FormControl('');
   usernameControl: FormControl = new FormControl('', [
     Validators.required,
     Validators.pattern("^[a-zA-Z']+$"),
@@ -104,6 +105,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       isAvailable: this.isAvailableControl,
       branch: this.branchControl,
       categories: this.categoriesControl,
+      password: 'Aa123456!', // TODO: change!!
+      status: 1, // TODO: should be done in backend by default
     });
 
     this.user = data?.user;
@@ -112,13 +115,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     // Only admins can create users from a different branch
     if (!this.isAdmin) {
       this.form.patchValue({
-        branch: this.user?.branch,
+        branch: this.user?.branch.id,
       });
     }
 
-    this.form.patchValue({
-      image: this.imageService.defaultAvatar,
-    });
+    this.defaultAvatar = this.imageService.defaultAvatar;
   }
 
   ngOnInit(): void {
@@ -151,12 +152,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         next: (response: UserRole[]) => {
           this.userRoles = response;
 
-          this.form.addControl(
-            'userRole',
-            this.fb.control(
-              this.userRoles.find((role) => role.id === Role.WORKER),
-            ),
-          );
+          this.form.addControl('userRole', this.fb.control(Role.WORKER));
         },
         error: (error) => {
           if (!this.isProduction) console.error('Error fetching data:', error);

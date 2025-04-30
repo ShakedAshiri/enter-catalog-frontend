@@ -14,11 +14,11 @@ import { RouterModule } from '@angular/router';
 export class UserCardComponent {
   @Input() user: User;
 
-  get defaultAvatar(): string {
-    return this.imageService.defaultAvatar;
-  }
+  defaultAvatar: string;
 
-  constructor(private imageService: ImageService) {}
+  constructor(private imageService: ImageService) {
+    this.defaultAvatar = this.imageService.defaultAvatar;
+  }
 
   getCategoryClass(category: Category): string {
     return `user-card--${category.name || 'default'}`;

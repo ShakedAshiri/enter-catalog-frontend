@@ -29,9 +29,7 @@ export class NavbarComponent {
 
   user$: Observable<User | null>;
 
-  get defaultAvatar(): string {
-    return this.imageService.defaultAvatar;
-  }
+  defaultAvatar: string;
 
   constructor(
     private popupModalService: PopupModalService,
@@ -39,6 +37,7 @@ export class NavbarComponent {
     private imageService: ImageService,
   ) {
     this.user$ = this.authService.currentUser$;
+    this.defaultAvatar = this.imageService.defaultAvatar;
   }
 
   openLoginForm(): void {

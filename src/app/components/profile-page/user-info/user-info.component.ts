@@ -57,10 +57,6 @@ export class UserInfoComponent {
     return `category--${category.name || 'default'}`;
   }
 
-  get defaultAvatar(): string {
-    return this.imageService.defaultAvatar;
-  }
-
   userInfoForm: FormGroup;
   usernameControl = new FormControl('', [
     Validators.required,
@@ -75,7 +71,7 @@ export class UserInfoComponent {
     Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
     noOnlySpacesValidator(),
   ]);
-  imageControl = new FormControl(this.defaultAvatar, Validators.required);
+  imageControl = new FormControl('', Validators.required);
   categoriesControl = new FormControl([], [Validators.required]);
   descriptionControl = new FormControl('', [
     Validators.required,
@@ -122,6 +118,10 @@ export class UserInfoComponent {
     // Listen for category changes dynamically
     this.categoriesControl.valueChanges.subscribe((selectedIds) => {
       this.updateSelectedCategoryClasses(selectedIds);
+    });
+
+    this.userInfoForm.patchValue({
+      image: this.imageService.defaultAvatar,
     });
   }
 
