@@ -24,6 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Role } from '../../../../shared/constants/role';
 import { EditableDirective } from '../../../../shared/directives/editable.directive';
+import { UserRole } from '../../../../shared/models/data-tables/userRole.class';
 
 @Component({
   selector: 'app-user-details',
@@ -51,7 +52,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   categories: Category[] = [];
   branches: Branch[] = [];
-  Role = Role;
+  userRoles: UserRole[] = [];
 
   user: User;
 
@@ -121,6 +122,24 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         error: (error) => {
           if (!this.isProduction) console.error('Error fetching data:', error);
           //this.showBranchesServerError = true;
+          //TODO: show error?
+        },
+      }),
+    );
+
+    this.subscriptions.push(
+      this.dataTableService.getUserRoles().subscribe({
+        next: (response: UserRole[]) => {
+          this.userRoles = response;
+
+          this.form.addControl(
+            'userRole',
+            this.fb.control(this.userRoles.find(role => role.id === Role.WORKER)),
+          );
+        },
+        error: (error) => {
+          if (!this.isProduction) console.error('Error fetching data:', error);
+          //this.showRolesServerError = true;
           //TODO: show error?
         },
       }),
