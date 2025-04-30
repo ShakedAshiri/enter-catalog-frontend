@@ -32,6 +32,7 @@ export class ApiConstants {
     DATA_TABLES: {
       CATEGORIES: `${ApiConstants.BASE_URL}/data-table/categories`,
       APPLY_REASONS: `${ApiConstants.BASE_URL}/data-table/apply-reasons`,
+      BRANCHES: `${ApiConstants.BASE_URL}/data-table/branches`,
     },
 
     // Email endpoints
