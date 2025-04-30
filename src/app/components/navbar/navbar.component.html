@@ -13,7 +13,7 @@
       מסך ניהול
     </button>
     <div class="logged-in">
-      <img [src]="user.image || 'avatar.png'" class="avatar" />
+      <img [src]="user.image || defaultAvatar" class="avatar" />
       <span class="display-name">{{ user.displayName }}</span>
       <div class="actions">
         <span *ngIf="user.userRole.id === 3">

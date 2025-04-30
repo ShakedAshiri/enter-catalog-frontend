@@ -10,6 +10,7 @@ import { User } from '../../shared/models/user.class';
 import { Observable, Subscription } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { PasswordResetComponent } from '../auth/password-reset/password-reset.component';
+import { ImageService } from '../../shared/services/image.service';
 
 @Component({
   selector: 'app-navbar',
@@ -28,9 +29,14 @@ export class NavbarComponent {
 
   user$: Observable<User | null>;
 
+  get defaultAvatar(): string {
+    return this.imageService.defaultAvatar;
+  }
+
   constructor(
     private popupModalService: PopupModalService,
-    public authService: AuthService
+    public authService: AuthService,
+    private imageService: ImageService,
   ) {
     this.user$ = this.authService.currentUser$;
   }
