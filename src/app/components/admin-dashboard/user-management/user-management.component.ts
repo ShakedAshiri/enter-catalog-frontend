@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { Router } from '@angular/router';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-user-management',
@@ -52,6 +53,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private router: Router,
     private popupModalService: PopupModalService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -83,7 +85,11 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   }
 
   createWorker(): void {
-    const workerDialogRef = this.popupModalService.open(UserDetailsComponent);
+    const workerDialogRef = this.popupModalService.open(
+      UserDetailsComponent,
+      {},
+      { user: this.authService.getCurrentUser() },
+    );
 
     const workerDetailsSub = workerDialogRef
       .afterClosed()
