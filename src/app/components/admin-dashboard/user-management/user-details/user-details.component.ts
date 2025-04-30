@@ -1,4 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ImageService } from './../../../../shared/services/image.service';
+import { Component, Inject, inject, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -9,7 +10,7 @@ import {
 import { environment } from '../../../../../environments/environment';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { ModalWrapperComponent } from '../../../../shared/components/modal-wrapper/modal-wrapper.component';
 import { MatInputModule } from '@angular/material/input';
 import { HiddenSubmitComponent } from '../../../../shared/components/hidden-submit/hidden-submit.component';
@@ -18,6 +19,11 @@ import { Branch } from '../../../../shared/models/data-tables/branch.class';
 import { Category } from '../../../../shared/models/data-tables/category.class';
 import { Subscription } from 'rxjs';
 import { DataTableService } from '../../../../shared/services/data-table.service';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Role } from '../../../../shared/constants/role';
+import { EditableDirective } from '../../../../shared/directives/editable.directive';
 
 @Component({
   selector: 'app-user-details',
@@ -29,6 +35,10 @@ import { DataTableService } from '../../../../shared/services/data-table.service
     HiddenSubmitComponent,
     MatProgressSpinnerModule,
     ModalWrapperComponent,
+    MatOptionModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    EditableDirective,
   ],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss',
@@ -41,7 +51,15 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   categories: Category[] = [];
   branches: Branch[] = [];
+  Role = Role;
 
+  user: User;
+
+  imageValid: boolean = false;
+  imageErrorMessage: string | null = null;
+  previousImage: string;
+
+  imageControl = new FormControl('', Validators.required);
   displayNameControl: FormControl = new FormControl('', [
     Validators.required,
     Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
@@ -53,12 +71,31 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   isProduction = environment.production;
 
-  constructor(private dataTableService: DataTableService) {
+  constructor(
+    private dataTableService: DataTableService,
+    private imageService: ImageService,
+    @Inject(MAT_DIALOG_DATA) public data?: any,
+  ) {
     this.form = this.fb.group({
+      image: this.imageControl,
       displayName: this.displayNameControl,
       isAvailable: this.isAvailableControl,
       branch: this.branchControl,
       categories: this.categoriesControl,
+    });
+
+    this.user = data?.user;
+
+    // Set branch for non-admins
+    // Only admins can create users from a different branch
+    if (!this.isAdmin) {
+      this.form.patchValue({
+        branch: this.user?.branch,
+      });
+    }
+
+    this.form.patchValue({
+      image: this.imageService.defaultAvatar,
     });
   }
 
@@ -100,5 +137,63 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
+
+  get isAdmin(): boolean {
+    return this.user?.userRole.id === Role.ADMIN;
+  }
+
+  onImageFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) {
+      this.imageValid = false;
+      return;
+    }
+
+    const file = input.files[0];
+
+    // Check if file is an image
+    if (!this.imageService.isFileTypeAllowed(file)) {
+      this.imageErrorMessage = 'נא לבחור קובץ תמונה (JPEG, PNG, GIF, או WebP)';
+      this.imageValid = false;
+      input.value = '';
+      return;
+    }
+
+    // Check aspect ratio
+    this.imageService.checkAspectRatio(file).then((isValidRatio) => {
+      if (isValidRatio) {
+        this.imageErrorMessage = null;
+        this.imageValid = true;
+
+        const reader = new FileReader();
+
+        reader.onload = (e: any) => {
+          this.imageControl.setValue(e.target.result);
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        this.imageErrorMessage = 'יש לבחור תמונה בעלת יחס רוחב-גובה 1:1';
+        this.imageValid = false;
+        input.value = '';
+      }
+    });
+  }
+
+  editImage() {
+    // Store the current value in case we need to cancel
+    this.previousImage = this.form.get('image').value;
+  }
+
+  saveImage() {
+    delete this.previousImage;
+  }
+
+  cancelImage() {
+    this.form.get('image').setValue(this.previousImage);
+
+    delete this.previousImage;
   }
 }
