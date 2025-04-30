@@ -26,6 +26,8 @@ import { Role } from '../../../../shared/constants/role';
 import { EditableDirective } from '../../../../shared/directives/editable.directive';
 import { UserRole } from '../../../../shared/models/data-tables/userRole.class';
 import noOnlySpacesValidator from '../../../../shared/validators/no-only-spaces.validator';
+import { ServerErrorComponent } from '../../../../shared/components/server-error/server-error.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-user-details',
@@ -41,6 +43,8 @@ import noOnlySpacesValidator from '../../../../shared/validators/no-only-spaces.
     MatSelectModule,
     MatCheckboxModule,
     EditableDirective,
+    ServerErrorComponent,
+    NgIf,
   ],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss',
@@ -76,7 +80,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     Validators.required,
     Validators.minLength(2),
     Validators.maxLength(500),
-    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '\\-\"`,.!?;]+$"),
+    Validators.pattern('^[a-zA-Z\u0590-\u05FF\u200f\u200e\n \'\\-"`,.!?;]+$'),
     noOnlySpacesValidator(),
   ]);
 
@@ -85,6 +89,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   categoriesControl: FormControl = new FormControl('', [Validators.required]);
 
   isProduction = environment.production;
+  isError = false;
 
   constructor(
     private dataTableService: DataTableService,
@@ -124,8 +129,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           if (!this.isProduction) console.error('Error fetching data:', error);
-          //this.showCategoriesServerError = true;
-          //TODO: show error?
+          this.isError = true;
         },
       }),
     );
@@ -137,8 +141,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           if (!this.isProduction) console.error('Error fetching data:', error);
-          //this.showBranchesServerError = true;
-          //TODO: show error?
+          this.isError = true;
         },
       }),
     );
@@ -157,8 +160,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           if (!this.isProduction) console.error('Error fetching data:', error);
-          //this.showRolesServerError = true;
-          //TODO: show error?
+          this.isError = true;
         },
       }),
     );
