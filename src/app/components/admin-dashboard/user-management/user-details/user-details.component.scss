@@ -7,17 +7,22 @@
     display: flex;
     flex-direction: row;
 
-    .img-container {
+    .right {
       flex: 33%;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      padding: 0 10px;
 
-      .card-img {
-        border-radius: 50%;
-        width: 100%;
-        height: auto;
+      .img-container {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 0 10px;
+
+        .card-img {
+          border-radius: 50%;
+          width: 100%;
+          height: auto;
+        }
       }
     }
 

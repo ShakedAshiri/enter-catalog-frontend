@@ -10,33 +10,35 @@
   >
     <form [formGroup]="form" class="user-details-form">
       <div class="top-row">
-        <div
-          class="img-container"
-          appEditable
-          [isEditable]="true"
-          [isMultiEdit]="true"
-          (startEdit)="editImage(); fileInput.click()"
-          (saveEdit)="saveImage()"
-          (cancelEdit)="cancelImage()"
-          [isSaveDisabled]="!imageValid"
-          [iconRight]="10"
-          [iconTop]="10"
-        >
-          <input
-            #fileInput
-            type="file"
-            accept="image/jpeg,image/png,image/gif,image/webp"
-            style="display: none"
-            (change)="onImageFileSelected($event)"
-            [readonly]="true"
-          />
-          <img class="card-img" [src]="imageControl.value" />
+        <div class="right">
+          <div
+            class="img-container"
+            appEditable
+            [isEditable]="true"
+            [isMultiEdit]="true"
+            (startEdit)="editImage(); fileInput.click()"
+            (saveEdit)="saveImage()"
+            (cancelEdit)="cancelImage()"
+            [isSaveDisabled]="!imageValid"
+            [iconRight]="10"
+            [iconTop]="10"
+          >
+            <input
+              #fileInput
+              type="file"
+              accept="image/jpeg,image/png,image/gif,image/webp"
+              style="display: none"
+              (change)="onImageFileSelected($event)"
+              [readonly]="true"
+            />
+            <img class="card-img" [src]="imageControl.value || defaultAvatar" />
 
-          @if (imageErrorMessage) {
-            <div class="error-message">
-              {{ imageErrorMessage }}
-            </div>
-          }
+            @if (imageErrorMessage) {
+              <div class="error-message">
+                {{ imageErrorMessage }}
+              </div>
+            }
+          </div>
 
           <mat-checkbox [formControl]="isAvailableControl"
             >האם זמין לעבודה?</mat-checkbox
@@ -109,7 +111,7 @@
             panelClass="white-select"
           >
             @for (category of categories; track category.id) {
-              <mat-option [value]="category">{{
+              <mat-option [value]="category.id">{{
                 category.displayName
               }}</mat-option>
             }
@@ -132,7 +134,7 @@
           } @else {
             <mat-select [formControl]="branchControl" panelClass="white-select">
               @for (branch of branches; track branch.id) {
-                <mat-option [value]="branch">{{ branch.name }}</mat-option>
+                <mat-option [value]="branch.id">{{ branch.name }}</mat-option>
               }
             </mat-select>
 
