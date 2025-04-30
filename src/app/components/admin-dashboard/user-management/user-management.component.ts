@@ -99,12 +99,24 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
           // Update worker
           if (result.id) {
           } else {
-            // TODO: Save new worker
+            // TODO: don't delete isAvailable
+            delete result.isAvailable;
 
-            // Add to workers table
-            this.workers.push(result);
-            this.dataSource.push(result);
-            this.table.renderRows();
+            // Create worker
+            this.userService.createUser(result).subscribe({
+              next: (result) => {
+                // Add to workers table
+                this.workers.push(result);
+                this.dataSource.push(result);
+                this.table.renderRows();
+              },
+              error: (error) => {
+                if (!environment.production)
+                  console.error('Error fetching data:', error);
+
+                this.popupModalService.open(ServerErrorComponent);
+              },
+            });
           }
         }
       });
