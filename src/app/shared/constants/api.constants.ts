@@ -17,7 +17,7 @@ export class ApiConstants {
     // User works endpoints
     WORKS: {
       CREATE: `${ApiConstants.BASE_URL}/work`,
-      UPDATE: `${ApiConstants.BASE_URL}/work/:id`
+      UPDATE: `${ApiConstants.BASE_URL}/work/:id`,
     },
 
     // Authentication endpoints
@@ -33,6 +33,7 @@ export class ApiConstants {
       CATEGORIES: `${ApiConstants.BASE_URL}/data-table/categories`,
       APPLY_REASONS: `${ApiConstants.BASE_URL}/data-table/apply-reasons`,
       BRANCHES: `${ApiConstants.BASE_URL}/data-table/branches`,
+      USER_ROLES: `${ApiConstants.BASE_URL}/data-table/user-roles`,
     },
 
     // Email endpoints
