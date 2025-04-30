@@ -12,6 +12,7 @@ export class ApiConstants {
       SECURE_USER: `${ApiConstants.BASE_URL}/user/:id`,
       PROFILE: `${ApiConstants.BASE_URL}/user/profile`,
       UPDATE: `${ApiConstants.BASE_URL}/user/update/:id`,
+      CREATE: `${ApiConstants.BASE_URL}/user`,
     },
 
     // User works endpoints
