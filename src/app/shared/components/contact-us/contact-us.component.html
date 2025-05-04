@@ -61,7 +61,7 @@
           (click)="onSubmit(contactUsForm)"
           [disabled]="!contactUsForm.valid || isButtonDisabled"
         >
-          @if (!isFormSubmitting) {
+          @if (isFormSubmitting) {
             <mat-spinner
               class="spinner"
               [mode]="'indeterminate'"
