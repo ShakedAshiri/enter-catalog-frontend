@@ -30,4 +30,20 @@
       </button>
     }
   </mat-form-field>
+  <mat-form-field class="smaller light" appearance="outline">
+    <mat-label>תחום</mat-label>
+    <mat-select
+      multiple
+      panelClass="white-select"
+      [(value)]="selectedCategory"
+      (selectionChange)="emitFilters()"
+    >
+      <mat-option *ngFor="let category of categories" [value]="category.id">{{
+        category.name
+      }}</mat-option>
+    </mat-select>
+    <!-- @if(contactUsForm.get('applyReasons')?.invalid) {
+    <mat-error>יש להזין סיבת פנייה</mat-error>
+    } -->
+  </mat-form-field>
 </div>

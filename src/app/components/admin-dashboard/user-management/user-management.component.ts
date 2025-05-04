@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { User } from '../../../shared/models/user.class';
 import { UserService } from '../../../shared/services/user.service';
@@ -42,6 +42,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   ];
   dataSource: MatTableDataSource<User>;
   users: User[];
+  filteredUsers: User[];
 
   isUsersLoaded = false;
   showUsersServerError = false;
@@ -56,7 +57,8 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
       this.userService.getWorkers().subscribe({
         next: (response: User[]) => {
           this.users = response;
-          this.dataSource = new MatTableDataSource(this.users);
+          this.filteredUsers = [...this.users];
+          this.dataSource = new MatTableDataSource(this.filteredUsers);
           this.isUsersLoaded = true;
         },
         error: (error) => {
@@ -65,6 +67,12 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
         },
       }),
     );
+  }
+
+  ngOnChange(changes: SimpleChanges) {
+    if (changes['filteredUsers']) {
+      this.dataSource = new MatTableDataSource(this.filteredUsers);
+    }
   }
 
   navigateToProfilePage(profileId: number) {
@@ -77,5 +85,21 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
 
   getCatagories(catagories?: Category[]): string {
     return catagories?.map((c) => c.displayName).join(', ') || '';
+  }
+
+  applyFilters(filters: {
+    category?: string;
+    branch?: string;
+    status?: string;
+  }) {
+    this.filteredUsers = this.users.filter(
+      (user) =>
+        (!filters.category ||
+          user.categories.some(
+            (category) => category.name === filters.category,
+          )) &&
+        (!filters.branch || user.branch.name === filters.branch) &&
+        (!filters.status || user.status.name === filters.status),
+    );
   }
 }

@@ -1,6 +1,6 @@
 <h1>ניהול משתמשים</h1>
 
-<app-user-filter />
+<app-user-filter (filtersChanged)="applyFilters($event)" />
 
 <div *ngIf="!isUsersLoaded; else data" class="spinner">
   <mat-spinner></mat-spinner>
