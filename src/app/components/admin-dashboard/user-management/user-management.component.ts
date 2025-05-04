@@ -11,6 +11,7 @@ import { Category } from '../../../shared/models/data-tables/category.class';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { Router } from '@angular/router';
+import { UserFilterComponent } from './user-filter/user-filter.component';
 
 @Component({
   selector: 'app-user-management',
@@ -22,6 +23,7 @@ import { Router } from '@angular/router';
     NgIf,
     MatProgressSpinnerModule,
     ServerErrorComponent,
+    UserFilterComponent,
   ],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss',

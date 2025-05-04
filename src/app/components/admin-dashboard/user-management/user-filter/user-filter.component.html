@@ -1,0 +1,33 @@
+<div class="container">
+  <mat-form-field class="input-field big" appearance="outline">
+    <span matPrefix class="prefix">
+      <button
+        class="btn-clear btn-search"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+    </span>
+
+    <input
+      matInput
+      type="text"
+      [(ngModel)]="searchText"
+      (input)="searchTextFilter()"
+    />
+
+    @if (searchText) {
+      <button
+        class="btn-clear"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="clearText()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+</div>
