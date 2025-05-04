@@ -14,6 +14,7 @@ import { ServerErrorComponent } from '../../../shared/components/server-error/se
 import { Router } from '@angular/router';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { AuthService } from '../../../shared/services/auth.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-user-management',
@@ -25,6 +26,7 @@ import { AuthService } from '../../../shared/services/auth.service';
     NgIf,
     MatProgressSpinnerModule,
     ServerErrorComponent,
+    MatButtonModule,
   ],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss',
