@@ -52,6 +52,7 @@ export class UserInfoComponent {
   imageValid: boolean = false;
   categories: Category[] = [];
   selectedCategoryClasses: string[] = [];
+  defaultAvatar: String;
 
   getCategoryClass(category: Category): string {
     return `category--${category.name || 'default'}`;
@@ -120,9 +121,7 @@ export class UserInfoComponent {
       this.updateSelectedCategoryClasses(selectedIds);
     });
 
-    this.userInfoForm.patchValue({
-      image: this.imageService.defaultAvatar,
-    });
+    this.defaultAvatar = this.imageService.defaultAvatar;
   }
 
   startEditing(fieldName: string) {
