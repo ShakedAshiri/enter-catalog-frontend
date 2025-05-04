@@ -61,12 +61,15 @@
           (click)="onSubmit(contactUsForm)"
           [disabled]="!contactUsForm.valid || isButtonDisabled"
         >
-          יאללה לעבודה!
-          <mat-progress-spinner
-            *ngIf="isFormSubmitting"
-            [mode]="'indeterminate'"
-            [diameter]="15"
-          />
+          @if (isFormSubmitting) {
+            <mat-spinner
+              class="spinner"
+              [mode]="'indeterminate'"
+              [diameter]="15"
+            />
+          } @else {
+            יאללה לעבודה!
+          }
         </button>
       </div>
     </div>

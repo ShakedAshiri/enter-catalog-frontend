@@ -52,6 +52,7 @@ export class UserInfoComponent {
   imageValid: boolean = false;
   categories: Category[] = [];
   selectedCategoryClasses: string[] = [];
+  defaultAvatar: String;
 
   getCategoryClass(category: Category): string {
     return `category--${category.name || 'default'}`;
@@ -71,7 +72,7 @@ export class UserInfoComponent {
     Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
     noOnlySpacesValidator(),
   ]);
-  imageControl = new FormControl('avatar.png', Validators.required);
+  imageControl = new FormControl('', Validators.required);
   categoriesControl = new FormControl([], [Validators.required]);
   descriptionControl = new FormControl('', [
     Validators.required,
@@ -119,6 +120,8 @@ export class UserInfoComponent {
     this.categoriesControl.valueChanges.subscribe((selectedIds) => {
       this.updateSelectedCategoryClasses(selectedIds);
     });
+
+    this.defaultAvatar = this.imageService.defaultAvatar;
   }
 
   startEditing(fieldName: string) {
@@ -182,7 +185,7 @@ export class UserInfoComponent {
     }
 
     // Check aspect ratio
-    this.checkAspectRatio(file).then((isValidRatio) => {
+    this.imageService.checkAspectRatio(file).then((isValidRatio) => {
       if (isValidRatio) {
         this.imageErrorMessage = null;
         this.imageValid = true;
@@ -199,19 +202,6 @@ export class UserInfoComponent {
         this.imageValid = false;
         input.value = '';
       }
-    });
-  }
-
-  private checkAspectRatio(file: File): Promise<boolean> {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        const aspectRatio = img.width / img.height;
-        // Allow a small tolerance for aspect ratio (e.g., 0.95 to 1.05)
-        const isValid = Math.abs(aspectRatio - 1) < 0.05;
-        resolve(isValid);
-      };
-      img.src = URL.createObjectURL(file);
     });
   }
 

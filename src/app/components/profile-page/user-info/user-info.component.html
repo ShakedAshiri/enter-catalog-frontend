@@ -21,7 +21,7 @@
           (change)="onImageFileSelected($event)"
           [readonly]="true"
         />
-        <img class="card-img" [src]="imageControl.value || 'avatar.png'" />
+        <img class="card-img" [src]="imageControl.value || defaultAvatar" />
 
         @if (imageErrorMessage) {
           <div class="error-message">

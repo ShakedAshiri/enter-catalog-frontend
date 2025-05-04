@@ -129,6 +129,21 @@ mat-form-field.hidden {
   }
 }
 
+mat-form-field.disabled {
+  --mdc-filled-text-field-container-color: #dfdfdf;
+
+  .mdc-text-field--outlined .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline__trailing {
+    border-style: none;
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background-color: #dfdfdf;
+  }
+}
+
+
 // Select option list
 .cdk-overlay-pane .white-select {
   --mat-select-panel-background-color: white;
@@ -141,8 +156,9 @@ button.btn {
 }
 
 button.btn:disabled {
-  opacity: 0.4;
-  cursor: default;
+  cursor: not-allowed;
+  color: #717171;
+  filter: grayscale(60%);
 }
 
 button.btn-clear {
