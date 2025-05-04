@@ -11,6 +11,7 @@ import { ServerErrorComponent } from '../../shared/components/server-error/serve
 import { environment } from '../../../environments/environment';
 import { Subscription } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ContactUsComponent } from '../../shared/components/contact-us/contact-us.component';
 
 @Component({
   selector: 'app-profile-page',
@@ -20,6 +21,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     NgIf,
     ServerErrorComponent,
     MatProgressSpinnerModule,
+    ContactUsComponent,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
@@ -36,7 +38,7 @@ export class ProfilePageComponent {
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -82,9 +84,11 @@ export class ProfilePageComponent {
     return {
       next: (response: User) => {
         this.profileUser = response;
-        this.authService.isActionPermitted(response.id).subscribe(isAllowed => {
-          this.isEditable = isAllowed;
-        });
+        this.authService
+          .isActionPermitted(response.id)
+          .subscribe((isAllowed) => {
+            this.isEditable = isAllowed;
+          });
       },
       error: (error) => {
         if (!this.isProduction) console.error('Error fetching data:', error);

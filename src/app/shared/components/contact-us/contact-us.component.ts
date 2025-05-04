@@ -17,6 +17,8 @@ import { SuccessModalComponent } from './success-modal/success-modal.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { Subscription } from 'rxjs';
+import { DataTableService } from '../../services/data-table.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-contact-us',
@@ -27,16 +29,34 @@ import { Subscription } from 'rxjs';
     MatProgressSpinnerModule,
     NgFor,
     ReactiveFormsModule,
+    ServerErrorComponent,
   ],
   templateUrl: './contact-us.component.html',
   styleUrl: './contact-us.component.scss',
 })
 export class ContactUsComponent {
-  @Input({ required: true }) applyReasons!: ApplyReason[];
-
   private subscriptions: Subscription[] = []; // Store multiple subscriptions
   isButtonDisabled = false;
   isFormSubmitting = false;
+  isProduction = environment.production;
+
+  applyReasons: ApplyReason[] = [];
+  showApplyReasonsServerError = false;
+
+  loadApplyReasons() {
+    this.subscriptions.push(
+      this.dataTableService.getApplyReasons().subscribe({
+        next: (response: ApplyReason[]) => {
+          this.applyReasons = response;
+        },
+
+        error: (error) => {
+          if (!this.isProduction) console.error(`Error fetching data:`, error);
+          this.showApplyReasonsServerError = true;
+        },
+      }),
+    );
+  }
 
   contactUsForm: FormGroup;
   nameControl = new FormControl('', [
@@ -54,6 +74,7 @@ export class ContactUsComponent {
     private contactUsService: ContactUsService,
     private popupModalService: PopupModalService,
     private fb: FormBuilder,
+    private dataTableService: DataTableService,
   ) {}
 
   ngOnInit() {
@@ -62,6 +83,8 @@ export class ContactUsComponent {
       email: this.emailControl,
       applyReasons: this.applyReasonsControl,
     });
+
+    this.loadApplyReasons();
   }
 
   arrayOfNumbersValidator(
