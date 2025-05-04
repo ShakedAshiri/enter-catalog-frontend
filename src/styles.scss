@@ -156,8 +156,9 @@ button.btn {
 }
 
 button.btn:disabled {
-  opacity: 0.4;
-  cursor: default;
+  cursor: not-allowed;
+  color: #717171;
+  filter: grayscale(60%);
 }
 
 button.btn-clear {
