@@ -49,18 +49,18 @@
 
   .title {
     font-weight: bold;
-    font-size: 2.5em;
+    font-size: clamp(1rem, 2.7vw, 2.6rem);
     color: var(--secondary-theme-color-light);
     text-shadow: 1px 1px #624b31;
   }
 
   .desc {
-    font-size: 1.3em;
+    font-size: clamp(1rem, 1.5vw, 1.5rem);;
   }
 
   .btn-contact {
     width: 40%;
-    margin-top: 16px;
+    margin-top: 2%;
 
     .btn-text {
       font-family: "open sans hebrew";
