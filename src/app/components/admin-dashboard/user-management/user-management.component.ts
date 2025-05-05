@@ -104,6 +104,8 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
             // TODO: don't delete isAvailable
             delete result.isAvailable;
 
+            if (!result.image) delete result.image;
+
             // Create worker
             this.userService.createUser(result).subscribe({
               next: (result) => {

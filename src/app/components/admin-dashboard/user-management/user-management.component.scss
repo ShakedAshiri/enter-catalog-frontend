@@ -54,3 +54,12 @@ mat-icon {
 .btn-create {
   margin-bottom: 20px;
 }
+
+.disabled {
+  color: rgba(0, 0, 0, 0.3);
+  cursor: not-allowed;
+}
+
+.disabled:hover {
+  color: rgba(0, 0, 0, 0.3);
+}
