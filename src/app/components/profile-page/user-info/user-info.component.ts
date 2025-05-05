@@ -76,9 +76,9 @@ export class UserInfoComponent {
   categoriesControl = new FormControl([], [Validators.required]);
   descriptionControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(2),
+    Validators.minLength(3),
     Validators.maxLength(500),
-    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '-,.!?;]+$"),
+    Validators.pattern('^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\n ()\'\\-"`,.!?;]+$'),
     noOnlySpacesValidator(),
   ]);
 
