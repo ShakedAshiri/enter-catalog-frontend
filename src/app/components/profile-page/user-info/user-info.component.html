@@ -136,7 +136,10 @@
             <mat-error>תיאור חייב להיות עד 500 תווים</mat-error>
           }
           @if (descriptionControl.hasError("pattern")) {
-            <mat-error>תיאור יכול להזין אותיות ומספרים בלבד</mat-error>
+            <mat-error
+              >תיאור יכול להזין אותיות ומספרים, נקודותיים וקווים
+              נטויים</mat-error
+            >
           }
         </mat-form-field>
       </div>

@@ -73,7 +73,7 @@ export class UserInfoComponent {
     Validators.minLength(3),
     Validators.maxLength(500),
     Validators.pattern(
-      '^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\n ()\'\\-"`,.!?;]+$',
+      '^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\\n ()\'\\\\\\-"`,.!?;:/]+$',
     ),
     noOnlySpacesValidator(),
   ]);
