@@ -81,7 +81,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     Validators.required,
     Validators.minLength(3),
     Validators.maxLength(500),
-    Validators.pattern('^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\n ()\'\\-"`,.!?;]+$'),
+    Validators.pattern(
+      '^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\n ()\'\\-"`,.!?;]+$',
+    ),
     noOnlySpacesValidator(),
   ]);
 
@@ -106,7 +108,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       branch: this.branchControl,
       categories: this.categoriesControl,
       password: 'Aa123456!', // TODO: change!!
-      status: 1, // TODO: should be done in backend by default
     });
 
     this.user = data?.user;
