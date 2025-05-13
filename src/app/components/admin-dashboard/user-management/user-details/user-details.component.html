@@ -53,7 +53,7 @@
               <mat-error>יש להזין שם מקבל שירות</mat-error>
             }
             @if (displayNameControl.hasError("pattern")) {
-              <mat-error>שם מקבל שירות יכול להזין אותיות בלבד</mat-error>
+              <mat-error>שם מקבל שירות חייב להכיל אותיות בלבד</mat-error>
             }
             @if (displayNameControl.hasError("minlength")) {
               <mat-error
@@ -68,11 +68,19 @@
             @if (usernameControl.hasError("required")) {
               <mat-error>יש להזין שם משתמש</mat-error>
             }
-            @if (usernameControl.hasError("pattern")) {
-              <mat-error>שם משתמש יכול להזין אותיות באנגלית בלבד</mat-error>
+            @if (
+              usernameControl.hasError("alphabeticLettersAndOptionalSeparators")
+            ) {
+              <mat-error>שם משתמש: אותיות באנגלית, מקף או קו תחתון</mat-error>
+            }
+            @if (usernameControl.hasError("disallowMultipleConsecutive")) {
+              <mat-error>שם משתמש לא יכול להכיל קווים רציפים</mat-error>
             }
             @if (usernameControl.hasError("minlength")) {
               <mat-error>שם משתמש חייב להיות באורך מינימום 2 תווים</mat-error>
+            }
+            @if (usernameControl.hasError("maxlength")) {
+              <mat-error>שם משתמש חייב להיות באורך מקסימום 30 תווים</mat-error>
             }
           </mat-form-field>
 
@@ -96,7 +104,7 @@
               <mat-error>תיאור חייב להיות עד 500 תווים</mat-error>
             }
             @if (descriptionControl.hasError("pattern")) {
-              <mat-error>תיאור יכול להזין אותיות ומספרים בלבד</mat-error>
+              <mat-error>תיאור יכול להכיל אותיות ומספרים בלבד</mat-error>
             }
           </mat-form-field>
         </div>

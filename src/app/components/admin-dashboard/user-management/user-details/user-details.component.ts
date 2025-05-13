@@ -28,6 +28,7 @@ import { UserRole } from '../../../../shared/models/data-tables/userRole.class';
 import noOnlySpacesValidator from '../../../../shared/validators/no-only-spaces.validator';
 import { ServerErrorComponent } from '../../../../shared/components/server-error/server-error.component';
 import { NgIf } from '@angular/common';
+import usernameValidator from '../../../../shared/validators/username.validator';
 
 @Component({
   selector: 'app-user-details',
@@ -67,11 +68,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   defaultAvatar: string;
 
   imageControl = new FormControl('');
-  usernameControl: FormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern("^[a-zA-Z']+$"),
-    Validators.minLength(2),
-  ]);
+  usernameControl: FormControl = new FormControl('', [usernameValidator()]);
   displayNameControl: FormControl = new FormControl('', [
     Validators.required,
     Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
