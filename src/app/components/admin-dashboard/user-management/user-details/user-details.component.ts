@@ -81,11 +81,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     Validators.required,
     Validators.minLength(3),
     Validators.maxLength(500),
-    Validators.pattern('^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\n ()\'\\-"`,.!?;]+$'),
+    Validators.pattern(
+      '^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\n ()\'\\-"`,.!?;]+$',
+    ),
     noOnlySpacesValidator(),
   ]);
 
-  isAvailableControl: FormControl = new FormControl('');
+  isAvailableControl: FormControl = new FormControl(false);
   branchControl: FormControl = new FormControl('', [Validators.required]);
   categoriesControl: FormControl = new FormControl('', [Validators.required]);
 
