@@ -101,9 +101,6 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
           // Update worker
           if (result.id) {
           } else {
-            // TODO: don't delete isAvailable
-            delete result.isAvailable;
-
             if (!result.image) delete result.image;
 
             // Create worker
