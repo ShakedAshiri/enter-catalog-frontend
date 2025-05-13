@@ -87,7 +87,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     noOnlySpacesValidator(),
   ]);
 
-  isAvailableControl: FormControl = new FormControl('');
+  isAvailableControl: FormControl = new FormControl(false);
   branchControl: FormControl = new FormControl('', [Validators.required]);
   categoriesControl: FormControl = new FormControl('', [Validators.required]);
 
