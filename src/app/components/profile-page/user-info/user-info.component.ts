@@ -59,12 +59,6 @@ export class UserInfoComponent {
   }
 
   userInfoForm: FormGroup;
-  usernameControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(2),
-    Validators.maxLength(30),
-    Validators.pattern('^[a-z]+$'),
-  ]);
   displayNameControl = new FormControl('', [
     Validators.required,
     Validators.minLength(2),
@@ -78,7 +72,9 @@ export class UserInfoComponent {
     Validators.required,
     Validators.minLength(3),
     Validators.maxLength(500),
-    Validators.pattern('^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\n ()\'\\-"`,.!?;]+$'),
+    Validators.pattern(
+      '^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\n ()\'\\-"`,.!?;]+$',
+    ),
     noOnlySpacesValidator(),
   ]);
 
@@ -87,13 +83,12 @@ export class UserInfoComponent {
     private userService: UserService,
     private popupModalService: PopupModalService,
     private dataTableService: DataTableService,
-    private imageService: ImageService
+    private imageService: ImageService,
   ) {}
 
   ngOnInit() {
     // Initialize the form first to avoid NG01052 error
     this.userInfoForm = this.fb.group({
-      username: this.usernameControl,
       displayName: this.displayNameControl,
       image: this.imageControl,
       categories: this.categoriesControl,
