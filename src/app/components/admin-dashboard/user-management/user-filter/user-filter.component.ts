@@ -62,9 +62,14 @@ export class UserFilterComponent {
 
   emitFilters() {
     this.filtersChanged.emit({
-      categoryId: Number(this.selectedCategoryId),
-      branchId: Number(this.selectedBranchId),
-      statusId: Number(this.selectedStatusId),
+      categoryId:
+        !this.selectedCategoryId === true
+          ? null
+          : Number(this.selectedCategoryId),
+      branchId:
+        !this.selectedBranchId === true ? null : Number(this.selectedBranchId),
+      statusId:
+        !this.selectedStatusId === true ? null : Number(this.selectedStatusId),
     });
   }
 

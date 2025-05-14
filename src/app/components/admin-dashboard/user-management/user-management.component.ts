@@ -95,31 +95,39 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(filters: {
-    categoryId?: number;
-    branchId?: number;
-    statusId?: number;
+    categoryId?: number | null;
+    branchId?: number | null;
+    statusId?: number | null;
   }) {
-    this.filteredWorkers = this.workers.filter((worker) => {
-      const matchesCategory =
-        !!filters.categoryId &&
-        Array.isArray(worker.categories) &&
-        worker.categories.some(
-          (category) => String(category.id) === String(filters.categoryId),
-        );
+    const noFiltersSelected =
+      filters.categoryId == null &&
+      filters.branchId == null &&
+      filters.statusId == null;
 
-      const matchesBranch =
-        !!filters.branchId &&
-        String(worker.branch?.id) === String(filters.branchId);
+    if (noFiltersSelected) {
+      this.filteredWorkers = this.workers; // מציג את כל העובדים
+    } else {
+      this.filteredWorkers = this.workers.filter((worker) => {
+        const matchesCategory =
+          filters.categoryId == null ||
+          (Array.isArray(worker.categories) &&
+            worker.categories.some(
+              (category) => category.id == filters.categoryId,
+            ));
 
-      const matchesStatus =
-        !!filters.statusId &&
-        String(worker.status?.id) === String(filters.statusId);
+        const matchesBranch =
+          filters.branchId == null || worker.branch?.id == filters.branchId;
 
-      return matchesCategory || matchesBranch || matchesStatus;
-    });
+        const matchesStatus =
+          filters.statusId == null || worker.status?.id == filters.statusId;
+
+        return matchesCategory && matchesBranch && matchesStatus;
+      });
+    }
 
     this.dataSource = new MatTableDataSource(this.filteredWorkers);
   }
+
   createWorker(): void {
     const workerDialogRef = this.popupModalService.open(
       UserDetailsComponent,

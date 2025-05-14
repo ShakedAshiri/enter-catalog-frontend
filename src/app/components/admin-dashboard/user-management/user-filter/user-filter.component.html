@@ -37,6 +37,7 @@
       [(value)]="selectedCategoryId"
       (selectionChange)="emitFilters()"
     >
+      <mat-option class="mat-option-reset" [value]="">תחום</mat-option>
       <mat-option *ngFor="let category of categories" [value]="category.id">{{
         category.displayName
       }}</mat-option>
@@ -49,6 +50,7 @@
       [(value)]="selectedBranchId"
       (selectionChange)="emitFilters()"
     >
+      <mat-option class="mat-option-reset" [value]="">חממה</mat-option>
       <mat-option *ngFor="let branch of branches" [value]="branch.id">{{
         branch.name
       }}</mat-option>
@@ -61,6 +63,7 @@
       [(value)]="selectedStatusId"
       (selectionChange)="emitFilters()"
     >
+      <mat-option class="mat-option-reset" [value]="">סטטוס</mat-option>
       <mat-option *ngFor="let status of statuses" [value]="status.id">{{
         status.displayName
       }}</mat-option>
