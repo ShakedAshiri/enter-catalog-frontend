@@ -78,7 +78,7 @@ export class UserWorkModalComponent extends ModalWrapperComponent {
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(100),
-        Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e '-]+$"),
+        Validators.pattern("^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e '-]+$"),
         noOnlySpacesValidator(),
       ],
     );
@@ -88,7 +88,9 @@ export class UserWorkModalComponent extends ModalWrapperComponent {
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(500),
-        Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '\\-\"`,.!?;]+$"),
+        Validators.pattern(
+          '^[a-zA-Z\u0590-\u05FF\u200f\u200e\n \'\\-"`,.!?;]+$',
+        ),
         noOnlySpacesValidator(),
       ],
     );
