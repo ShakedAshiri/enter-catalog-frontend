@@ -35,9 +35,10 @@ export class UserFilterComponent {
 
   @Output() textFilterChange = new EventEmitter<string>();
   @Output() filtersChanged = new EventEmitter<{
-    categoryId?: number;
-    branchId?: number;
-    statusId?: number;
+    categoryId?: number | null;
+    branchId?: number | null;
+    statusId?: number | null;
+    searchText?: string | null;
   }>();
 
   isProduction = environment.production;
@@ -55,12 +56,12 @@ export class UserFilterComponent {
   selectedStatusId = '';
 
   searchText: string;
-  searchTextFilter() {}
   clearText() {
     this.searchText = '';
   }
 
   emitFilters() {
+    console.log(this.searchText);
     this.filtersChanged.emit({
       categoryId:
         !this.selectedCategoryId === true
@@ -70,6 +71,7 @@ export class UserFilterComponent {
         !this.selectedBranchId === true ? null : Number(this.selectedBranchId),
       statusId:
         !this.selectedStatusId === true ? null : Number(this.selectedStatusId),
+      searchText: !this.searchText === true ? null : this.searchText,
     });
   }
 

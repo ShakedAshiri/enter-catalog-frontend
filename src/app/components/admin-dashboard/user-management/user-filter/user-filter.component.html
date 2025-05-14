@@ -15,7 +15,7 @@
       matInput
       type="text"
       [(ngModel)]="searchText"
-      (input)="searchTextFilter()"
+      (input)="emitFilters()"
     />
 
     @if (searchText) {

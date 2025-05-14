@@ -98,30 +98,41 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
     categoryId?: number | null;
     branchId?: number | null;
     statusId?: number | null;
+    searchText?: string | null;
   }) {
     const noFiltersSelected =
-      filters.categoryId == null &&
-      filters.branchId == null &&
-      filters.statusId == null;
+      filters.categoryId === null &&
+      filters.branchId === null &&
+      filters.statusId === null &&
+      filters.searchText === null;
 
     if (noFiltersSelected) {
       this.filteredWorkers = this.workers; // מציג את כל העובדים
     } else {
       this.filteredWorkers = this.workers.filter((worker) => {
         const matchesCategory =
-          filters.categoryId == null ||
+          filters.categoryId === null ||
           (Array.isArray(worker.categories) &&
             worker.categories.some(
-              (category) => category.id == filters.categoryId,
+              (category) => category.id === filters.categoryId,
             ));
 
         const matchesBranch =
-          filters.branchId == null || worker.branch?.id == filters.branchId;
+          filters.branchId === null || worker.branch?.id === filters.branchId;
 
         const matchesStatus =
-          filters.statusId == null || worker.status?.id == filters.statusId;
+          filters.statusId === null || worker.status?.id === filters.statusId;
 
-        return matchesCategory && matchesBranch && matchesStatus;
+        const matchesText =
+          filters.searchText === null ||
+          worker.displayName.includes(filters.searchText) ||
+          worker.username.includes(filters.searchText) ||
+          worker.branch.name.includes(filters.searchText) ||
+          worker.categories.some((category) =>
+            category.displayName.includes(filters.searchText),
+          );
+
+        return matchesCategory && matchesBranch && matchesStatus && matchesText;
       });
     }
 
