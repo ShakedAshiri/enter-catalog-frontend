@@ -60,4 +60,8 @@ export class UserService {
     });
     return this.http.patch<User>(url, userData);
   }
+
+  public createUser(newUser: Partial<User>): Observable<User> {
+    return this.http.post<User>(ApiConstants.ENDPOINTS.USERS.CREATE, newUser);
+  }
 }

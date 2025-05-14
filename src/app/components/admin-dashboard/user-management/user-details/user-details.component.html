@@ -1,0 +1,162 @@
+<section *ngIf="isError; else userDetails">
+  <app-server-error />
+</section>
+
+<ng-template #userDetails>
+  <app-modal-wrapper
+    title="יצירת מקבל שירות חדש"
+    [disableSubmit]="!form.valid"
+    [childSubmit]="submit.bind(this)"
+  >
+    <form [formGroup]="form" class="user-details-form">
+      <div class="top-row">
+        <div class="right">
+          <div
+            class="img-container"
+            appEditable
+            [isEditable]="true"
+            [isMultiEdit]="true"
+            (startEdit)="editImage(); fileInput.click()"
+            (saveEdit)="saveImage()"
+            (cancelEdit)="cancelImage()"
+            [isSaveDisabled]="!imageValid"
+            [iconRight]="10"
+            [iconTop]="10"
+          >
+            <input
+              #fileInput
+              type="file"
+              accept="image/jpeg,image/png,image/gif,image/webp"
+              style="display: none"
+              (change)="onImageFileSelected($event)"
+              [readonly]="true"
+            />
+            <img class="card-img" [src]="imageControl.value || defaultAvatar" />
+
+            @if (imageErrorMessage) {
+              <div class="error-message">
+                {{ imageErrorMessage }}
+              </div>
+            }
+          </div>
+
+          <mat-checkbox [formControl]="isAvailableControl"
+            >האם זמין לעבודה?</mat-checkbox
+          >
+        </div>
+
+        <div class="name-fields-container">
+          <mat-form-field appearance="outline" class="light small">
+            <mat-label>שם מקבל שירות</mat-label>
+            <input matInput [formControl]="displayNameControl" />
+            @if (displayNameControl.hasError("required")) {
+              <mat-error>יש להזין שם מקבל שירות</mat-error>
+            }
+            @if (displayNameControl.hasError("pattern")) {
+              <mat-error>שם מקבל שירות חייב להכיל אותיות בלבד</mat-error>
+            }
+            @if (displayNameControl.hasError("minlength")) {
+              <mat-error
+                >שם מקבל שירות חייב להיות באורך מינימום 2 תווים</mat-error
+              >
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="light small">
+            <mat-label>שם משתמש (אנגלית בלבד)</mat-label>
+            <input matInput [formControl]="usernameControl" />
+            @if (usernameControl.hasError("required")) {
+              <mat-error>יש להזין שם משתמש</mat-error>
+            }
+            @if (
+              usernameControl.hasError("alphabeticLettersAndOptionalSeparators")
+            ) {
+              <mat-error>שם משתמש: אותיות באנגלית, מקף או קו תחתון</mat-error>
+            }
+            @if (usernameControl.hasError("disallowMultipleConsecutive")) {
+              <mat-error>שם משתמש לא יכול להכיל קווים רציפים</mat-error>
+            }
+            @if (usernameControl.hasError("minlength")) {
+              <mat-error>שם משתמש חייב להיות באורך מינימום 2 תווים</mat-error>
+            }
+            @if (usernameControl.hasError("maxlength")) {
+              <mat-error>שם משתמש חייב להיות באורך מקסימום 30 תווים</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field class="small light" appearance="outline">
+            <mat-label>תיאור</mat-label>
+            <textarea
+              matInput
+              rows="3"
+              [formControl]="descriptionControl"
+            ></textarea>
+            @if (
+              descriptionControl.hasError("required") ||
+              descriptionControl.hasError("noOnlySpaces")
+            ) {
+              <mat-error>יש להזין תיאור</mat-error>
+            }
+            @if (descriptionControl.hasError("minlength")) {
+              <mat-error>תיאור חייב להיות באורך לפחות 3 תווים</mat-error>
+            }
+            @if (descriptionControl.hasError("maxlength")) {
+              <mat-error>תיאור חייב להיות עד 500 תווים</mat-error>
+            }
+            @if (descriptionControl.hasError("pattern")) {
+              <mat-error>תיאור יכול להכיל אותיות ומספרים בלבד</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="general-fields-container">
+        <mat-form-field class="small light" appearance="outline">
+          <mat-label>תחום</mat-label>
+          <mat-select
+            [formControl]="categoriesControl"
+            multiple
+            panelClass="white-select"
+          >
+            @for (category of categories; track category.id) {
+              <mat-option [value]="category.id">{{
+                category.displayName
+              }}</mat-option>
+            }
+          </mat-select>
+
+          @if (categoriesControl.hasError("required")) {
+            <mat-error>יש להזין לפחות קטגוריה אחת</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field
+          class="small light"
+          [class.disabled]="!isAdmin"
+          appearance="outline"
+        >
+          <mat-label>חממה</mat-label>
+
+          @if (!isAdmin) {
+            <input matInput disabled [value]="user?.branch.name" />
+          } @else {
+            <mat-select [formControl]="branchControl" panelClass="white-select">
+              @for (branch of branches; track branch.id) {
+                <mat-option [value]="branch.id">{{ branch.name }}</mat-option>
+              }
+            </mat-select>
+
+            @if (
+              branchControl.hasError("required") &&
+              (branchControl.touched || branchControl.dirty)
+            ) {
+              <mat-error>יש לבחור חממה</mat-error>
+            }
+          }
+        </mat-form-field>
+      </div>
+
+      <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
+    </form>
+  </app-modal-wrapper>
+</ng-template>

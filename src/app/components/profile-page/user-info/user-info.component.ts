@@ -52,18 +52,13 @@ export class UserInfoComponent {
   imageValid: boolean = false;
   categories: Category[] = [];
   selectedCategoryClasses: string[] = [];
+  defaultAvatar: String;
 
   getCategoryClass(category: Category): string {
     return `category--${category.name || 'default'}`;
   }
 
   userInfoForm: FormGroup;
-  usernameControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(2),
-    Validators.maxLength(30),
-    Validators.pattern('^[a-z]+$'),
-  ]);
   displayNameControl = new FormControl('', [
     Validators.required,
     Validators.minLength(2),
@@ -71,13 +66,15 @@ export class UserInfoComponent {
     Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
     noOnlySpacesValidator(),
   ]);
-  imageControl = new FormControl('avatar.png', Validators.required);
+  imageControl = new FormControl('', Validators.required);
   categoriesControl = new FormControl([], [Validators.required]);
   descriptionControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(2),
+    Validators.minLength(3),
     Validators.maxLength(500),
-    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e\n '-,.!?;]+$"),
+    Validators.pattern(
+      '^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\\n ()\'\\\\\\-"`,.!?;:/]+$',
+    ),
     noOnlySpacesValidator(),
   ]);
 
@@ -86,13 +83,12 @@ export class UserInfoComponent {
     private userService: UserService,
     private popupModalService: PopupModalService,
     private dataTableService: DataTableService,
-    private imageService: ImageService
+    private imageService: ImageService,
   ) {}
 
   ngOnInit() {
     // Initialize the form first to avoid NG01052 error
     this.userInfoForm = this.fb.group({
-      username: this.usernameControl,
       displayName: this.displayNameControl,
       image: this.imageControl,
       categories: this.categoriesControl,
@@ -119,6 +115,8 @@ export class UserInfoComponent {
     this.categoriesControl.valueChanges.subscribe((selectedIds) => {
       this.updateSelectedCategoryClasses(selectedIds);
     });
+
+    this.defaultAvatar = this.imageService.defaultAvatar;
   }
 
   startEditing(fieldName: string) {
@@ -182,7 +180,7 @@ export class UserInfoComponent {
     }
 
     // Check aspect ratio
-    this.checkAspectRatio(file).then((isValidRatio) => {
+    this.imageService.checkAspectRatio(file).then((isValidRatio) => {
       if (isValidRatio) {
         this.imageErrorMessage = null;
         this.imageValid = true;
@@ -199,19 +197,6 @@ export class UserInfoComponent {
         this.imageValid = false;
         input.value = '';
       }
-    });
-  }
-
-  private checkAspectRatio(file: File): Promise<boolean> {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        const aspectRatio = img.width / img.height;
-        // Allow a small tolerance for aspect ratio (e.g., 0.95 to 1.05)
-        const isValid = Math.abs(aspectRatio - 1) < 0.05;
-        resolve(isValid);
-      };
-      img.src = URL.createObjectURL(file);
     });
   }
 

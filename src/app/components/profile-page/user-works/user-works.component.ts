@@ -47,7 +47,7 @@ export class UserWorksComponent {
     let dialogRef = this.popupModalService.open(
       UserWorkModalComponent,
       {
-        disableClose: true,
+        disableClose: this.isEditable,
       },
       {
         isEditable: this.isEditable,

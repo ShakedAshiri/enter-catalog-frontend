@@ -1,4 +1,8 @@
-<div class="container">
+<section class="apply-reasons-server-error" *ngIf="showApplyReasonsServerError">
+  <app-server-error />
+</section>
+
+<div class="container" *ngIf="!showApplyReasonsServerError">
   <span class="title">בואו לעבוד איתנו!</span>
   <span class="subtitle"
     >השאירו את הפרטים שלכם וצוות החממה יצור אתכם קשר בהקדם!</span
@@ -9,22 +13,25 @@
       <mat-form-field class="smaller light" appearance="outline">
         <mat-label>שם מלא</mat-label>
         <input matInput type="text" [formControl]="nameControl" />
-        @if (nameControl.hasError('required')) {
-        <mat-error>יש להזין שם מלא</mat-error>
-        } @if (nameControl.hasError('minlength')) {
-        <mat-error>שם מלא חייב להיות באורך לפחות 2 תווים</mat-error>
-        } @if (nameControl.hasError('maxlength')) {
-        <mat-error>שם מלא חייב להיות באורך של עד 30 תווים</mat-error>
+        @if (nameControl.hasError("required")) {
+          <mat-error>יש להזין שם מלא</mat-error>
+        }
+        @if (nameControl.hasError("minlength")) {
+          <mat-error>שם מלא חייב להיות באורך לפחות 2 תווים</mat-error>
+        }
+        @if (nameControl.hasError("maxlength")) {
+          <mat-error>שם מלא חייב להיות באורך של עד 30 תווים</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field class="smaller light" appearance="outline">
         <mat-label>אימייל</mat-label>
         <input matInput type="email" [formControl]="emailControl" />
-        @if (emailControl.hasError('required')) {
-        <mat-error>יש להזין אימייל</mat-error>
-        } @if (emailControl.hasError('email')) {
-        <mat-error>אימייל לא תקין</mat-error>
+        @if (emailControl.hasError("required")) {
+          <mat-error>יש להזין אימייל</mat-error>
+        }
+        @if (emailControl.hasError("email")) {
+          <mat-error>אימייל לא תקין</mat-error>
         }
       </mat-form-field>
 
@@ -41,8 +48,8 @@
             >{{ applyReason.name }}</mat-option
           >
         </mat-select>
-        @if(contactUsForm.get('applyReasons')?.invalid) {
-        <mat-error>יש להזין סיבת פנייה</mat-error>
+        @if (contactUsForm.get("applyReasons")?.invalid) {
+          <mat-error>יש להזין סיבת פנייה</mat-error>
         }
       </mat-form-field>
 
@@ -54,12 +61,15 @@
           (click)="onSubmit(contactUsForm)"
           [disabled]="!contactUsForm.valid || isButtonDisabled"
         >
-          יאללה לעבודה!
-          <mat-progress-spinner
-            *ngIf="isFormSubmitting"
-            [mode]="'indeterminate'"
-            [diameter]="15"
-          />
+          @if (isFormSubmitting) {
+            <mat-spinner
+              class="spinner"
+              [mode]="'indeterminate'"
+              [diameter]="15"
+            />
+          } @else {
+            יאללה לעבודה!
+          }
         </button>
       </div>
     </div>

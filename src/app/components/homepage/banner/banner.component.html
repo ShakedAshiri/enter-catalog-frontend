@@ -1,16 +1,29 @@
-<mat-grid-list class="banner-grid" cols="12">
+<mat-grid-list class="banner-grid" cols="12" [rowHeight]="'15vw'">
   <!--ENTER-->
-  <mat-grid-tile colspan="8" class="left-banner" (click)="scrollToAbout()">
-    <img src="ENTER.jpg" alt="ENTER" />
+  <mat-grid-tile colspan="12" class="left-banner" (click)="scrollToAbout()">
+    <div class="wrapper">
+      <div class="enter-img">
+        <img src="banner-img.png" alt="ENTER" />
+      </div>
+      <div class="enter-text">
+        <span class="title">מחפשים מומחי דיגיטל? מצאתם!</span>
+        <span class="desc"
+          >מעצבים, מפתחים ומשווקים שייקחו את העסק שלכם קדימה.</span
+        >
+        <button class="btn btn-secondary-light btn-contact">
+          <span class="btn-text">דברו איתנו עכשיו!</span>
+        </button>
+      </div>
+    </div>
   </mat-grid-tile>
 
   <!--ENTER TEXT-->
-  <mat-grid-tile colspan="4">
+  <!-- <mat-grid-tile colspan="4">
     <div class="left-section">
       <span class="rolling-text">
         <b>צפו</b> בעבודות של אנשי מקצוע מובילים בתחומים מגוונים. <b>בחרו</b> את
         השירות שמתאים לצרכים שלכם. <b>צרו קשר</b> ואנחנו נחזור אליכם בהקדם.
       </span>
     </div>
-  </mat-grid-tile>
+  </mat-grid-tile> -->
 </mat-grid-list>

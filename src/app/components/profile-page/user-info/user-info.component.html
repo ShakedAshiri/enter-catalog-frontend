@@ -21,7 +21,7 @@
           (change)="onImageFileSelected($event)"
           [readonly]="true"
         />
-        <img class="card-img" [src]="imageControl.value || 'avatar.png'" />
+        <img class="card-img" [src]="imageControl.value || defaultAvatar" />
 
         @if (imageErrorMessage) {
           <div class="error-message">
@@ -130,13 +130,16 @@
             <mat-error>יש להזין תיאור</mat-error>
           }
           @if (descriptionControl.hasError("minlength")) {
-            <mat-error>תיאור חייב להיות באורך לפחות 2 תווים</mat-error>
+            <mat-error>תיאור חייב להיות באורך לפחות 3 תווים</mat-error>
           }
           @if (descriptionControl.hasError("maxlength")) {
-            <mat-error>תיאור חייב להיות עד 30 תווים</mat-error>
+            <mat-error>תיאור חייב להיות עד 500 תווים</mat-error>
           }
           @if (descriptionControl.hasError("pattern")) {
-            <mat-error>תיאור יכול להזין אותיות ומספרים בלבד</mat-error>
+            <mat-error
+              >תיאור יכול להזין אותיות ומספרים, נקודותיים וקווים
+              נטויים</mat-error
+            >
           }
         </mat-form-field>
       </div>

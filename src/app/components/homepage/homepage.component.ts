@@ -8,12 +8,11 @@ import { Category } from '../../shared/models/data-tables/category.class';
 import { CategoryFilterComponent } from './category-filter/category-filter.component';
 import { UserService } from '../../shared/services/user.service';
 import { DataTableService } from '../../shared/services/data-table.service';
-import { ContactUsComponent } from './contact-us/contact-us.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../shared/components/server-error/server-error.component';
 import { environment } from '../../../environments/environment';
-import { ApplyReason } from '../../shared/models/data-tables/applyReason.class';
 import { Subscription } from 'rxjs';
+import { ContactUsComponent } from '../../shared/components/contact-us/contact-us.component';
 
 @Component({
   selector: 'app-homepage',
@@ -41,11 +40,9 @@ export class HomepageComponent implements OnInit {
   itemsPerPageCount: number = 6;
   itemsPerPage: number;
   categories: Category[] = [];
-  applyReasons: ApplyReason[] = [];
 
   showCategoriesServerError = false;
   showUsersServerError = false;
-  showApplyReasonsServerError = false;
 
   isProduction = environment.production;
 
@@ -59,7 +56,7 @@ export class HomepageComponent implements OnInit {
 
   constructor(
     public userService: UserService,
-    public dataTableService: DataTableService
+    public dataTableService: DataTableService,
   ) {}
 
   ngOnInit() {
@@ -79,7 +76,7 @@ export class HomepageComponent implements OnInit {
           if (!this.isProduction) console.error('Error fetching data:', error);
           this.showUsersServerError = true;
         },
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -91,20 +88,7 @@ export class HomepageComponent implements OnInit {
           if (!this.isProduction) console.error('Error fetching data:', error);
           this.showCategoriesServerError = true;
         },
-      })
-    );
-
-    this.subscriptions.push(
-      this.dataTableService.getApplyReasons().subscribe({
-        next: (response: ApplyReason[]) => {
-          this.applyReasons = response;
-        },
-
-        error: (error) => {
-          if (!this.isProduction) console.error(`Error fetching data:`, error);
-          this.showApplyReasonsServerError = true;
-        },
-      })
+      }),
     );
 
     this.itemsPerPage = this.itemsPerPageCount;
@@ -115,7 +99,7 @@ export class HomepageComponent implements OnInit {
 
     const nextItems = this.filteredUsers.slice(
       this.visibleUsers.length,
-      this.visibleUsers.length + this.itemsPerPageCount
+      this.visibleUsers.length + this.itemsPerPageCount,
     );
     this.visibleUsers = [...this.visibleUsers, ...nextItems];
   }
@@ -149,8 +133,8 @@ export class HomepageComponent implements OnInit {
 
     return usersToSearch.filter((user) =>
       user.categories.some((userCategory) =>
-        selectedCategories.some((category) => category.id === userCategory.id)
-      )
+        selectedCategories.some((category) => category.id === userCategory.id),
+      ),
     );
   }
 
@@ -176,7 +160,7 @@ export class HomepageComponent implements OnInit {
       : usersToSearch.filter(
           (user) =>
             user.displayName.includes(this.searchText) ||
-            user.description.includes(this.searchText)
+            user.description.includes(this.searchText),
         );
   }
 

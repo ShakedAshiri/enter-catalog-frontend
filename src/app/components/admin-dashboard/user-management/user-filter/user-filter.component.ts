@@ -9,6 +9,12 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
+import { DataTableService } from '../../../../shared/services/data-table.service';
+import { Subscription } from 'rxjs';
+import { Category } from '../../../../shared/models/data-tables/category.class';
+import { environment } from '../../../../../environments/environment';
+import { JsonPipe, NgFor } from '@angular/common';
+import { Branch } from '../../../../shared/models/data-tables/branch.class';
 
 @Component({
   selector: 'app-user-filter',
@@ -19,37 +25,86 @@ import { MatOption, MatSelect } from '@angular/material/select';
     MatSelect,
     MatOption,
     FormsModule,
+    NgFor,
   ],
   templateUrl: './user-filter.component.html',
   styleUrl: './user-filter.component.scss',
 })
 export class UserFilterComponent {
+  private subscriptions: Subscription[] = [];
+
   @Output() textFilterChange = new EventEmitter<string>();
   @Output() filtersChanged = new EventEmitter<{
-    category?: string;
-    branch?: string;
-    status?: string;
+    categoryId?: number;
+    branchId?: number;
+    statusId?: number;
   }>();
 
+  isProduction = environment.production;
+
+  constructor(private readonly dataTableService: DataTableService) {}
+
   categories = [];
-  selectedCategory = '';
+  showCategoriesServerError = false;
+  selectedCategoryId = '';
 
   branches = [];
-  selectedBranch = '';
+  selectedBranchId = '';
 
   statuses = [];
-  selectedStatus = '';
+  selectedStatusId = '';
 
   searchText: string;
   searchTextFilter() {}
-
-  clearText() {}
+  clearText() {
+    this.searchText = '';
+  }
 
   emitFilters() {
     this.filtersChanged.emit({
-      category: this.selectedCategory,
-      branch: this.selectedBranch,
-      status: this.selectedStatus,
+      categoryId: Number(this.selectedCategoryId),
+      branchId: Number(this.selectedBranchId),
+      statusId: Number(this.selectedStatusId),
     });
+  }
+
+  ngOnInit() {
+    this.loadInitialItems();
+  }
+
+  loadInitialItems() {
+    this.subscriptions.push(
+      this.dataTableService.getCategories().subscribe({
+        next: (response: Category[]) => {
+          this.categories = response;
+        },
+        error: (error) => {
+          if (!this.isProduction) console.error('Error fetching data:', error);
+          this.showCategoriesServerError = true;
+        },
+      }),
+    );
+
+    this.subscriptions.push(
+      this.dataTableService.getBranches().subscribe({
+        next: (response: Branch[]) => {
+          this.branches = response;
+        },
+        error: (error) => {
+          if (!this.isProduction) console.error('Error fetching data:', error);
+          this.showCategoriesServerError = true;
+        },
+      }),
+    );
+
+    // TODO: fetch from backend
+    this.statuses = [
+      { id: 1, name: 'active', displayName: 'פעיל' },
+      { id: 2, name: 'inactive', displayName: 'לא פעיל' },
+    ];
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

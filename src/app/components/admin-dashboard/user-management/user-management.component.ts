@@ -1,5 +1,8 @@
 import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { PopupModalService } from './../../../shared/services/popup-modal.service';
+import { ViewChild } from '@angular/core';
+import { MatTable } from '@angular/material/table';
 import { User } from '../../../shared/models/user.class';
 import { UserService } from '../../../shared/services/user.service';
 import { Subscription } from 'rxjs';
@@ -12,6 +15,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { Router } from '@angular/router';
 import { UserFilterComponent } from './user-filter/user-filter.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
+import { AuthService } from '../../../shared/services/auth.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-user-management',
@@ -24,6 +30,7 @@ import { UserFilterComponent } from './user-filter/user-filter.component';
     MatProgressSpinnerModule,
     ServerErrorComponent,
     UserFilterComponent,
+    MatButtonModule,
   ],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss',
@@ -35,31 +42,37 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'image',
     'displayName',
+    'username',
     'isAvailable',
     'branch',
     'categories',
     'actions',
   ];
-  dataSource: MatTableDataSource<User>;
-  users: User[];
-  filteredUsers: User[];
 
-  isUsersLoaded = false;
+  dataSource: MatTableDataSource<User>;
+  workers: User[];
+  filteredWorkers: User[];
+
+  @ViewChild(MatTable) table: MatTable<User>;
+
+  isWorkersLoaded = false;
   showUsersServerError = false;
 
   constructor(
     private userService: UserService,
     private router: Router,
+    private popupModalService: PopupModalService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
     this.subscriptions.push(
       this.userService.getWorkers().subscribe({
         next: (response: User[]) => {
-          this.users = response;
-          this.filteredUsers = [...this.users];
-          this.dataSource = new MatTableDataSource(this.filteredUsers);
-          this.isUsersLoaded = true;
+          this.workers = response;
+          this.filteredWorkers = [...this.workers];
+          this.dataSource = new MatTableDataSource(this.workers);
+          this.isWorkersLoaded = true;
         },
         error: (error) => {
           if (!this.isProduction) console.error('Error fetching data:', error);
@@ -67,12 +80,6 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
         },
       }),
     );
-  }
-
-  ngOnChange(changes: SimpleChanges) {
-    if (changes['filteredUsers']) {
-      this.dataSource = new MatTableDataSource(this.filteredUsers);
-    }
   }
 
   navigateToProfilePage(profileId: number) {
@@ -88,18 +95,66 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(filters: {
-    category?: string;
-    branch?: string;
-    status?: string;
+    categoryId?: number;
+    branchId?: number;
+    statusId?: number;
   }) {
-    this.filteredUsers = this.users.filter(
-      (user) =>
-        (!filters.category ||
-          user.categories.some(
-            (category) => category.name === filters.category,
-          )) &&
-        (!filters.branch || user.branch.name === filters.branch) &&
-        (!filters.status || user.status.name === filters.status),
+    this.filteredWorkers = this.workers.filter((worker) => {
+      const matchesCategory =
+        !!filters.categoryId &&
+        Array.isArray(worker.categories) &&
+        worker.categories.some(
+          (category) => String(category.id) === String(filters.categoryId),
+        );
+
+      const matchesBranch =
+        !!filters.branchId &&
+        String(worker.branch?.id) === String(filters.branchId);
+
+      const matchesStatus =
+        !!filters.statusId &&
+        String(worker.status?.id) === String(filters.statusId);
+
+      return matchesCategory || matchesBranch || matchesStatus;
+    });
+
+    this.dataSource = new MatTableDataSource(this.filteredWorkers);
+  }
+  createWorker(): void {
+    const workerDialogRef = this.popupModalService.open(
+      UserDetailsComponent,
+      {},
+      { user: this.authService.getCurrentUser() },
     );
+
+    const workerDetailsSub = workerDialogRef
+      .afterClosed()
+      .subscribe((result: User) => {
+        if (result) {
+          // Update worker
+          if (result.id) {
+          } else {
+            if (!result.image) delete result.image;
+
+            // Create worker
+            this.userService.createUser(result).subscribe({
+              next: (result) => {
+                // Add to workers table
+                this.workers.push(result);
+                this.dataSource.data.push(result);
+                this.table.renderRows();
+              },
+              error: (error) => {
+                if (!environment.production)
+                  console.error('Error fetching data:', error);
+
+                this.popupModalService.open(ServerErrorComponent);
+              },
+            });
+          }
+        }
+      });
+
+    this.subscriptions.push(workerDetailsSub);
   }
 }

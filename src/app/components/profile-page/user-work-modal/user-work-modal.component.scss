@@ -6,7 +6,7 @@ form {
 
 .card {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 15px;
 
   .card-img-container {
@@ -42,7 +42,6 @@ form {
 
     .work-image {
       width: 100%;
-      aspect-ratio: 1 / 1;
       object-fit: contain;
     }
 
@@ -72,7 +71,7 @@ form {
 }
 
 .thumbnail-viewport {
-  width: calc(40px * 3 + 10px * 3);
+  width: 434px;
   height: 74px;
   overflow-x: auto;
   white-space: nowrap;

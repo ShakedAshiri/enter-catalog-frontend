@@ -65,20 +65,19 @@ mat-grid-list {
     }
 
     .title {
-      font-weight: 400;
-      font-size: 32px;
-      line-height: 44px;
-      white-space: nowrap;
-      overflow: hidden;
+      font-weight: bold;
+      font-size: 28px;
+      line-height: 30px;
+      margin-bottom: 5px;
       text-overflow: ellipsis;
       width: 100%;
       max-width: 100%;
     }
 
     .desc {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 400;
-      line-height: 34px;
+      line-height: 26px;
       height: 6em; /* 2 lines x 1.5em per line */
       width: 100%;
       max-width: 100%;

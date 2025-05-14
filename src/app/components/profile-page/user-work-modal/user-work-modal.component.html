@@ -81,12 +81,8 @@
           </cdk-virtual-scroll-viewport>
         </div>
       </div>
-      <div class="card-text-container">
-        <mat-form-field
-          *ngIf="isEditable"
-          class="small light"
-          appearance="outline"
-        >
+      <div class="card-text-container" *ngIf="isEditable">
+        <mat-form-field class="small light" appearance="outline">
           <mat-label>כותרת עבודה</mat-label>
           <input matInput [formControl]="titleControl" />
 
@@ -129,6 +125,9 @@
             <mat-error>תיאור יכול להזין אותיות ומספרים בלבד</mat-error>
           }
         </mat-form-field>
+      </div>
+      <div *ngIf="!isEditable">
+        {{ descriptionControl.value }}
       </div>
     </div>
   </form>
