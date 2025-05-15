@@ -1,6 +1,8 @@
 <h1>ניהול משתמשים</h1>
 
-<div *ngIf="!isUsersLoaded; else data" class="spinner">
+<app-user-filter (filtersChanged)="applyFilters($event)" />
+
+<div *ngIf="!isWorkersLoaded; else data" class="spinner">
   <mat-spinner></mat-spinner>
 </div>
 
@@ -11,7 +13,12 @@
 
   <ng-template #workerTable>
     <!--TODO: move button to search row-->
-    <button mat-fab extended class="btn btn-primary btn-create" (click)="createWorker()">
+    <button
+      mat-fab
+      extended
+      class="btn btn-primary btn-create"
+      (click)="createWorker()"
+    >
       <mat-icon class="blue">add</mat-icon>צור מקבל שירות חדש
     </button>
 

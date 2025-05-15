@@ -1,0 +1,72 @@
+<div class="container">
+  <mat-form-field class="input-field big" appearance="outline">
+    <span matPrefix class="prefix">
+      <button
+        class="btn-clear btn-search"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+    </span>
+
+    <input
+      matInput
+      type="text"
+      [(ngModel)]="searchText"
+      (input)="emitFilters()"
+    />
+
+    @if (searchText) {
+      <button
+        class="btn-clear"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="clearText()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+  <mat-form-field class="smaller light" appearance="outline">
+    <mat-label>תחום</mat-label>
+    <mat-select
+      panelClass="white-select"
+      [(value)]="selectedCategoryId"
+      (selectionChange)="emitFilters()"
+    >
+      <mat-option class="mat-option-reset" [value]="">תחום</mat-option>
+      <mat-option *ngFor="let category of categories" [value]="category.id">{{
+        category.displayName
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="smaller light" appearance="outline">
+    <mat-label>חממה</mat-label>
+    <mat-select
+      panelClass="white-select"
+      [(value)]="selectedBranchId"
+      (selectionChange)="emitFilters()"
+    >
+      <mat-option class="mat-option-reset" [value]="">חממה</mat-option>
+      <mat-option *ngFor="let branch of branches" [value]="branch.id">{{
+        branch.name
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="smaller light" appearance="outline">
+    <mat-label>סטטוס</mat-label>
+    <mat-select
+      panelClass="white-select"
+      [(value)]="selectedStatusId"
+      (selectionChange)="emitFilters()"
+    >
+      <mat-option class="mat-option-reset" [value]="">סטטוס</mat-option>
+      <mat-option *ngFor="let status of statuses" [value]="status.id">{{
+        status.displayName
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
