@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { AuthService } from '../../../shared/services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-management',
@@ -98,30 +99,71 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((result: User) => {
         if (result) {
-          // Update worker
-          if (result.id) {
-          } else {
-            if (!result.image) delete result.image;
+          if (!result.image) delete result.image;
 
-            // Create worker
-            this.userService.createUser(result).subscribe({
-              next: (result) => {
-                // Add to workers table
-                this.workers.push(result);
-                this.dataSource.push(result);
-                this.table.renderRows();
-              },
-              error: (error) => {
-                if (!environment.production)
-                  console.error('Error fetching data:', error);
+          // Create worker
+          this.userService.createUser(result).subscribe({
+            next: (result) => {
+              // Add to workers table
+              this.workers.push(result);
+              this.dataSource.push(result);
+              this.table.renderRows();
+            },
+            error: (error) => {
+              if (!environment.production)
+                console.error('Error fetching data:', error);
 
-                this.popupModalService.open(ServerErrorComponent);
-              },
-            });
-          }
+              this.popupModalService.open(ServerErrorComponent);
+            },
+          });
         }
       });
 
     this.subscriptions.push(workerDetailsSub);
+  }
+
+  editWorker(workerId: number): void {
+    this.userService.getPublicUserById(workerId).subscribe({
+      next: (response: User) => {
+        const workerDialogRef = this.popupModalService.open(
+          UserDetailsComponent,
+          {},
+          {
+            user: this.authService.getCurrentUser(),
+            worker: response,
+          },
+        );
+
+        const workerDetailsSub = workerDialogRef
+          .afterClosed()
+          .subscribe((result: User) => {
+            if (result) {
+              if (!result.image) delete result.image;
+
+              // Create worker
+              this.userService.updateUser(result.id, result).subscribe({
+                next: (result) => {
+                  // Add to workers table
+                  this.workers.push(result);
+                  this.dataSource.push(result);
+                  this.table.renderRows();
+                },
+                error: (error) => {
+                  if (!environment.production)
+                    console.error('Error fetching data:', error);
+
+                  this.popupModalService.open(ServerErrorComponent);
+                },
+              });
+            }
+          });
+
+        this.subscriptions.push(workerDetailsSub);
+      },
+      error: (error) => {
+        if (!this.isProduction) console.error('Error fetching data:', error);
+        // this.isError = true;
+      },
+    });
   }
 }

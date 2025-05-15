@@ -4,7 +4,7 @@
 
 <ng-template #userDetails>
   <app-modal-wrapper
-    title="יצירת מקבל שירות חדש"
+    [title]="title"
     [disableSubmit]="!form.valid"
     [childSubmit]="submit.bind(this)"
   >
@@ -114,16 +114,25 @@
         <mat-form-field class="small light" appearance="outline">
           <mat-label>תחום</mat-label>
           <mat-select
+            [disabled]="isLoadingCategoryAndBranch"
             [formControl]="categoriesControl"
             multiple
             panelClass="white-select"
           >
-            @for (category of categories; track category.id) {
-              <mat-option [value]="category.id">{{
-                category.displayName
-              }}</mat-option>
+            @if (!isLoadingCategoryAndBranch) {
+              @for (category of categories; track category.id) {
+                <mat-option [value]="category.id">{{
+                  category.displayName
+                }}</mat-option>
+              }
             }
           </mat-select>
+          @if (isLoadingCategoryAndBranch) {
+            <mat-progress-spinner
+              mode="indeterminate"
+              diameter="16"
+            ></mat-progress-spinner>
+          }
 
           @if (categoriesControl.hasError("required")) {
             <mat-error>יש להזין לפחות קטגוריה אחת</mat-error>
@@ -140,11 +149,23 @@
           @if (!isAdmin) {
             <input matInput disabled [value]="user?.branch.name" />
           } @else {
-            <mat-select [formControl]="branchControl" panelClass="white-select">
-              @for (branch of branches; track branch.id) {
-                <mat-option [value]="branch.id">{{ branch.name }}</mat-option>
+            <mat-select
+              [disabled]="isLoadingCategoryAndBranch"
+              [formControl]="branchControl"
+              panelClass="white-select"
+            >
+              @if (!isLoadingCategoryAndBranch) {
+                @for (branch of branches; track branch.id) {
+                  <mat-option [value]="branch.id">{{ branch.name }}</mat-option>
+                }
               }
             </mat-select>
+            @if (isLoadingCategoryAndBranch) {
+              <mat-progress-spinner
+                mode="indeterminate"
+                diameter="16"
+              ></mat-progress-spinner>
+            }
 
             @if (
               branchControl.hasError("required") &&

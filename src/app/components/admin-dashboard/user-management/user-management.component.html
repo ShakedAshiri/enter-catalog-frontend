@@ -11,7 +11,12 @@
 
   <ng-template #workerTable>
     <!--TODO: move button to search row-->
-    <button mat-fab extended class="btn btn-primary btn-create" (click)="createWorker()">
+    <button
+      mat-fab
+      extended
+      class="btn btn-primary btn-create"
+      (click)="createWorker()"
+    >
       <mat-icon class="blue">add</mat-icon>צור מקבל שירות חדש
     </button>
 
@@ -79,7 +84,9 @@
             <mat-icon class="blue" (click)="navigateToProfilePage(row.id)"
               >remove_red_eye</mat-icon
             >
-            <mat-icon disabled class="blue disabled">edit</mat-icon>
+            <mat-icon disabled class="blue" (click)="editWorker(row.id)"
+              >edit</mat-icon
+            >
             <mat-icon class="red delete disabled">delete</mat-icon>
           </td>
         </ng-container>
