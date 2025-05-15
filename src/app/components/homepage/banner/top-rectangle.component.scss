@@ -1,4 +1,4 @@
-.banner-grid {
+.top-rectangle-grid {
   width: 100%;
   margin: 0px 10px;
 }
@@ -7,7 +7,7 @@
   flex: 1 1 auto;
 }
 
-.left-banner {
+.left-top-rectangle {
   cursor: pointer;
   background-color: #a66bd5;
 
@@ -55,7 +55,7 @@
   }
 
   .desc {
-    font-size: clamp(1rem, 1.5vw, 1.5rem);;
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
   }
 
   .btn-contact {
