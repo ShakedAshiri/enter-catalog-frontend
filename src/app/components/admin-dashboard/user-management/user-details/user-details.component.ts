@@ -215,6 +215,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   submit(): User {
     if (this.form.valid) {
+      if (!this.worker) return this.form.value;
       return { ...this.form.value, id: this.worker.id };
     }
 

@@ -55,10 +55,12 @@ export class UserService {
   }
 
   public updateUser(id: number, userData: Partial<User>): Observable<User> {
-    console.log(id, userData);
     const url = ApiConstants.buildUrl(ApiConstants.ENDPOINTS.USERS.UPDATE, {
       id: id,
     });
+
+    delete userData.id;
+
     return this.http.patch<User>(url, userData);
   }
 

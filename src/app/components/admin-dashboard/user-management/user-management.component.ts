@@ -158,7 +158,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
             next: (result) => {
               // Add to workers table
               this.workers.push(result);
-              this.dataSource.data.push(result);
+              this.dataSource.data = [...this.workers];
               this.table.renderRows();
             },
             error: (error) => {
@@ -191,13 +191,17 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
           .subscribe((result: User) => {
             if (result) {
               if (!result.image) delete result.image;
+              delete result.password;
 
-              // Create worker
+              // Update worker
               this.userService.updateUser(result.id, result).subscribe({
                 next: (result) => {
                   // Add to workers table
-                  this.workers.push(result);
-                  this.dataSource.data.push(result);
+                  const foundWorkerIndex = this.workers.findIndex(
+                    (worker) => worker.id === result.id,
+                  );
+                  this.workers[foundWorkerIndex] = result;
+                  this.dataSource.data = [...this.workers];
                   this.table.renderRows();
                 },
                 error: (error) => {
