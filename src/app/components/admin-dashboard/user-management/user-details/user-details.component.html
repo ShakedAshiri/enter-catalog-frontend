@@ -114,7 +114,7 @@
         <mat-form-field class="small light" appearance="outline">
           <mat-label>תחום</mat-label>
           <mat-select
-            [disabled]="isLoadingCategoryAndBranch"
+            [disabled]="isLoadingCategoryAndBranch || !isAdmin"
             [formControl]="categoriesControl"
             multiple
             panelClass="white-select"
