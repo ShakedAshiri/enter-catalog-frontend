@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { MatGridListModule } from '@angular/material/grid-list'
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @Component({
-  selector: 'app-banner',
+  selector: 'app-top-rectangle',
   imports: [MatGridListModule],
-  templateUrl: './banner.component.html',
-  styleUrl: './banner.component.scss'
+  templateUrl: './top-rectangle.component.html',
+  styleUrl: './top-rectangle.component.scss',
 })
-export class BannerComponent {
+export class TopRectangleComponent {
   scrollToAbout() {
     const element = document.getElementById('about-section');
     if (element) {

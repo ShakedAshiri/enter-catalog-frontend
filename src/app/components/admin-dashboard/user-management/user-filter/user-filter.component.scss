@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.input-field.small,
+.input-field.big {
+  width: clamp(116px, 30vw, 310px);
+}
+
+.input-field {
+  margin-left: 10px;
+
+  .prefix {
+    .btn-search {
+      padding: 0px 8px 0px 0px;
+      display: flex;
+
+      mat-icon {
+        color: black;
+        font-size: 1.2rem;
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+}
+
+mat-option.mat-option-reset {
+  color: #aaa;
+}
+
+:host ::ng-deep .mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-shape: 20px;
+}

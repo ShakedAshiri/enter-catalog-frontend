@@ -1,6 +1,8 @@
+import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PopupModalService } from './../../../shared/services/popup-modal.service';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatTable, MatTableModule } from '@angular/material/table';
+import { ViewChild } from '@angular/core';
+import { MatTable } from '@angular/material/table';
 import { User } from '../../../shared/models/user.class';
 import { UserService } from '../../../shared/services/user.service';
 import { Subscription } from 'rxjs';
@@ -12,6 +14,7 @@ import { Category } from '../../../shared/models/data-tables/category.class';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { Router } from '@angular/router';
+import { UserFilterComponent } from './user-filter/user-filter.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { AuthService } from '../../../shared/services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,6 +30,7 @@ import { MatDialogRef } from '@angular/material/dialog';
     NgIf,
     MatProgressSpinnerModule,
     ServerErrorComponent,
+    UserFilterComponent,
     MatButtonModule,
   ],
   templateUrl: './user-management.component.html',
@@ -45,12 +49,14 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
     'categories',
     'actions',
   ];
+
+  dataSource: MatTableDataSource<User>;
+  workers: User[];
+  filteredWorkers: User[];
+
   @ViewChild(MatTable) table: MatTable<User>;
 
-  dataSource: User[];
-  workers: User[];
-
-  isUsersLoaded = false;
+  isWorkersLoaded = false;
   showUsersServerError = false;
 
   constructor(
@@ -65,8 +71,9 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
       this.userService.getWorkers().subscribe({
         next: (response: User[]) => {
           this.workers = response;
-          this.dataSource = [...this.workers];
-          this.isUsersLoaded = true;
+          this.filteredWorkers = [...this.workers];
+          this.dataSource = new MatTableDataSource(this.workers);
+          this.isWorkersLoaded = true;
         },
         error: (error) => {
           if (!this.isProduction) console.error('Error fetching data:', error);
@@ -88,6 +95,51 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
     return catagories?.map((c) => c.displayName).join(', ') || '';
   }
 
+  applyFilters(filters: {
+    categoryId?: number | null;
+    branchId?: number | null;
+    statusId?: number | null;
+    searchText?: string | null;
+  }) {
+    const noFiltersSelected =
+      filters.categoryId === null &&
+      filters.branchId === null &&
+      filters.statusId === null &&
+      filters.searchText === null;
+
+    if (noFiltersSelected) {
+      this.filteredWorkers = this.workers; // מציג את כל העובדים
+    } else {
+      this.filteredWorkers = this.workers.filter((worker) => {
+        const matchesCategory =
+          filters.categoryId === null ||
+          (Array.isArray(worker.categories) &&
+            worker.categories.some(
+              (category) => category.id === filters.categoryId,
+            ));
+
+        const matchesBranch =
+          filters.branchId === null || worker.branch?.id === filters.branchId;
+
+        const matchesStatus =
+          filters.statusId === null || worker.status?.id === filters.statusId;
+
+        const matchesText =
+          filters.searchText === null ||
+          worker.displayName.includes(filters.searchText) ||
+          worker.username.includes(filters.searchText) ||
+          worker.branch.name.includes(filters.searchText) ||
+          worker.categories.some((category) =>
+            category.displayName.includes(filters.searchText),
+          );
+
+        return matchesCategory && matchesBranch && matchesStatus && matchesText;
+      });
+    }
+
+    this.dataSource = new MatTableDataSource(this.filteredWorkers);
+  }
+
   createWorker(): void {
     const workerDialogRef = this.popupModalService.open(
       UserDetailsComponent,
@@ -106,7 +158,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
             next: (result) => {
               // Add to workers table
               this.workers.push(result);
-              this.dataSource.push(result);
+              this.dataSource.data.push(result);
               this.table.renderRows();
             },
             error: (error) => {
@@ -145,7 +197,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
                 next: (result) => {
                   // Add to workers table
                   this.workers.push(result);
-                  this.dataSource.push(result);
+                  this.dataSource.data.push(result);
                   this.table.renderRows();
                 },
                 error: (error) => {

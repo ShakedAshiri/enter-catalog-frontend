@@ -1,6 +1,6 @@
 import { User } from './../../shared/models/user.class';
 import { Component, OnInit } from '@angular/core';
-import { BannerComponent } from './banner/banner.component';
+import { TopRectangleComponent } from './rectangle/top-rectangle.component';
 import { UsersGridComponent } from './users-grid/users-grid.component';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './about/about.component';
@@ -18,13 +18,13 @@ import { ContactUsComponent } from '../../shared/components/contact-us/contact-u
   selector: 'app-homepage',
   imports: [
     CommonModule,
-    BannerComponent,
     UsersGridComponent,
     AboutComponent,
     CategoryFilterComponent,
     ContactUsComponent,
     MatProgressSpinnerModule,
     ServerErrorComponent,
+    TopRectangleComponent,
   ],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss',
