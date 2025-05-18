@@ -1,6 +1,6 @@
 import { User } from './../../shared/models/user.class';
 import { Component, OnInit } from '@angular/core';
-import { TopRectangleComponent } from './banner/top-rectangle.component';
+import { TopRectangleComponent } from './rectangle/top-rectangle.component';
 import { UsersGridComponent } from './users-grid/users-grid.component';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './about/about.component';
