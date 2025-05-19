@@ -8,7 +8,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { environment } from '../../../../../environments/environment';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {
+  MatProgressSpinner,
+  MatProgressSpinnerModule,
+} from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { ModalWrapperComponent } from '../../../../shared/components/modal-wrapper/modal-wrapper.component';
@@ -37,6 +40,7 @@ import usernameValidator from '../../../../shared/validators/username.validator'
     MatFormFieldModule,
     MatDialogModule,
     MatInputModule,
+    MatProgressSpinner,
     HiddenSubmitComponent,
     MatProgressSpinnerModule,
     ModalWrapperComponent,
@@ -60,7 +64,15 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   branches: Branch[] = [];
   userRoles: UserRole[] = [];
 
+  previousCategory = null;
+  previousBranch = null;
+  isLoadingCategoryAndBranch = false;
+  private categoriesLoaded = false;
+  private branchesLoaded = false;
+
   user: User;
+  worker?: User;
+  title = 'יצירת מקבל שירות חדש';
 
   imageValid: boolean = false;
   imageErrorMessage: string | null = null;
@@ -108,6 +120,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     });
 
     this.user = data?.user;
+    this.worker = data?.worker;
+
+    if (this.worker) {
+      this.title = 'עריכת מקבל שירות';
+      this.isLoadingCategoryAndBranch = true;
+    }
 
     // Set branch for non-admins
     // Only admins can create users from a different branch
@@ -125,9 +143,19 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       this.dataTableService.getCategories().subscribe({
         next: (response: Category[]) => {
           this.categories = response;
+
+          if (this.worker) {
+            this.form.patchValue({
+              categories: this.worker.categories.map((category) => category.id),
+            });
+          }
+
+          this.categoriesLoaded = true;
+          this.checkDataLoaded();
         },
         error: (error) => {
-          if (!this.isProduction) console.error('Error fetching data:', error);
+          if (!this.isProduction)
+            console.error('Error fetching categories:', error);
           this.isError = true;
         },
       }),
@@ -137,9 +165,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       this.dataTableService.getBranches().subscribe({
         next: (response: Branch[]) => {
           this.branches = response;
+
+          if (this.worker) {
+            this.form.patchValue({ branch: this.worker.branch.id });
+          }
+
+          this.branchesLoaded = true;
+          this.checkDataLoaded();
         },
         error: (error) => {
-          if (!this.isProduction) console.error('Error fetching data:', error);
+          if (!this.isProduction)
+            console.error('Error fetching branches:', error);
           this.isError = true;
         },
       }),
@@ -158,11 +194,29 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         },
       }),
     );
+
+    if (this.worker) {
+      this.form.patchValue({
+        image: this.worker.image,
+        displayName: this.worker.displayName,
+        username: this.worker.username,
+        description: this.worker.description,
+        isAvailable: this.worker.isAvailable,
+        password: 'Aa123456!', // TODO: change!!
+      });
+    }
+  }
+
+  checkDataLoaded() {
+    if (this.categoriesLoaded && this.branchesLoaded) {
+      this.isLoadingCategoryAndBranch = false;
+    }
   }
 
   submit(): User {
     if (this.form.valid) {
-      return this.form.value;
+      if (!this.worker) return this.form.value;
+      return { ...this.form.value, id: this.worker.id };
     }
 
     return null;

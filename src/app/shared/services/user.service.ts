@@ -19,7 +19,7 @@ export class UserService {
   public isUserFromBranch(id: number, branchId: number): boolean | null {
     return (
       this.workers?.some(
-        (worker) => worker.id === id && worker.branch.id === branchId
+        (worker) => worker.id === id && worker.branch.id === branchId,
       ) ?? null
     );
   }
@@ -37,7 +37,7 @@ export class UserService {
   public getPublicUserById(id: number): Observable<User> {
     const url = ApiConstants.buildUrl(
       ApiConstants.ENDPOINTS.USERS.PUBLIC_USER,
-      { id: id }
+      { id: id },
     );
     return this.http.get<User>(url);
   }
@@ -45,7 +45,7 @@ export class UserService {
   public getSecureUserById(id: number): Observable<User> {
     const url = ApiConstants.buildUrl(
       ApiConstants.ENDPOINTS.USERS.SECURE_USER,
-      { id: id }
+      { id: id },
     );
     return this.http.get<User>(url);
   }
@@ -58,6 +58,9 @@ export class UserService {
     const url = ApiConstants.buildUrl(ApiConstants.ENDPOINTS.USERS.UPDATE, {
       id: id,
     });
+
+    delete userData.id;
+
     return this.http.patch<User>(url, userData);
   }
 

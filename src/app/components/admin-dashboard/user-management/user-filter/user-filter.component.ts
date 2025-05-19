@@ -61,7 +61,6 @@ export class UserFilterComponent {
   }
 
   emitFilters() {
-    console.log(this.searchText);
     this.filtersChanged.emit({
       categoryId:
         !this.selectedCategoryId === true
