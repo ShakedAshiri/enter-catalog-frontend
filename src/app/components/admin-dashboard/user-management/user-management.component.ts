@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PopupModalService } from './../../../shared/services/popup-modal.service';
 import { ViewChild } from '@angular/core';
@@ -18,7 +18,7 @@ import { UserFilterComponent } from './user-filter/user-filter.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { AuthService } from '../../../shared/services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogRef } from '@angular/material/dialog';
+import { UserDeactivationComponent } from './user-deactivation/user-deactivation.component';
 
 @Component({
   selector: 'app-user-management',
@@ -158,7 +158,8 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
             next: (result) => {
               // Add to workers table
               this.workers.push(result);
-              this.dataSource.data = [...this.workers];
+              this.filteredWorkers.push(result);
+              this.dataSource.data = [...this.filteredWorkers];
               this.table.renderRows();
             },
             error: (error) => {
@@ -201,7 +202,12 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
                     (worker) => worker.id === result.id,
                   );
                   this.workers[foundWorkerIndex] = result;
-                  this.dataSource.data = [...this.workers];
+                  const foundWorkerInFilteredIndex =
+                    this.filteredWorkers.findIndex(
+                      (worker) => worker.id === result.id,
+                    );
+                  this.filteredWorkers[foundWorkerInFilteredIndex] = result;
+                  this.dataSource.data = [...this.filteredWorkers];
                   this.table.renderRows();
                 },
                 error: (error) => {
@@ -221,5 +227,44 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
         // this.isError = true;
       },
     });
+  }
+
+  deactivateWorker(workerId: number) {
+    const workerDialogRef = this.popupModalService.open(
+      UserDeactivationComponent,
+      {},
+      {
+        workerId: workerId,
+      },
+    );
+
+    const workerDeactivationSub = workerDialogRef
+      .afterClosed()
+      .subscribe((result: number) => {
+        if (result) {
+          // Deactivate worker
+          this.userService.deactivateUser(result).subscribe({
+            next: (result) => {
+              // Remove from workers table
+              this.workers = this.workers.filter(
+                (worker) => worker.id !== result.id,
+              );
+              this.filteredWorkers = this.filteredWorkers.filter(
+                (worker) => worker.id !== result.id,
+              );
+              this.dataSource.data = [...this.filteredWorkers];
+              this.table.renderRows();
+            },
+            error: (error) => {
+              if (!environment.production)
+                console.error('Error fetching data:', error);
+
+              this.popupModalService.open(ServerErrorComponent);
+            },
+          });
+        }
+      });
+
+    this.subscriptions.push(workerDeactivationSub);
   }
 }
