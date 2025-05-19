@@ -89,7 +89,9 @@
             <mat-icon disabled class="blue" (click)="editWorker(row.id)"
               >edit</mat-icon
             >
-            <mat-icon class="red delete disabled">delete</mat-icon>
+            <mat-icon class="red delete" (click)="deactivateWorker(row.id)"
+              >delete</mat-icon
+            >
           </td>
         </ng-container>
 

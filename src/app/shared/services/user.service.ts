@@ -67,4 +67,12 @@ export class UserService {
   public createUser(newUser: Partial<User>): Observable<User> {
     return this.http.post<User>(ApiConstants.ENDPOINTS.USERS.CREATE, newUser);
   }
+
+  public deactivateUser(id: number): Observable<User> {
+    const url = ApiConstants.buildUrl(ApiConstants.ENDPOINTS.USERS.DEACTIVATE, {
+      id: id,
+    });
+
+    return this.http.patch<User>(url, {});
+  }
 }

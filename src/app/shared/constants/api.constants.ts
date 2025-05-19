@@ -13,6 +13,7 @@ export class ApiConstants {
       PROFILE: `${ApiConstants.BASE_URL}/user/profile`,
       UPDATE: `${ApiConstants.BASE_URL}/user/update/:id`,
       CREATE: `${ApiConstants.BASE_URL}/user`,
+      DEACTIVATE: `${ApiConstants.BASE_URL}/user/deactivate/:id`,
     },
 
     // User works endpoints
