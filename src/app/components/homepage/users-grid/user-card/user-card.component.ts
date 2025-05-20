@@ -23,4 +23,8 @@ export class UserCardComponent {
   getCategoryClass(category: Category): string {
     return `user-card--${category.name || 'default'}`;
   }
+
+  getCategoryClassIcon(category: Category): string {
+    return `category-icon-container--${category.name || 'default'}`;
+  }
 }

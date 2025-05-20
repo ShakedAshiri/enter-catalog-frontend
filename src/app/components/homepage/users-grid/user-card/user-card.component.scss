@@ -40,11 +40,30 @@
 .user-card {
   @each $category, $color in colors.$category-colors {
     &--#{$category} {
-      background-color: $color;
+      background-color: #eee;
       padding-top: clamp(35px, 5vw, 52px);
       text-align: center;
       width: clamp(166px, 17vw, 240px);
       border-radius: 20px;
+    }
+  }
+}
+
+.category-icon-container {
+  @each $category, $color in colors.$category-colors {
+    &--#{$category} {
+      background-color: $color;
+      position: absolute;
+      top: 0;
+      left: 0rem;
+      width: 3rem;
+
+      img {
+        width: 100%;
+      }
+      // padding-top: clamp(35px, 5vw, 52px);
+      // text-align: center;
+      // border-radius: 20px;
     }
   }
 }

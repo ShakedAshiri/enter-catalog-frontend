@@ -28,5 +28,15 @@
     <mat-card-content>
       <p class="desc">{{ user?.description }}</p>
     </mat-card-content>
+    @if (user.categories) {
+      <div [class]="getCategoryClassIcon(user.categories[0])">
+        <img
+          class="category-icon"
+          [src]="'categories/' + user.categories[0].name + '.svg'"
+          [alt]="user.categories[0].name"
+          [title]="user.categories[0].name"
+        />
+      </div>
+    }
   </mat-card>
 </div>
