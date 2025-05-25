@@ -8,6 +8,7 @@ export class User {
   constructor(
     public id: number,
     public username: string,
+    public email: string,
     public displayName: string,
     public password: string,
     public userRole: UserRole,
@@ -20,6 +21,6 @@ export class User {
     public categories?: Category[],
     public branch?: Branch,
     public works?: UserWork[],
-    public token?: string
+    public token?: string,
   ) {}
 }
