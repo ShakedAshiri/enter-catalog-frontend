@@ -50,3 +50,10 @@ mat-progress-spinner {
   top: 0.75rem;
   right: 3.25rem;
 }
+
+.new-password {
+  .password {
+    background-color: white;
+    padding: 2.5px;
+  }
+}

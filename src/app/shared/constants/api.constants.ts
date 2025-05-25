@@ -14,6 +14,7 @@ export class ApiConstants {
       UPDATE: `${ApiConstants.BASE_URL}/user/update/:id`,
       CREATE: `${ApiConstants.BASE_URL}/user`,
       DEACTIVATE: `${ApiConstants.BASE_URL}/user/deactivate/:id`,
+      RESET_PASSWORD: `${ApiConstants.BASE_URL}/user/reset-password/:id`,
     },
 
     // User works endpoints
