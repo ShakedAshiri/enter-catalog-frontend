@@ -84,6 +84,17 @@
             }
           </mat-form-field>
 
+          <mat-form-field appearance="outline" class="light small">
+            <mat-label>אימייל:</mat-label>
+            <input matInput [formControl]="emailControl" />
+            @if (emailControl.hasError("required")) {
+              <mat-error>יש להזין אימייל</mat-error>
+            }
+            @if (emailControl.hasError("email")) {
+              <mat-error>אימייל לא תקין</mat-error>
+            }
+          </mat-form-field>
+
           <mat-form-field class="small light" appearance="outline">
             <mat-label>תיאור</mat-label>
             <textarea

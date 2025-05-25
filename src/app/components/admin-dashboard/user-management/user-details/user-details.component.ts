@@ -95,10 +95,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     ),
     noOnlySpacesValidator(),
   ]);
-
   isAvailableControl: FormControl = new FormControl(false);
   branchControl: FormControl = new FormControl('', [Validators.required]);
   categoriesControl: FormControl = new FormControl('', [Validators.required]);
+  emailControl: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
 
   isProduction = environment.production;
   isError = false;
@@ -112,6 +115,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       image: this.imageControl,
       displayName: this.displayNameControl,
       username: this.usernameControl,
+      email: this.emailControl,
       description: this.descriptionControl,
       isAvailable: this.isAvailableControl,
       branch: this.branchControl,
@@ -200,6 +204,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         image: this.worker.image,
         displayName: this.worker.displayName,
         username: this.worker.username,
+        email: this.worker.email,
         description: this.worker.description,
         isAvailable: this.worker.isAvailable,
         password: 'Aa123456!', // TODO: change!!
