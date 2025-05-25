@@ -40,7 +40,7 @@
 .user-card {
   @each $category, $color in colors.$category-colors {
     &--#{$category} {
-      background-color: $color;
+      background-color: var(--primary-gray-color);
       padding-top: clamp(35px, 5vw, 52px);
       text-align: center;
       width: clamp(166px, 17vw, 240px);
