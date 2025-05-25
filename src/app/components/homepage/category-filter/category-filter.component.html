@@ -36,7 +36,7 @@
       *ngFor="let category of categories"
       (click)="toggleCategory(category)"
       [class.active]="selectedCategories.has(category)"
-      [class]="'category--' + category.name"
+      [class]="'btn category--' + category.name"
     >
       {{ category.displayName }}
     </button>

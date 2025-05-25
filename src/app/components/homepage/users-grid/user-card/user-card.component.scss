@@ -50,7 +50,6 @@
 }
 
 .tagline {
-  font-weight: bold;
   font-size: clamp(0.8rem, 2vw, 1rem);
   height: 1.5rem;
 }
@@ -62,6 +61,7 @@
   overflow: hidden;
   white-space: nowrap;
   margin-top: 0.5rem;
+  font-weight: bold;
 }
 
 .desc {

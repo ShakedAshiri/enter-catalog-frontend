@@ -3,7 +3,13 @@
 html {
   color-scheme: light dark;
   @include mat.theme((
-    typography: 'open sans hebrew',
+    typography: (
+      plain-family: 'open sans hebrew',
+      brand-family: 'open sans hebrew',
+      bold-weight: 900,
+      medium-weight: 500,
+      regular-weight: 300,
+    ),
     density: 0
   ));
 }
