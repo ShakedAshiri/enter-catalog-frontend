@@ -1,0 +1,9 @@
+@use '@angular/material' as mat;
+
+html {
+  color-scheme: light dark;
+  @include mat.theme((
+    typography: 'open sans hebrew',
+    density: 0
+  ));
+}
