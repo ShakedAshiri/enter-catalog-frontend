@@ -24,6 +24,8 @@ export class CategoryFilterComponent {
   @Output() textFilterChange = new EventEmitter<string>();
   selectedCategories = new Set<Category>();
   searchText: string;
+  showSecondRow = false;
+  rowLimit = 4; // או כל ערך שמתאים לך
 
   toggleCategory(category: Category) {
     if (this.selectedCategories.has(category)) {

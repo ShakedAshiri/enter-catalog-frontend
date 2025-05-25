@@ -1,45 +1,78 @@
 <div class="container">
   <div class="category-buttons">
-    <mat-form-field class="input-field big" appearance="outline">
-      <span matPrefix class="prefix">
-        <button
-          class="btn-clear btn-search"
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-        >
-          <mat-icon>search</mat-icon>
-        </button>
-      </span>
+    <!-- שורת חיפוש + שורה ראשונה של קטגוריות + חץ -->
+    <div class="category-buttons-row">
+      <!-- שדה החיפוש -->
+      <mat-form-field class="input-field big" appearance="outline">
+        <span matPrefix class="prefix">
+          <button
+            class="btn-clear btn-search"
+            matSuffix
+            mat-icon-button
+            aria-label="Search"
+          >
+            <mat-icon>search</mat-icon>
+          </button>
+        </span>
 
-      <input
-        matInput
-        type="text"
-        [(ngModel)]="searchText"
-        (input)="searchTextFilter()"
-      />
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="searchTextFilter()"
+        />
 
-      @if (searchText) {
+        @if (searchText) {
+          <button
+            class="btn-clear"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="clearText()"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <!-- שורה ראשונה של קטגוריות -->
+      <div class="categories-row">
         <button
-          class="btn-clear"
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="clearText()"
+          mat-button
+          *ngFor="let category of categories.slice(0, rowLimit)"
+          (click)="toggleCategory(category)"
+          [class.active]="selectedCategories.has(category)"
+          [class]="'category--' + category.name"
         >
-          <mat-icon>close</mat-icon>
+          {{ category.displayName }}
         </button>
-      }
-    </mat-form-field>
-    <button
-      mat-button
-      *ngFor="let category of categories"
-      (click)="toggleCategory(category)"
-      [class.active]="selectedCategories.has(category)"
-      [class]="'category--' + category.name"
-    >
-      {{ category.displayName }}
-    </button>
+
+        <!-- כפתור הצג עוד / הסתר -->
+        <img
+          (click)="showSecondRow = !showSecondRow"
+          src="category-expander.svg"
+          alt="category-expander"
+          title="category-expander"
+          class="category-expander"
+          [style.transform]="showSecondRow ? 'rotate(180deg)' : ''"
+        />
+      </div>
+    </div>
+
+    <!-- שורה שנייה של קטגוריות -->
+    <div class="categories-row second-row" [class.hidden]="!showSecondRow">
+      <button
+        mat-button
+        *ngFor="let category of categories.slice(rowLimit)"
+        (click)="toggleCategory(category)"
+        [class.active]="selectedCategories.has(category)"
+        [class]="'category--' + category.name"
+      >
+        {{ category.displayName }}
+      </button>
+    </div>
+
+    <!-- כפתור נקה -->
     <button class="btn-clear btn-close" (click)="resetFilter()">
       <mat-icon>cancel</mat-icon>
     </button>
