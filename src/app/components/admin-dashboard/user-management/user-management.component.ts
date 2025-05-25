@@ -5,7 +5,7 @@ import { ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { User } from '../../../shared/models/user.class';
 import { UserService } from '../../../shared/services/user.service';
-import { Subscription } from 'rxjs';
+import { filter, map, of, Subscription, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +19,10 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { AuthService } from '../../../shared/services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { UserDeactivationComponent } from './user-deactivation/user-deactivation.component';
+
+interface UserAndResetPassword extends User {
+  resetPassword: boolean;
+}
 
 @Component({
   selector: 'app-user-management',
@@ -176,57 +180,75 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   }
 
   editWorker(workerId: number): void {
-    this.userService.getPublicUserById(workerId).subscribe({
-      next: (response: User) => {
-        const workerDialogRef = this.popupModalService.open(
-          UserDetailsComponent,
-          {},
-          {
-            user: this.authService.getCurrentUser(),
-            worker: response,
-          },
-        );
+    this.userService
+      .getPublicUserById(workerId)
+      .pipe(
+        switchMap((worker: User) => {
+          const dialogRef = this.popupModalService.open(
+            UserDetailsComponent,
+            {},
+            {
+              user: this.authService.getCurrentUser(),
+              worker,
+            },
+          );
 
-        const workerDetailsSub = workerDialogRef
-          .afterClosed()
-          .subscribe((result: User) => {
-            if (result) {
-              if (!result.image) delete result.image;
-              delete result.password;
+          return dialogRef.afterClosed();
+        }),
+        filter(
+          (
+            userWithResetPassword,
+          ): userWithResetPassword is UserAndResetPassword =>
+            !!userWithResetPassword,
+        ),
+        tap((userWithResetPassword) => {
+          if (!userWithResetPassword.image) {
+            delete userWithResetPassword.image;
+          }
+        }),
+        switchMap((userWithResetPassword) => {
+          if (userWithResetPassword.resetPassword) {
+            return this.userService
+              .resetPassword(
+                userWithResetPassword.id,
+                userWithResetPassword.password,
+              )
+              .pipe(
+                map(() => {
+                  delete userWithResetPassword.password;
+                  return userWithResetPassword;
+                }),
+              );
+          } else {
+            return of(userWithResetPassword);
+          }
+        }),
+        switchMap((updatedUser) => {
+          delete updatedUser.password;
+          delete updatedUser.resetPassword;
+          return this.userService.updateUser(updatedUser.id, updatedUser);
+        }),
+      )
+      .subscribe({
+        next: (result: User) => {
+          const updateWorkerInList = (list: User[]) => {
+            const index = list.findIndex((worker) => worker.id === result.id);
+            if (index !== -1) list[index] = result;
+          };
 
-              // Update worker
-              this.userService.updateUser(result.id, result).subscribe({
-                next: (result) => {
-                  // Add to workers table
-                  const foundWorkerIndex = this.workers.findIndex(
-                    (worker) => worker.id === result.id,
-                  );
-                  this.workers[foundWorkerIndex] = result;
-                  const foundWorkerInFilteredIndex =
-                    this.filteredWorkers.findIndex(
-                      (worker) => worker.id === result.id,
-                    );
-                  this.filteredWorkers[foundWorkerInFilteredIndex] = result;
-                  this.dataSource.data = [...this.filteredWorkers];
-                  this.table.renderRows();
-                },
-                error: (error) => {
-                  if (!environment.production)
-                    console.error('Error fetching data:', error);
+          updateWorkerInList(this.workers);
+          updateWorkerInList(this.filteredWorkers);
 
-                  this.popupModalService.open(ServerErrorComponent);
-                },
-              });
-            }
-          });
-
-        this.subscriptions.push(workerDetailsSub);
-      },
-      error: (error) => {
-        if (!this.isProduction) console.error('Error fetching data:', error);
-        // this.isError = true;
-      },
-    });
+          this.dataSource.data = [...this.filteredWorkers];
+          this.table.renderRows();
+        },
+        error: (error) => {
+          if (!environment.production) {
+            console.error('Error fetching data:', error);
+          }
+          this.popupModalService.open(ServerErrorComponent);
+        },
+      });
   }
 
   deactivateWorker(workerId: number) {

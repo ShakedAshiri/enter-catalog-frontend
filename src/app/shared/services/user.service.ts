@@ -64,6 +64,17 @@ export class UserService {
     return this.http.patch<User>(url, userData);
   }
 
+  public resetPassword(id: number, password: string): Observable<User> {
+    const url = ApiConstants.buildUrl(
+      ApiConstants.ENDPOINTS.USERS.RESET_PASSWORD,
+      {
+        id: id,
+      },
+    );
+
+    return this.http.patch<User>(url, { password });
+  }
+
   public createUser(newUser: Partial<User>): Observable<User> {
     return this.http.post<User>(ApiConstants.ENDPOINTS.USERS.CREATE, newUser);
   }

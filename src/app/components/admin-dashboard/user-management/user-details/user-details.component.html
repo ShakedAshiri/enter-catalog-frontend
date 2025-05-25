@@ -43,6 +43,19 @@
           <mat-checkbox [formControl]="isAvailableControl"
             >האם זמין לעבודה?</mat-checkbox
           >
+          @if (worker) {
+            <mat-checkbox
+              (click)="changePassword()"
+              [formControl]="resetPasswordControl"
+              >איפוס סיסמה</mat-checkbox
+            >
+            @if (resetPasswordControl.value === true) {
+              <p class="new-password">
+                סיסמה חדשה: <br />
+                <span class="password">{{ form.value.password }}</span>
+              </p>
+            }
+          }
         </div>
 
         <div class="name-fields-container">

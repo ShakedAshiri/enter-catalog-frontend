@@ -102,6 +102,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     Validators.required,
     Validators.email,
   ]);
+  resetPasswordControl: FormControl = new FormControl(false);
 
   isProduction = environment.production;
   isError = false;
@@ -120,6 +121,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       isAvailable: this.isAvailableControl,
       branch: this.branchControl,
       categories: this.categoriesControl,
+      resetPassword: this.resetPasswordControl,
       password: 'Aa123456!', // TODO: change!!
     });
 
@@ -227,6 +229,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  changePassword() {
+    this.form.value.password = this.generatePassword();
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
@@ -287,5 +293,32 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.form.get('image').setValue(this.previousImage);
 
     delete this.previousImage;
+  }
+
+  generatePassword(length: number = 12): string {
+    const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbers = '0123456789';
+    const symbols = '!@#$';
+
+    const allChars = lowercase + uppercase + numbers + symbols;
+
+    // Ensure the password includes at least one of each type
+    const getRandom = (charset: string) =>
+      charset[Math.floor(Math.random() * charset.length)];
+
+    let password = [
+      getRandom(lowercase),
+      getRandom(uppercase),
+      getRandom(numbers),
+      getRandom(symbols),
+    ];
+
+    for (let i = password.length; i < length; i++) {
+      password.push(getRandom(allChars));
+    }
+
+    // Shuffle password array
+    return password.sort(() => Math.random() - 0.5).join('');
   }
 }
