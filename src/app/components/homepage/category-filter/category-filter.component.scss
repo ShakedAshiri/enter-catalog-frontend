@@ -44,6 +44,7 @@
         align-items: center; // Center text vertically
         justify-content: center; // Center text horizontally
         white-space: nowrap; // Prevents text wrapping
+        font-weight: bold;
       }
 
       &--#{$category}.active::after {
