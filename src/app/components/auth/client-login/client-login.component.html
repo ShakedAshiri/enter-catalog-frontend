@@ -1,0 +1,31 @@
+<app-modal-wrapper title="כניסה לפרופיל שלי" [childSubmit]="submit.bind(this)">
+  @if (showLoginServerError) {
+    <section class="login-server-error">
+      <app-server-error text="שם משתמש או כתובת מייל לא נכונים" />
+    </section>
+  }
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="light">
+      <mat-label>שם משתמש</mat-label>
+      <input matInput [formControl]="nameControl" />
+      @if (nameControl.hasError("required")) {
+        <mat-error>יש להזין שם משתמש</mat-error>
+      }
+      @if (nameControl.hasError("pattern")) {
+        <mat-error>שם משתמש יכול להזין אותיות בלבד</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="light">
+      <mat-label>אי-מייל</mat-label>
+      <input matInput [formControl]="emailControl" type="email" />
+      @if (emailControl.hasError("required")) {
+        <mat-error>יש להזין כתובת מייל</mat-error>
+      }
+      @if (emailControl.hasError("email")) {
+        <mat-error>כתובת מייל לא תקינה</mat-error>
+      }
+    </mat-form-field>
+    <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
+  </form>
+</app-modal-wrapper>
