@@ -40,7 +40,7 @@
 .user-card {
   @each $category, $color in colors.$category-colors {
     &--#{$category} {
-      background-color: $color;
+      background-color: var(--primary-gray-color);
       padding-top: clamp(35px, 5vw, 52px);
       text-align: center;
       width: clamp(166px, 17vw, 240px);
@@ -50,7 +50,6 @@
 }
 
 .tagline {
-  font-weight: bold;
   font-size: clamp(0.8rem, 2vw, 1rem);
   height: 1.5rem;
 }
@@ -62,6 +61,7 @@
   overflow: hidden;
   white-space: nowrap;
   margin-top: 0.5rem;
+  font-weight: bold;
 }
 
 .desc {

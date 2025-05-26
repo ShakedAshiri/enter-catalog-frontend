@@ -44,6 +44,13 @@
         align-items: center;
         justify-content: center;
         white-space: nowrap;
+        padding: 10px 15px; // Adjust padding for better spacing
+        width: auto; // Ensure buttons only take up the width of their text
+        display: inline-flex; // Keeps buttons inline with proper spacing
+        align-items: center; // Center text vertically
+        justify-content: center; // Center text horizontally
+        white-space: nowrap; // Prevents text wrapping
+        font-weight: bold;
       }
 
       &--#{$category}.active::after {
@@ -89,28 +96,4 @@
 
 :host ::ng-deep .mdc-text-field--outlined {
   --mdc-outlined-text-field-container-shape: 20px;
-}
-
-/* שורות הקטגוריות */
-.categories-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  min-height: 49px;
-}
-
-/* שורה שנייה מוסתרת */
-.second-row.hidden {
-  visibility: hidden;
-  height: 0;
-  overflow: hidden;
-}
-
-/* כפתור החץ */
-.category-expander {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  padding: 4px;
 }

@@ -35,46 +35,19 @@
         }
       </mat-form-field>
 
-      <!-- שורה ראשונה של קטגוריות -->
-      <div class="categories-row">
-        <button
-          mat-button
-          *ngFor="let category of categories.slice(0, rowLimit)"
-          (click)="toggleCategory(category)"
-          [class.active]="selectedCategories.has(category)"
-          [class]="'category--' + category.name"
-        >
-          {{ category.displayName }}
-        </button>
-
-        <!-- כפתור הצג עוד / הסתר -->
-        <img
-          (click)="showSecondRow = !showSecondRow"
-          src="category-expander.svg"
-          alt="category-expander"
-          title="category-expander"
-          class="category-expander"
-          [style.transform]="showSecondRow ? 'rotate(180deg)' : ''"
-        />
-      </div>
-    </div>
-
-    <!-- שורה שנייה של קטגוריות -->
-    <div class="categories-row second-row" [class.hidden]="!showSecondRow">
+      <!-- כפתור נקה -->
       <button
         mat-button
-        *ngFor="let category of categories.slice(rowLimit)"
+        *ngFor="let category of categories"
         (click)="toggleCategory(category)"
         [class.active]="selectedCategories.has(category)"
-        [class]="'category--' + category.name"
+        [class]="'btn category--' + category.name"
       >
         {{ category.displayName }}
       </button>
+      <button class="btn-clear btn-close" (click)="resetFilter()">
+        <mat-icon>cancel</mat-icon>
+      </button>
     </div>
-
-    <!-- כפתור נקה -->
-    <button class="btn-clear btn-close" (click)="resetFilter()">
-      <mat-icon>cancel</mat-icon>
-    </button>
   </div>
 </div>
