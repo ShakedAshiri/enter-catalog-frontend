@@ -15,6 +15,8 @@ import { HiddenSubmitComponent } from '../../../shared/components/hidden-submit/
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BaseModalComponent } from '../../../shared/components/base-modal/base-modal.component';
 import { environment } from '../../../../environments/environment';
+import { AuthService } from '../../../shared/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-client-login',
@@ -32,8 +34,11 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './client-login.component.scss',
 })
 export class ClientLoginComponent extends BaseModalComponent {
+  private subscriptions: Subscription[] = [];
+
   isProduction = environment.production;
   showLoginServerError = false;
+  isFormSubmitting = false;
 
   private fb = inject(FormBuilder);
   form: FormGroup;
@@ -46,7 +51,7 @@ export class ClientLoginComponent extends BaseModalComponent {
     Validators.email,
   ]);
 
-  constructor() {
+  constructor(private authService: AuthService) {
     super();
 
     this.form = this.fb.group({
@@ -56,6 +61,30 @@ export class ClientLoginComponent extends BaseModalComponent {
   }
 
   override submit(): void {
-    throw new Error('Method not implemented.');
+    if (this.form.valid) {
+      this.isFormSubmitting = true;
+
+      const sub = this.authService
+        .login(this.form.value.name, this.form.value.email)
+        .subscribe({
+          next: (result) => {
+            this.isFormSubmitting = false;
+            this.close(result);
+          },
+          error: (error) => {
+            if (!this.isProduction) {
+              console.error('Error fetching data:', error);
+            }
+
+            this.isFormSubmitting = false;
+            this.showLoginServerError = true;
+          },
+        });
+      this.subscriptions.push(sub);
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
