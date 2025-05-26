@@ -15,19 +15,19 @@
 
 .category-buttons {
   display: flex;
-  flex-wrap: wrap; // Allow wrapping to new rows
+  flex-direction: column;
   justify-content: flex-start;
   margin-right: 55px;
-  width: 1000px; // Fixed width for the container
-  gap: clamp(2px, 1vw, 10px); // Spacing between buttons
-  row-gap: 20px; // Space between rows
+  width: 1200px;
+  gap: clamp(2px, 1vw, 10px);
+  row-gap: 20px;
 
   mat-form-field.input-field.small {
     height: 49px;
   }
 
   .btn-close {
-    padding: 0px;
+    padding: 0;
   }
 
   button.category {
@@ -38,12 +38,12 @@
         border: none;
         background-color: $color;
         position: relative;
-        padding: 10px 15px; // Adjust padding for better spacing
-        width: auto; // Ensure buttons only take up the width of their text
-        display: inline-flex; // Keeps buttons inline with proper spacing
-        align-items: center; // Center text vertically
-        justify-content: center; // Center text horizontally
-        white-space: nowrap; // Prevents text wrapping
+        padding: 10px 15px;
+        width: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
         font-weight: bold;
       }
 
@@ -56,9 +56,28 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.3);
-        pointer-events: none; /* Ensures clicks go through */
+        pointer-events: none;
       }
     }
+  }
+}
+
+.category-buttons-row {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap; // מאפשר ירידה שורה
+  align-items: center;
+  gap: clamp(2px, 1vw, 10px);
+  row-gap: 20px;
+  width: 100%;
+
+  .btn-toggle-row {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    height: 40px;
   }
 }
 
@@ -67,7 +86,7 @@
 
   .prefix {
     .btn-search {
-      padding: 0px 8px 0px 0px;
+      padding: 0 8px 0 0;
       display: flex;
 
       mat-icon {
@@ -80,6 +99,17 @@
   }
 }
 
+// פינה עגולה לשדה חיפוש
 :host ::ng-deep .mdc-text-field--outlined {
   --mdc-outlined-text-field-container-shape: 20px;
+}
+
+.category-expander {
+  height: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &.flipped {
+    transform: rotate(180deg);
+  }
 }
