@@ -1,53 +1,69 @@
-<div class="container">
-  <div class="category-buttons">
-    <!-- שורת חיפוש + שורה ראשונה של קטגוריות + חץ -->
-    <div class="category-buttons-row">
-      <!-- שדה החיפוש -->
-      <mat-form-field class="input-field big" appearance="outline">
-        <span matPrefix class="prefix">
-          <button
-            class="btn-clear btn-search"
-            matSuffix
-            mat-icon-button
-            aria-label="Search"
-          >
-            <mat-icon>search</mat-icon>
-          </button>
-        </span>
+@if (categories.length > 0) {
+  <div class="container">
+    <div class="category-buttons">
+      <div class="category-buttons-row">
+        <!-- שדה חיפוש -->
+        <mat-form-field class="input-field big" appearance="outline">
+          <span matPrefix class="prefix">
+            <button
+              class="btn-clear btn-search"
+              matSuffix
+              mat-icon-button
+              aria-label="Search"
+            >
+              <mat-icon>search</mat-icon>
+            </button>
+          </span>
 
-        <input
-          matInput
-          type="text"
-          [(ngModel)]="searchText"
-          (input)="searchTextFilter()"
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="searchText"
+            (input)="searchTextFilter()"
+          />
+
+          @if (searchText) {
+            <button
+              class="btn-clear"
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              (click)="clearText()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+
+        <!-- כפתורי קטגוריה -->
+        <ng-container *ngFor="let category of categories; let i = index">
+          <button
+            *ngIf="showMore || i < 5"
+            mat-button
+            (click)="toggleCategory(category)"
+            [class.active]="selectedCategories.has(category)"
+            [class]="'btn category category--' + category.name"
+          >
+            {{ category.displayName }}
+          </button>
+        </ng-container>
+
+        <!-- כפתור איפוס -->
+        <button class="btn-clear btn-close" (click)="resetFilter()">
+          <mat-icon>cancel</mat-icon>
+        </button>
+
+        <!-- כפתור חץ (הרחבה) -->
+        <img
+          src="category-expander.svg"
+          alt="category-expander"
+          class="category-expander"
+          [ngClass]="{ flipped: showMore }"
+          title="Category Expander"
+          (click)="showMore = !showMore"
+          aria-label="Toggle more categories"
         />
-
-        @if (searchText) {
-          <button
-            class="btn-clear"
-            matSuffix
-            mat-icon-button
-            aria-label="Clear"
-            (click)="clearText()"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        }
-      </mat-form-field>
-
-      <!-- כפתור נקה -->
-      <button
-        mat-button
-        *ngFor="let category of categories"
-        (click)="toggleCategory(category)"
-        [class.active]="selectedCategories.has(category)"
-        [class]="'btn category--' + category.name"
-      >
-        {{ category.displayName }}
-      </button>
-      <button class="btn-clear btn-close" (click)="resetFilter()">
-        <mat-icon>cancel</mat-icon>
-      </button>
+      </div>
     </div>
   </div>
-</div>
+}

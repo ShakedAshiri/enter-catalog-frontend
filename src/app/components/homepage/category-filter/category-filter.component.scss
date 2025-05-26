@@ -18,7 +18,7 @@
   flex-direction: column;
   justify-content: flex-start;
   margin-right: 55px;
-  width: 1000px;
+  width: 1200px;
   gap: clamp(2px, 1vw, 10px);
   row-gap: 20px;
 
@@ -27,7 +27,7 @@
   }
 
   .btn-close {
-    padding: 0px;
+    padding: 0;
   }
 
   button.category {
@@ -44,12 +44,6 @@
         align-items: center;
         justify-content: center;
         white-space: nowrap;
-        padding: 10px 15px; // Adjust padding for better spacing
-        width: auto; // Ensure buttons only take up the width of their text
-        display: inline-flex; // Keeps buttons inline with proper spacing
-        align-items: center; // Center text vertically
-        justify-content: center; // Center text horizontally
-        white-space: nowrap; // Prevents text wrapping
         font-weight: bold;
       }
 
@@ -68,12 +62,23 @@
   }
 }
 
-/* שורת הקטגוריות + החיפוש */
 .category-buttons-row {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; // מאפשר ירידה שורה
   align-items: center;
-  gap: 12px;
+  gap: clamp(2px, 1vw, 10px);
+  row-gap: 20px;
+  width: 100%;
+
+  .btn-toggle-row {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    height: 40px;
+  }
 }
 
 .input-field {
@@ -81,7 +86,7 @@
 
   .prefix {
     .btn-search {
-      padding: 0px 8px 0px 0px;
+      padding: 0 8px 0 0;
       display: flex;
 
       mat-icon {
@@ -94,6 +99,17 @@
   }
 }
 
+// פינה עגולה לשדה חיפוש
 :host ::ng-deep .mdc-text-field--outlined {
   --mdc-outlined-text-field-container-shape: 20px;
+}
+
+.category-expander {
+  height: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &.flipped {
+    transform: rotate(180deg);
+  }
 }
