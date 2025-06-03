@@ -1,21 +1,18 @@
 import { UserService } from './user.service';
 import { Injectable, NgZone } from '@angular/core';
-import {
-  BehaviorSubject,
-  catchError,
-  firstValueFrom,
-  map,
-  Observable,
-  of,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { User } from '../models/user.class';
 import { ApiConstants } from '../constants/api.constants';
 import { HttpClient } from '@angular/common/http';
 import { Role } from '../constants/role';
-import { Router } from '@angular/router';
 import { LocalStorageKeys } from '../constants/localStorage.constants';
+import { environment } from '../../../environments/environment';
+
+declare global {
+  interface Window {
+    google: any;
+  }
+}
 
 @Injectable({
   providedIn: 'root',
@@ -55,8 +52,27 @@ export class AuthService {
     return response;
   }
 
+  clientLogin(user: Partial<User>): Observable<User> {
+    const response = this.http
+      .post<User>(ApiConstants.ENDPOINTS.AUTH.CLIENT_LOGIN, { user })
+      .pipe(
+        tap((response) => {
+          localStorage.setItem(this.localStorageKey, JSON.stringify(response));
+          this.currentUserSubject.next(response);
+        }),
+      );
+
+    return response;
+  }
+
   logout() {
+    // Add Google sign-out if user was authenticated via Google
+    if (this.getCurrentUser()?.authProvider == 'GOOGLE' && window.google) {
+      window.google.accounts.id.disableAutoSelect();
+    }
+
     localStorage.removeItem(this.localStorageKey);
+
     return this.http.post(ApiConstants.ENDPOINTS.AUTH.LOGOUT, {});
   }
 
@@ -115,5 +131,45 @@ export class AuthService {
         return of(false);
       }),
     );
+  }
+
+  initializeGoogleAuth(): void {
+    if (typeof window !== 'undefined' && window.google) {
+      window.google.accounts.id.initialize({
+        client_id: environment.GOOGLE_CLIENT_ID,
+        callback: (response: any) => this.handleGoogleAuthResponse(response),
+      });
+    }
+  }
+
+  private handleGoogleAuthResponse(response: any): void {
+    try {
+      // Decode JWT token from Google
+      const payload = JSON.parse(atob(response.credential.split('.')[1]));
+
+      const googleUser: User = {
+        email: payload.email,
+        displayName: payload.name,
+        image: payload.picture,
+        providerId: payload.sub,
+        authProvider: 'GOOGLE',
+        isEmailVerified: true,
+        username: payload.email,
+        password: '',
+        isPasswordReset: false,
+        isAvailable: false,
+      };
+
+      this.clientLogin(googleUser);
+    } catch (error) {
+      console.error('Error processing Google auth response:', error);
+      // TODO: Handle error
+    }
+  }
+
+  promptGoogleSignIn(): void {
+    if (window.google) {
+      window.google.accounts.id.prompt();
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -33,7 +33,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './client-login.component.html',
   styleUrl: './client-login.component.scss',
 })
-export class ClientLoginComponent extends BaseModalComponent {
+export class ClientLoginComponent extends BaseModalComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   isProduction = environment.production;
@@ -60,6 +60,16 @@ export class ClientLoginComponent extends BaseModalComponent {
     });
   }
 
+  ngOnInit(): void {
+    // Initialize Google Auth
+    this.authService.initializeGoogleAuth();
+
+    // Render Google button after view init
+    setTimeout(() => {
+      this.renderGoogleButton('google-signin-button');
+    }, 100);
+  }
+
   override submit(): void {
     if (this.form.valid) {
       this.isFormSubmitting = true;
@@ -81,6 +91,20 @@ export class ClientLoginComponent extends BaseModalComponent {
           },
         });
       this.subscriptions.push(sub);
+    }
+  }
+
+  renderGoogleButton(elementId: string): void {
+    if (window.google) {
+      window.google.accounts.id.renderButton(
+        document.getElementById(elementId),
+        {
+          theme: 'outline',
+          size: 'large',
+          type: 'standard',
+          text: 'signin_with'
+        }
+      );
     }
   }
 

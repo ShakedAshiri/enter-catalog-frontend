@@ -28,4 +28,13 @@
     </mat-form-field>
     <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
   </form>
+
+  <div class="divider">
+    <span>or</span>
+  </div>
+
+  <!-- Google sign-in options -->
+  <div class="social-login">
+    <div id="google-signin-button"></div>
+  </div>
 </app-modal-wrapper>

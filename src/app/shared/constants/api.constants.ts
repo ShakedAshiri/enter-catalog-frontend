@@ -26,6 +26,7 @@ export class ApiConstants {
     // Authentication endpoints
     AUTH: {
       LOGIN: `${ApiConstants.BASE_URL}/auth/login`,
+      CLIENT_LOGIN: `${ApiConstants.BASE_URL}/auth/google`,
       LOGOUT: `${ApiConstants.BASE_URL}/auth/logout`,
       REFRESH: `${ApiConstants.BASE_URL}/auth/refresh`,
       RESET_PASSWORD: `${ApiConstants.BASE_URL}/auth/change-password`,
