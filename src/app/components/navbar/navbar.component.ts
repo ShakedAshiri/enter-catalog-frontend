@@ -11,6 +11,7 @@ import { Observable, Subscription } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { PasswordResetComponent } from '../auth/password-reset/password-reset.component';
 import { ImageService } from '../../shared/services/image.service';
+import { ClientLoginComponent } from '../auth/client-login/client-login.component';
 
 @Component({
   selector: 'app-navbar',
@@ -55,6 +56,16 @@ export class NavbarComponent {
 
         this.subscriptions.push(resetSub);
       }
+    });
+
+    this.subscriptions.push(loginSub);
+  }
+
+  openClientLoginForm(): void {
+    const loginDialogRef = this.popupModalService.open(ClientLoginComponent);
+
+    const loginSub = loginDialogRef.afterClosed().subscribe((result: User) => {
+      // hi
     });
 
     this.subscriptions.push(loginSub);
