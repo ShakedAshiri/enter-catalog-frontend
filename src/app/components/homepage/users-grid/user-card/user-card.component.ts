@@ -23,4 +23,12 @@ export class UserCardComponent {
   getCategoryClass(category: Category): string {
     return `user-card--${category.name || 'default'}`;
   }
+
+  getCategoryClassBadge(category: Category): string {
+    return `category-badge--${category.name || 'default'}`;
+  }
+
+  getCategoryImagePath(category: Category): string {
+    return 'categories/' + category.name + '.svg';
+  }
 }

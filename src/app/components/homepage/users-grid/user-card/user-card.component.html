@@ -11,6 +11,13 @@
   </div>
   <mat-card [className]="getCategoryClass(user.categories[0])">
     <mat-card-title class="displayname">{{ user?.displayName }}</mat-card-title>
+    <div [class]="getCategoryClassBadge(user.categories[0])">
+      <img
+        [src]="getCategoryImagePath(user.categories[0])"
+        [alt]="user.categories[0].name"
+        [title]="user.categories[0].displayName"
+      />
+    </div>
     <mat-card-subtitle class="tagline">
       @if (user.categories) {
         @for (
