@@ -49,6 +49,23 @@
   }
 }
 
+.category-badge {
+  @each $category, $color in colors.$category-colors {
+    &--#{$category} {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: $color;
+      padding: 5px;
+      border-top-left-radius: 10px;
+
+      img {
+        height: 35px;
+      }
+    }
+  }
+}
+
 .tagline {
   font-size: clamp(0.8rem, 2vw, 1rem);
   height: 1.5rem;
