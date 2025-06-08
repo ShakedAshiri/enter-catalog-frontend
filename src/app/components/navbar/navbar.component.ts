@@ -63,12 +63,6 @@ export class NavbarComponent {
 
   openClientLoginForm(): void {
     const loginDialogRef = this.popupModalService.open(ClientLoginComponent);
-
-    const loginSub = loginDialogRef.afterClosed().subscribe((result: User) => {
-      // hi
-    });
-
-    this.subscriptions.push(loginSub);
   }
 
   logout(): void {
