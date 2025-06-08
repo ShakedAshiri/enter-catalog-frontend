@@ -49,6 +49,31 @@ mat-form-field.light {
   }
 }
 
+mat-form-field.gray {
+  --mdc-filled-text-field-container-color: var(--primary-gray-color);
+
+  .mdc-text-field--outlined .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline__trailing {
+    border-style: none;
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--primary-gray-color);
+  }
+
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+    .mdc-notched-outline--upgraded
+    .mdc-floating-label--float-above {
+    transform: translateY(-25px) scale(0.7);
+  }
+
+  // Color background on autofill
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px var(--primary-gray-color) inset;
+  }
+}
+
 mat-form-field.border {
   .mdc-text-field--outlined .mdc-notched-outline__leading,
   .mdc-text-field--outlined .mdc-notched-outline__notch,
@@ -143,7 +168,6 @@ mat-form-field.disabled {
   }
 }
 
-
 // Select option list
 .cdk-overlay-pane .white-select {
   --mat-select-panel-background-color: white;
@@ -174,6 +198,12 @@ button.btn-clear {
 button.btn-small {
   border: none;
   padding: 6px 15px;
+}
+
+button.btn-large {
+  width: 100%;
+  font-size: large;
+  font-weight: bold;
 }
 
 button.btn-primary {
