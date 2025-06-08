@@ -42,21 +42,21 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   form: FormGroup;
-  nameControl: FormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
-  ]);
   emailControl: FormControl = new FormControl('', [
     Validators.required,
     Validators.email,
+  ]);
+  passwordControl: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(5),
   ]);
 
   constructor(private authService: AuthService) {
     super();
 
     this.form = this.fb.group({
-      name: this.nameControl,
       email: this.emailControl,
+      password: this.passwordControl
     });
   }
 
@@ -110,5 +110,5 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
-  }
+}
 }
