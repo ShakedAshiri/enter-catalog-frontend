@@ -17,6 +17,7 @@ import { BaseModalComponent } from '../../../shared/components/base-modal/base-m
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Subscription } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-client-login',
@@ -29,6 +30,7 @@ import { Subscription } from 'rxjs';
     ServerErrorComponent,
     HiddenSubmitComponent,
     MatProgressSpinnerModule,
+    MatButtonModule,
   ],
   templateUrl: './client-login.component.html',
   styleUrl: './client-login.component.scss',
@@ -99,11 +101,13 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
       window.google.accounts.id.renderButton(
         document.getElementById(elementId),
         {
-          theme: 'outline',
+          theme: 'filled_blue',
           size: 'large',
           type: 'standard',
-          text: 'signin_with'
-        }
+          text: 'signin_with',
+          locale: 'he',
+          width: '400',
+        },
       );
     }
   }

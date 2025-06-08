@@ -1,11 +1,17 @@
-<app-modal-wrapper title="כניסה לפרופיל שלי" [childSubmit]="submit.bind(this)">
+<app-modal-wrapper
+  title=""
+  theme="white-theme"
+>
   @if (showLoginServerError) {
     <section class="login-server-error">
-      <app-server-error text="שם משתמש או כתובת מייל לא נכונים" />
+      <app-server-error text="כתובת מייל או סיסמא לא נכונים" />
     </section>
   }
+
+  <h2 class="login-title">כניסה לחשבון האישי</h2>
+
   <form [formGroup]="form">
-    <mat-form-field appearance="outline" class="light">
+    <mat-form-field appearance="outline" class="gray">
       <mat-label>שם משתמש</mat-label>
       <input matInput [formControl]="nameControl" />
       @if (nameControl.hasError("required")) {
@@ -16,7 +22,7 @@
       }
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="light">
+    <mat-form-field appearance="outline" class="gray">
       <mat-label>אי-מייל</mat-label>
       <input matInput [formControl]="emailControl" type="email" />
       @if (emailControl.hasError("required")) {
@@ -27,14 +33,16 @@
       }
     </mat-form-field>
     <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
+
+    <!-- Google sign-in options -->
+    <div class="social-login">
+      <div id="google-signin-button"></div>
+    </div>
+
+    <button matFab extended class="btn btn-secondary-light btn-large btn-login">
+      התחברות
+    </button>
   </form>
 
-  <div class="divider">
-    <span>or</span>
-  </div>
-
-  <!-- Google sign-in options -->
-  <div class="social-login">
-    <div id="google-signin-button"></div>
-  </div>
+  <ng-template #actions> </ng-template>
 </app-modal-wrapper>

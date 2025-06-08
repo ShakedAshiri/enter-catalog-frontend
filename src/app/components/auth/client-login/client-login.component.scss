@@ -9,3 +9,21 @@ form {
     color: red;
   }
 }
+
+.login-title {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 0.83em;
+}
+
+.social-login {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.btn-login {
+  margin-top: 5px;
+}
