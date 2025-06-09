@@ -102,9 +102,13 @@ export class ClientSignupComponent
   }
 
   override submit(): void {
-    throw new Error('Method not implemented.');
+    this.isFormSubmitting = true;
   }
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    // Render Google button after view init
+    setTimeout(() => {
+      this.authService.renderGoogleButton('google-signin-button');
+    }, 100);
   }
 }
