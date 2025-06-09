@@ -6,7 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ModalWrapperComponent } from '../../../shared/components/modal-wrapper/modal-wrapper.component';
 import { MatInputModule } from '@angular/material/input';
@@ -24,7 +23,6 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatDialogModule,
     ModalWrapperComponent,
     MatInputModule,
     ServerErrorComponent,
@@ -63,9 +61,6 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Initialize Google Auth
-    this.authService.initializeGoogleAuth();
-
     // Render Google button after view init
     setTimeout(() => {
       this.renderGoogleButton('google-signin-button');
