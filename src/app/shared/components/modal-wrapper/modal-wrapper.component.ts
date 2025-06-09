@@ -16,6 +16,7 @@ export class ModalWrapperComponent extends BaseModalComponent {
   @Input() titleStyle: string = '';
   @Input() closeOption: boolean = true;
   @Input() disableSubmit: boolean = false;
+  @Input() theme: 'default-theme' | 'white-theme' = 'default-theme';
   @ContentChild('actions') actionsTemplate!: TemplateRef<any>;
 
   @Input() childSubmit!: () => void;
