@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
 import { PasswordResetComponent } from '../auth/password-reset/password-reset.component';
 import { ImageService } from '../../shared/services/image.service';
 import { ClientLoginComponent } from '../auth/client-login/client-login.component';
+import { ClientSignupComponent } from '../auth/client-signup/client-signup.component';
 
 @Component({
   selector: 'app-navbar',
@@ -49,7 +50,7 @@ export class NavbarComponent {
         // Reset password
         const resetDialogRef = this.popupModalService.open(
           PasswordResetComponent,
-          { disableClose: true }
+          { disableClose: true },
         );
 
         const resetSub = resetDialogRef.afterClosed().subscribe(() => {});
@@ -62,7 +63,25 @@ export class NavbarComponent {
   }
 
   openClientLoginForm(): void {
-    const loginDialogRef = this.popupModalService.open(ClientLoginComponent);
+    const loginDialogRef = this.popupModalService.open(ClientLoginComponent, {
+      width: '400px',
+    });
+
+    const loginSub = loginDialogRef.afterClosed().subscribe((result: any) => {
+      if (result && result === 'signup') {
+        // Open signup window
+        const signupDialogRef = this.popupModalService.open(
+          ClientSignupComponent,
+          { width: '400px' },
+        );
+
+        const signupSub = signupDialogRef.afterClosed().subscribe(() => {});
+
+        this.subscriptions.push(signupSub);
+      }
+    });
+
+    this.subscriptions.push(loginSub);
   }
 
   logout(): void {
