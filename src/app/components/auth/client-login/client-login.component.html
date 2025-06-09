@@ -29,6 +29,9 @@
     <!-- Google sign-in options -->
     <div class="social-login">
       <div id="google-signin-button"></div>
+      @if (isFormSubmitting) {
+        <div class="button-overlay"></div>
+      }
     </div>
 
     <div class="btn-login-wrapper">
@@ -37,6 +40,7 @@
         extended
         class="btn btn-secondary-light btn-full-small btn-login"
         [class.loading]="isFormSubmitting"
+        [disabled]="!form.valid"
       >
         @if (isFormSubmitting) {
           <mat-progress-spinner
