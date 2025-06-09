@@ -5,8 +5,14 @@ form {
 }
 
 .login-server-error {
-  p {
-    color: red;
+  height: 10px;
+  visibility: hidden;
+}
+
+.login-server-error.visible {
+  visibility: visible;
+  ::ng-deep p {
+    margin: 0;
   }
 }
 
@@ -26,6 +32,10 @@ form {
 
 .btn-login-wrapper {
   padding: 0 7px;
+
+  .btn-login.loading {
+    padding: 10px 0;
+  }
 }
 
 .signin-fields {

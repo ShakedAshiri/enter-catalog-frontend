@@ -1,10 +1,4 @@
 <app-modal-wrapper title="" theme="white-theme">
-  @if (showLoginServerError) {
-    <section class="login-server-error">
-      <app-server-error text="כתובת מייל או סיסמא לא נכונים" />
-    </section>
-  }
-
   <h2 class="login-title">כניסה לחשבון האישי</h2>
 
   <form [formGroup]="form">
@@ -42,10 +36,23 @@
         (click)="submit()"
         extended
         class="btn btn-secondary-light btn-full-small btn-login"
+        [class.loading]="isFormSubmitting"
       >
-        התחברות
+        @if (isFormSubmitting) {
+          <mat-progress-spinner
+            class="spinner"
+            [mode]="'indeterminate'"
+            [diameter]="15"
+          />
+        } @else {
+          התחברות
+        }
       </button>
     </div>
+
+    <section class="login-server-error" [class.visible]="showLoginServerError">
+      <app-server-error text="כתובת מייל או סיסמא לא נכונים" />
+    </section>
 
     <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
   </form>
@@ -53,7 +60,9 @@
   <div class="signup">
     <h1 class="signup-title">עוד לא נרשמתם?</h1>
     <h2 class="signup-subtitle">למה אתם מחכים?</h2>
-    <button (click)="signup()" class="btn btn-green-light btn-full-small">הרשמה</button>
+    <button (click)="signup()" class="btn btn-green-light btn-full-small">
+      הרשמה
+    </button>
   </div>
 
   <ng-template #actions> </ng-template>
