@@ -1,6 +1,64 @@
 <app-modal-wrapper title="" theme="white-theme">
-
   <h2 class="signup-title">הרשמה למשתמשים חדשים</h2>
+
+  <form [formGroup]="form">
+    <div class="signin-fields">
+      <mat-form-field appearance="outline" class="gray small">
+        <mat-label>שם מלא</mat-label>
+        <input matInput [formControl]="displayNameControl" />
+        @if (displayNameControl.hasError("required")) {
+          <mat-error>יש להזין שם מלא</mat-error>
+        }
+        @if (displayNameControl.hasError("pattern")) {
+          <mat-error>שם חייב להכיל אותיות בלבד</mat-error>
+        }
+        @if (displayNameControl.hasError("minlength")) {
+          <mat-error>שם חייב להיות באורך מינימום 2 תווים</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="gray small">
+        <mat-label>אי-מייל</mat-label>
+        <input matInput [formControl]="emailControl" type="email" />
+        @if (emailControl.hasError("required")) {
+          <mat-error>יש להזין כתובת מייל</mat-error>
+        }
+        @if (emailControl.hasError("email")) {
+          <mat-error>כתובת מייל לא תקינה</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="gray small">
+        <mat-label>סיסמא</mat-label>
+        <input matInput [formControl]="passwordControl" type="password" />
+        @if (passwordControl.hasError("required")) {
+          <mat-error>יש להזין סיסמא</mat-error>
+        }
+        @if (passwordControl.hasError("minlength")) {
+          <mat-error>סיסמא חייבת להיות באורך לפחות 5 תווים</mat-error>
+        }
+      </mat-form-field>
+
+      @if (showSignupServerError) {
+        <section class="signup-server-error">
+          <app-server-error
+            text="שגיאה בעת יצירת משתמש חדש, נא לנסות שנית מאוחר יותר"
+          />
+        </section>
+      }
+
+      <button (click)="submit()" class="btn btn-green-light btn-full-small">
+        הרשמה
+      </button>
+    </div>
+
+    <!-- Google sign-in options -->
+    <div class="social-login">
+      <div id="google-signin-button"></div>
+    </div>
+
+    <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
+  </form>
 
   <ng-template #actions> </ng-template>
 </app-modal-wrapper>
