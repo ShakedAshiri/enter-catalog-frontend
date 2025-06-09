@@ -24,6 +24,33 @@ form {
   margin-top: 0.83em;
 }
 
-.btn-login {
-  margin-top: 5px;
+.btn-login-wrapper {
+  padding: 0 7px;
+}
+
+.signin-fields {
+  padding: 0 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.signup {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 20px 0;
+
+  .signup-title {
+    margin: 0;
+    font-size: 2.3em;
+  }
+
+  .signup-subtitle {
+    font-weight: normal;
+  }
 }

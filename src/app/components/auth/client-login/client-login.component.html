@@ -1,7 +1,4 @@
-<app-modal-wrapper
-  title=""
-  theme="white-theme"
->
+<app-modal-wrapper title="" theme="white-theme">
   @if (showLoginServerError) {
     <section class="login-server-error">
       <app-server-error text="כתובת מייל או סיסמא לא נכונים" />
@@ -11,38 +8,53 @@
   <h2 class="login-title">כניסה לחשבון האישי</h2>
 
   <form [formGroup]="form">
-    <mat-form-field appearance="outline" class="light">
-      <mat-label>אי-מייל</mat-label>
-      <input matInput [formControl]="emailControl" type="email" />
-      @if (emailControl.hasError("required")) {
-        <mat-error>יש להזין כתובת מייל</mat-error>
-      }
-      @if (emailControl.hasError("email")) {
-        <mat-error>כתובת מייל לא תקינה</mat-error>
-      }
-    </mat-form-field>
+    <div class="signin-fields">
+      <mat-form-field appearance="outline" class="gray small">
+        <mat-label>אי-מייל</mat-label>
+        <input matInput [formControl]="emailControl" type="email" />
+        @if (emailControl.hasError("required")) {
+          <mat-error>יש להזין כתובת מייל</mat-error>
+        }
+        @if (emailControl.hasError("email")) {
+          <mat-error>כתובת מייל לא תקינה</mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="gray">
-      <mat-label>סיסמא</mat-label>
-      <input matInput [formControl]="passwordControl" type="password" />
-      @if (passwordControl.hasError("required")) {
-        <mat-error>יש להזין סיסמא</mat-error>
-      }
-      @if (passwordControl.hasError("minlength")) {
-        <mat-error>סיסמא חייבת להיות באורך לפחות 5 תווים</mat-error>
-      }
-    </mat-form-field>
-    <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
+      <mat-form-field appearance="outline" class="gray small">
+        <mat-label>סיסמא</mat-label>
+        <input matInput [formControl]="passwordControl" type="password" />
+        @if (passwordControl.hasError("required")) {
+          <mat-error>יש להזין סיסמא</mat-error>
+        }
+        @if (passwordControl.hasError("minlength")) {
+          <mat-error>סיסמא חייבת להיות באורך לפחות 5 תווים</mat-error>
+        }
+      </mat-form-field>
+    </div>
 
     <!-- Google sign-in options -->
     <div class="social-login">
       <div id="google-signin-button"></div>
     </div>
 
-    <button matFab extended class="btn btn-secondary-light btn-large btn-login">
-      התחברות
-    </button>
+    <div class="btn-login-wrapper">
+      <button
+        (click)="submit()"
+        extended
+        class="btn btn-secondary-light btn-full-small btn-login"
+      >
+        התחברות
+      </button>
+    </div>
+
+    <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
   </form>
+
+  <div class="signup">
+    <h1 class="signup-title">עוד לא נרשמתם?</h1>
+    <h2 class="signup-subtitle">למה אתם מחכים?</h2>
+    <button (click)="signup()" class="btn btn-green-light btn-full-small">הרשמה</button>
+  </div>
 
   <ng-template #actions> </ng-template>
 </app-modal-wrapper>

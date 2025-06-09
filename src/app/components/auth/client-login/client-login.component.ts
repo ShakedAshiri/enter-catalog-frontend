@@ -58,7 +58,7 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
 
     this.form = this.fb.group({
       email: this.emailControl,
-      password: this.passwordControl
+      password: this.passwordControl,
     });
   }
 
@@ -77,7 +77,7 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
       this.isFormSubmitting = true;
 
       const sub = this.authService
-        .login(this.form.value.name, this.form.value.email)
+        .login(this.form.value.email, this.form.value.password)
         .subscribe({
           next: (result) => {
             this.isFormSubmitting = false;
@@ -106,13 +106,17 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
           type: 'standard',
           text: 'signin_with',
           locale: 'he',
-          width: '400',
+          width: '338',
         },
       );
     }
   }
 
+  signup() {
+    this.close('signup');
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
-}
+  }
 }
