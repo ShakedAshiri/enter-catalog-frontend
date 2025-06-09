@@ -23,6 +23,7 @@ export class AuthService {
     this.getCurrentUser(),
   );
   public currentUser$ = this.getUserAsObservable();
+  isProduction = environment.production;
 
   constructor(
     private http: HttpClient,
@@ -137,34 +138,34 @@ export class AuthService {
     if (typeof window !== 'undefined' && window.google) {
       window.google.accounts.id.initialize({
         client_id: environment.GOOGLE_CLIENT_ID,
-        callback: (response: any) => this.handleGoogleAuthResponse(response),
+        callback: (response: any) =>
+          this.handleGoogleAuthResponse(response).subscribe({
+            next: () => {
+              window.location.reload();
+            },
+            error: (err) => {
+              if (!this.isProduction) {
+                console.error('Google login failed:', err);
+              }
+            },
+          }),
       });
     }
   }
 
-  private handleGoogleAuthResponse(response: any): void {
-    try {
-      // Decode JWT token from Google
-      const payload = JSON.parse(atob(response.credential.split('.')[1]));
+  private handleGoogleAuthResponse(responseFromGoogle: any): Observable<User> {
+    const idToken = responseFromGoogle.credential;
 
-      const googleUser: User = {
-        email: payload.email,
-        displayName: payload.name,
-        image: payload.picture,
-        providerId: payload.sub,
-        authProvider: 'GOOGLE',
-        isEmailVerified: true,
-        username: payload.email,
-        password: '',
-        isPasswordReset: false,
-        isAvailable: false,
-      };
+    const response = this.http
+      .post<User>(ApiConstants.ENDPOINTS.AUTH.GOOGLE_LOGIN, { idToken })
+      .pipe(
+        tap((response) => {
+          localStorage.setItem(this.localStorageKey, JSON.stringify(response));
+          this.currentUserSubject.next(response); // This updates in the same tab
+        }),
+      );
 
-      this.clientLogin(googleUser);
-    } catch (error) {
-      console.error('Error processing Google auth response:', error);
-      // TODO: Handle error
-    }
+    return response;
   }
 
   promptGoogleSignIn(): void {

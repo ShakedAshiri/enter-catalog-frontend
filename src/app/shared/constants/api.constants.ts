@@ -30,6 +30,7 @@ export class ApiConstants {
       LOGOUT: `${ApiConstants.BASE_URL}/auth/logout`,
       REFRESH: `${ApiConstants.BASE_URL}/auth/refresh`,
       RESET_PASSWORD: `${ApiConstants.BASE_URL}/auth/change-password`,
+      GOOGLE_LOGIN: `${ApiConstants.BASE_URL}/auth/google-login`,
     },
 
     // Data table endpoints
