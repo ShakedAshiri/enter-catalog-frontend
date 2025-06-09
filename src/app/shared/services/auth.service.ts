@@ -173,4 +173,20 @@ export class AuthService {
       window.google.accounts.id.prompt();
     }
   }
+
+  renderGoogleButton(elementId: string): void {
+    if (window.google) {
+      window.google.accounts.id.renderButton(
+        document.getElementById(elementId),
+        {
+          theme: 'filled_blue',
+          size: 'large',
+          type: 'standard',
+          text: 'signin_with',
+          locale: 'he',
+          width: '338',
+        },
+      );
+    }
+  }
 }

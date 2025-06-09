@@ -63,7 +63,7 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
   ngOnInit(): void {
     // Render Google button after view init
     setTimeout(() => {
-      this.renderGoogleButton('google-signin-button');
+      this.authService.renderGoogleButton('google-signin-button');
     }, 100);
   }
 
@@ -88,22 +88,6 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
           },
         });
       this.subscriptions.push(sub);
-    }
-  }
-
-  renderGoogleButton(elementId: string): void {
-    if (window.google) {
-      window.google.accounts.id.renderButton(
-        document.getElementById(elementId),
-        {
-          theme: 'filled_blue',
-          size: 'large',
-          type: 'standard',
-          text: 'signin_with',
-          locale: 'he',
-          width: '338',
-        },
-      );
     }
   }
 
