@@ -200,10 +200,12 @@ button.btn-small {
   padding: 6px 15px;
 }
 
-button.btn-large {
+button.btn-full-small {
   width: 100%;
   font-size: large;
   font-weight: bold;
+  border: none;
+  padding: 6px 15px;
 }
 
 button.btn-primary {
@@ -222,6 +224,11 @@ button.btn-secondary {
 button.btn-secondary-light {
   background-color: var(--secondary-theme-color-light);
 }
+
+button.btn-green-light {
+  background-color: var(--primary-light-green-color);
+}
+
 
 button.btn-underline {
   text-decoration: underline;
