@@ -5,8 +5,14 @@ form {
 }
 
 .login-server-error {
-  p {
-    color: red;
+  height: 10px;
+  visibility: hidden;
+}
+
+.login-server-error.visible {
+  visibility: visible;
+  ::ng-deep p {
+    margin: 0;
   }
 }
 
@@ -15,6 +21,23 @@ form {
   display: flex;
   flex-direction: column;
   width: 100%;
+  position: relative;
+
+  // disable google login if already sent login request
+  .button-overlay {
+    position: absolute;
+    top: 0px;
+    left: 7px;
+    right: 6px;
+    bottom: -1px;
+    background: rgb(255 255 255 / 57%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: not-allowed;
+    pointer-events: all;
+  }
 }
 
 .login-title {
@@ -26,6 +49,10 @@ form {
 
 .btn-login-wrapper {
   padding: 0 7px;
+
+  .btn-login.loading {
+    padding: 10px 0;
+  }
 }
 
 .signin-fields {

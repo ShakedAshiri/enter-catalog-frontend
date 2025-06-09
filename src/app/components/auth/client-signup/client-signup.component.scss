@@ -10,3 +10,37 @@ form {
   flex-direction: column;
   margin-top: 0.83em;
 }
+
+.btn-signup.loading {
+  padding: 10px 0;
+}
+
+.social-signup-title {
+  font-weight: normal;
+  text-align: center;
+}
+
+.social-login {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+
+  // disable google login if already sent signup request
+  .button-overlay {
+    position: absolute;
+    top: 0px;
+    left: 7px;
+    right: 6px;
+    bottom: -1px;
+    background: rgb(255 255 255 / 57%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: not-allowed;
+    pointer-events: all;
+  }
+}
