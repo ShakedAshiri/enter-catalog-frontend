@@ -72,7 +72,7 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
       this.isFormSubmitting = true;
 
       const sub = this.authService
-        .login(this.form.value.email, this.form.value.password)
+        .clientLogin(this.form.value.email, this.form.value.password)
         .subscribe({
           next: (result) => {
             this.isFormSubmitting = false;

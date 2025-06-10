@@ -36,6 +36,9 @@
       @if (passwordControl.hasError("minlength")) {
         <mat-error>סיסמא חייבת להיות באורך לפחות 5 תווים</mat-error>
       }
+      @if (passwordControl.hasError("pattern")) {
+        <mat-error>שדרג את הסיסמה שלך: הוסף אות, מספר ותו מיוחד.</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="gray small">
@@ -47,11 +50,9 @@
       }
     </mat-form-field>
 
-    @if (showSignupServerError) {
+    @if (showSignUpServerError) {
       <section class="signup-server-error">
-        <app-server-error
-          text="שגיאה בעת יצירת משתמש חדש, נא לנסות שנית מאוחר יותר"
-        />
+        <app-server-error [text]="signUpServerErrorString" />
       </section>
     }
 

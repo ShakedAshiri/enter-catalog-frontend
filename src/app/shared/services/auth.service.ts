@@ -53,9 +53,30 @@ export class AuthService {
     return response;
   }
 
-  clientLogin(user: Partial<User>): Observable<User> {
+  clientSignUp(displayName: string, email: string, password: string) {
+    alert(displayName);
     const response = this.http
-      .post<User>(ApiConstants.ENDPOINTS.AUTH.CLIENT_LOGIN, { user })
+      .post<User>(ApiConstants.ENDPOINTS.AUTH.CLIENT_SIGN_UP, {
+        displayName,
+        email,
+        password,
+      })
+      .pipe(
+        tap((response) => {
+          localStorage.setItem(this.localStorageKey, JSON.stringify(response));
+          this.currentUserSubject.next(response);
+        }),
+      );
+
+    return response;
+  }
+
+  clientLogin(email: string, password: string): Observable<User> {
+    const response = this.http
+      .post<User>(ApiConstants.ENDPOINTS.AUTH.CLIENT_LOGIN, {
+        identifier: email,
+        password,
+      })
       .pipe(
         tap((response) => {
           localStorage.setItem(this.localStorageKey, JSON.stringify(response));
