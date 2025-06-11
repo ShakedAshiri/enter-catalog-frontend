@@ -13,6 +13,7 @@ import { PasswordResetComponent } from '../auth/password-reset/password-reset.co
 import { ImageService } from '../../shared/services/image.service';
 import { ClientLoginComponent } from '../auth/client-login/client-login.component';
 import { ClientSignupComponent } from '../auth/client-signup/client-signup.component';
+import { SuccessModalComponent } from '../../shared/components/contact-us/success-modal/success-modal.component';
 
 @Component({
   selector: 'app-navbar',
@@ -75,7 +76,18 @@ export class NavbarComponent {
           { width: '400px' },
         );
 
-        const signupSub = signupDialogRef.afterClosed().subscribe(() => {});
+        const signupSub = signupDialogRef
+          .afterClosed()
+          .subscribe((result: User) => {
+            if (result) {
+              // Display success message
+              this.popupModalService.open(
+                SuccessModalComponent,
+                {},
+                { text: 'נרשמת בהצלחה!' },
+              );
+            }
+          });
 
         this.subscriptions.push(signupSub);
       }
