@@ -75,3 +75,26 @@ mat-toolbar {
   border-radius: 20px;
   padding: 9px;
 }
+
+.login-area {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.btn-login {
+  border-radius: 14px;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 4px 24px;
+}
+
+.btn-client-login {
+  background-color: #498bee;
+  color: #1729a2;
+}
+
+.btn-worker-login {
+  background-color: #EB9595;
+  color: #A10808;
+}
