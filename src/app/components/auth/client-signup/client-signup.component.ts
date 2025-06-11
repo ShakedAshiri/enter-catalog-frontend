@@ -16,6 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../shared/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-client-signup',
@@ -36,8 +37,10 @@ export class ClientSignupComponent
   extends BaseModalComponent
   implements OnInit
 {
+  private subscriptions: Subscription[] = [];
   isProduction = environment.production;
-  showSignupServerError = false;
+  showSignUpServerError = false;
+  signUpServerErrorString = '';
   isFormSubmitting = false;
 
   private fb = inject(FormBuilder);
@@ -69,7 +72,7 @@ export class ClientSignupComponent
 
     this.form = this.fb.group(
       {
-        displayname: this.displayNameControl,
+        displayName: this.displayNameControl,
         email: this.emailControl,
         password: this.passwordControl,
         repassword: this.repasswordControl,
@@ -103,6 +106,29 @@ export class ClientSignupComponent
 
   override submit(): void {
     this.isFormSubmitting = true;
+
+    const sub = this.authService
+      .clientSignUp(
+        this.form.value.displayName,
+        this.form.value.email,
+        this.form.value.password,
+      )
+      .subscribe({
+        next: (result) => {
+          this.isFormSubmitting = false;
+          this.close(result);
+        },
+        error: ({ error }) => {
+          if (!this.isProduction) {
+            console.error('Error fetching data:', error);
+          }
+
+          this.isFormSubmitting = false;
+          this.showSignUpServerError = true;
+          this.signUpServerErrorString = error.message[0];
+        },
+      });
+    this.subscriptions.push(sub);
   }
 
   ngOnInit(): void {

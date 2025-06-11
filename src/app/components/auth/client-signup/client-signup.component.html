@@ -53,11 +53,9 @@
       }
     </mat-form-field>
 
-    @if (showSignupServerError) {
+    @if (showSignUpServerError) {
       <section class="signup-server-error">
-        <app-server-error
-          text="שגיאה בעת יצירת משתמש חדש, נא לנסות שנית מאוחר יותר"
-        />
+        <app-server-error [text]="signUpServerErrorString" />
       </section>
     }
 
