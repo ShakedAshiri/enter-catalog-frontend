@@ -25,18 +25,20 @@
   </ng-container>
 
   <ng-template #loginTemplate>
-    <button mat-button class="login-button">
-      <div class="button-content" (click)="openClientLoginForm()">
-        <mat-icon class="account-icon">account_circle</mat-icon>
-        <span class="login-text">כניסת לקוחות</span>
-      </div>
-    </button>
+    <div class="login-area">
+      <button
+        class="btn btn-small btn-login btn-client-login"
+        (click)="openClientLoginForm()"
+      >
+        לקוחות
+      </button>
 
-    <button mat-button class="login-button">
-      <div class="button-content" (click)="openLoginForm()">
-        <mat-icon class="account-icon">account_circle</mat-icon>
-        <span class="login-text">כניסת מומחים</span>
-      </div>
-    </button>
+      <button
+        class="btn btn-small btn-login btn-worker-login"
+        (click)="openLoginForm()"
+      >
+        מומחים
+      </button>
+    </div>
   </ng-template>
 </mat-toolbar>

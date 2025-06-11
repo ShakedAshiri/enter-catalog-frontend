@@ -54,7 +54,6 @@ export class AuthService {
   }
 
   clientSignUp(displayName: string, email: string, password: string) {
-    alert(displayName);
     const response = this.http
       .post<User>(ApiConstants.ENDPOINTS.AUTH.CLIENT_SIGN_UP, {
         displayName,

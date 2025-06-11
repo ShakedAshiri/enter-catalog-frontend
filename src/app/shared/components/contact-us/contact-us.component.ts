@@ -116,7 +116,11 @@ export class ContactUsComponent {
       .submitContactUsForm({ name, email, applyReasons })
       .subscribe({
         next: () => {
-          this.popupModalService.open(SuccessModalComponent);
+          this.popupModalService.open(
+            SuccessModalComponent,
+            {},
+            { text: 'תודה רבה! צוות החממה יצור קשר בהקדם' },
+          );
           this.isFormSubmitting = false;
         },
         error: () => {
