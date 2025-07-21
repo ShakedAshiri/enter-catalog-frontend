@@ -98,10 +98,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   isAvailableControl: FormControl = new FormControl(false);
   branchControl: FormControl = new FormControl('', [Validators.required]);
   categoriesControl: FormControl = new FormControl('', [Validators.required]);
-  emailControl: FormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
+  emailControl: FormControl = new FormControl('', [Validators.email]);
   resetPasswordControl: FormControl = new FormControl(false);
 
   isProduction = environment.production;

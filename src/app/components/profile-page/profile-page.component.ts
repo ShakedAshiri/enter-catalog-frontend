@@ -49,7 +49,8 @@ export class ProfilePageComponent {
 
       if (
         !this.authService.isLoggedIn() ||
-        this.authService.getCurrentUser().userRole.id === Role.WORKER
+        this.authService.getCurrentUser().userRole.id === Role.WORKER ||
+        this.authService.getCurrentUser().userRole.id === Role.CLIENT
       ) {
         sub = this.userService
           .getPublicUserById(+id)
