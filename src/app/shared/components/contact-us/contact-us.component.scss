@@ -1,59 +1,44 @@
 .container {
-  display: flex;
-  flex-direction: column;
   margin: 0px 43px;
   padding: 4px 15px;
-  background-color: var(--primary-theme-color-light);
+  background-color: #aa6ed9;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
   font-size: clamp(1.4rem, 3vw, 4vw);
+  font-weight: 800;
+  color: #fdbf74;
 }
 
 .subtitle {
-  font-size: clamp(0.6rem, 1vw, 1rem);
-  font-weight: bold;
-}
-
-.input-details {
-  margin: 25px 0px;
-
-  .contact-details-row {
-    display: grid;
-    gap: 20px;
-    /* On larger screens, create 4 equal columns */
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  /* On mobile screens, stack the elements */
-  @media (max-width: 768px) {
-    .contact-details-row {
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-  }
+  font-size: clamp(18px, 4vw, 23.5px);
 }
 
 .button-container {
   display: flex;
-  align-items: flex-start;
-
-  .btn-send {
-    width: 100%;
-  }
-}
-
-mat-form-field {
-  max-height: 49px !important;
+  flex-direction: row-reverse;
+  margin-bottom: 10px;
 }
 
 button {
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: none;
+  outline: none;
+  cursor: pointer;
 
-  mat-progress-spinner {
-    margin-right: 10px;
-  }
+  background-color: #fdbf74;
+  width: 200px;
+  height: 40px;
+  line-height: 40px;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  align-self: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
