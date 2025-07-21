@@ -21,6 +21,6 @@
   </section>
 
   <app-contact-us-profile-page
-    *ngIf="profileUser && loggedInUserIsClient && !showUserProfileServerError"
+    *ngIf="profileUser && shouldDisplayContactUs && !showUserProfileServerError"
   />
 </div>

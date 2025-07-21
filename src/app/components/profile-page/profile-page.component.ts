@@ -102,7 +102,10 @@ export class ProfilePageComponent {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
-  get loggedInUserIsClient() {
-    return this.authService.getCurrentUser()?.userRole.id === Role.CLIENT;
+  get shouldDisplayContactUs() {
+    return (
+      !this.authService.isLoggedIn() ||
+      this.authService.getCurrentUser()?.userRole.id === Role.CLIENT
+    );
   }
 }
