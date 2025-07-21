@@ -3,7 +3,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ApplyReason } from '../../../shared/models/data-tables/applyReason.class';
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import {
   FormBuilder,
   FormControl,
@@ -27,7 +27,6 @@ import { environment } from '../../../../environments/environment';
     MatInputModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    NgFor,
     ReactiveFormsModule,
     ServerErrorComponent,
     NgIf,
