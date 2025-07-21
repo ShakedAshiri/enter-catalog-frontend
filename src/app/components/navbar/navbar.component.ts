@@ -13,7 +13,7 @@ import { PasswordResetComponent } from '../auth/password-reset/password-reset.co
 import { ImageService } from '../../shared/services/image.service';
 import { ClientLoginComponent } from '../auth/client-login/client-login.component';
 import { ClientSignupComponent } from '../auth/client-signup/client-signup.component';
-import { SuccessModalComponent } from '../../shared/components/contact-us/success-modal/success-modal.component';
+import { SuccessModalComponent } from '../../shared/components/success-modal/success-modal.component';
 
 @Component({
   selector: 'app-navbar',

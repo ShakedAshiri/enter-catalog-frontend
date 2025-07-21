@@ -1,7 +1,7 @@
 import { Component, Inject, Optional } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { ModalWrapperComponent } from '../../modal-wrapper/modal-wrapper.component';
+import { ModalWrapperComponent } from '../modal-wrapper/modal-wrapper.component';
 
 @Component({
   selector: 'app-success-modal',

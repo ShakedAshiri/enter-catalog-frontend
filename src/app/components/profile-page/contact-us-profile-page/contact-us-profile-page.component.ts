@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ApplyReason } from '../../../shared/models/data-tables/applyReason.class';
 import { NgIf } from '@angular/common';
 import {
   FormBuilder,
@@ -11,17 +10,18 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
+import { ApplyReason } from '../../../shared/models/data-tables/applyReason.class';
 import { ContactUsService } from '../../../shared/services/contact-us.service';
 import { PopupModalService } from '../../../shared/services/popup-modal.service';
-import { SuccessModalComponent } from './success-modal/success-modal.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
-import { Subscription } from 'rxjs';
-import { DataTableService } from '../../services/data-table.service';
-import { environment } from '../../../../environments/environment';
+import { DataTableService } from '../../../shared/services/data-table.service';
+import { SuccessModalComponent } from '../../../shared/components/success-modal/success-modal.component';
 
 @Component({
-  selector: 'app-contact-us',
+  selector: 'app-contact-us-profile-page',
   imports: [
     MatFormFieldModule,
     MatInputModule,
@@ -31,10 +31,10 @@ import { environment } from '../../../../environments/environment';
     ServerErrorComponent,
     NgIf,
   ],
-  templateUrl: './contact-us.component.html',
-  styleUrl: './contact-us.component.scss',
+  templateUrl: './contact-us-profile-page.component.html',
+  styleUrl: './contact-us-profile-page.component.scss',
 })
-export class ContactUsComponent {
+export class ContactUsProfilePageComponent {
   private subscriptions: Subscription[] = []; // Store multiple subscriptions
   isButtonDisabled = false;
   isFormSubmitting = false;

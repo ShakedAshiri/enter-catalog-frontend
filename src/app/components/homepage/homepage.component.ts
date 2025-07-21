@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServerErrorComponent } from '../../shared/components/server-error/server-error.component';
 import { environment } from '../../../environments/environment';
 import { Subscription } from 'rxjs';
-import { ContactUsComponent } from '../../shared/components/contact-us/contact-us.component';
+import { ContactUsHomepageComponent } from './contact-us-homepage/contact-us-homepage.component';
 
 @Component({
   selector: 'app-homepage',
@@ -21,7 +21,7 @@ import { ContactUsComponent } from '../../shared/components/contact-us/contact-u
     UsersGridComponent,
     AboutComponent,
     CategoryFilterComponent,
-    ContactUsComponent,
+    ContactUsHomepageComponent,
     MatProgressSpinnerModule,
     ServerErrorComponent,
     TopRectangleComponent,

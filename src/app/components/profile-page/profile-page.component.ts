@@ -11,7 +11,7 @@ import { ServerErrorComponent } from '../../shared/components/server-error/serve
 import { environment } from '../../../environments/environment';
 import { Subscription } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ContactUsComponent } from '../../shared/components/contact-us/contact-us.component';
+import { ContactUsProfilePageComponent } from './contact-us-profile-page/contact-us-profile-page.component';
 
 @Component({
   selector: 'app-profile-page',
@@ -21,7 +21,7 @@ import { ContactUsComponent } from '../../shared/components/contact-us/contact-u
     NgIf,
     ServerErrorComponent,
     MatProgressSpinnerModule,
-    ContactUsComponent,
+    ContactUsProfilePageComponent,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
@@ -100,5 +100,9 @@ export class ProfilePageComponent {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
+
+  get loggedInUserIsClient() {
+    return this.authService.getCurrentUser()?.userRole.id === Role.CLIENT;
   }
 }
