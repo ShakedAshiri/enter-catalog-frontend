@@ -57,6 +57,7 @@ export class UserInfoComponent {
   getCategoryClass(category: Category): string {
     return `category--${category.name || 'default'}`;
   }
+  formattedCategories: string = '';
 
   userInfoForm: FormGroup;
   displayNameControl = new FormControl('', [
@@ -117,6 +118,8 @@ export class UserInfoComponent {
     });
 
     this.defaultAvatar = this.imageService.defaultAvatar;
+
+    this.formattedCategories = this.userCategoriesDisplayNames.join(', ');
   }
 
   startEditing(fieldName: string) {

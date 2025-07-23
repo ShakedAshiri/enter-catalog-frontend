@@ -80,11 +80,7 @@
             (cancelEdit)="cancelEdit('categories')"
           >
             @if (!isEditable) {
-              <input
-                matInput
-                [value]="userCategoriesDisplayNames.join(', ')"
-                readonly
-              />
+              <input matInput [value]="formattedCategories" readonly />
             } @else {
               <mat-select
                 [formControl]="categoriesControl"
