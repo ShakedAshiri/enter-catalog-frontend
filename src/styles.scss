@@ -74,6 +74,31 @@ mat-form-field.gray {
   }
 }
 
+mat-form-field.contact-worker {
+  --mdc-filled-text-field-container-color: #d9d9d9;
+
+  .mdc-text-field--outlined .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline__trailing {
+    border-style: none;
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background-color: #d9d9d9;
+  }
+
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+    .mdc-notched-outline--upgraded
+    .mdc-floating-label--float-above {
+    transform: translateY(-25px) scale(0.7);
+  }
+
+  // Color background on autofill
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #d9d9d9 inset;
+  }
+}
+
 mat-form-field.border {
   .mdc-text-field--outlined .mdc-notched-outline__leading,
   .mdc-text-field--outlined .mdc-notched-outline__notch,
@@ -229,7 +254,6 @@ button.btn-green-light {
   background-color: var(--primary-light-green-color);
 }
 
-
 button.btn-underline {
   text-decoration: underline;
 }
@@ -248,5 +272,15 @@ mat-grid-tile.work-tile {
   div.mat-grid-tile-content {
     align-items: start !important;
     justify-content: start;
+  }
+}
+
+.no-radius-dialog {
+  max-width: none !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+
+  .mat-mdc-dialog-surface.mdc-dialog__surface {
+    border-radius: 0 !important;
   }
 }

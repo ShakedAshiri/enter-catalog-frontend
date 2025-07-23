@@ -1,10 +1,6 @@
-<section class="apply-reasons-server-error" *ngIf="showApplyReasonsServerError">
-  <app-server-error />
-</section>
-
-<div class="container" *ngIf="!showApplyReasonsServerError">
+<div class="container">
   <span class="title">אוהבים את מה שאתם רואים?</span>
   <div class="button-container">
-    <button><span>צרו קשר</span></button>
+    <button (click)="openContactWorkerModal()"><span>צרו קשר</span></button>
   </div>
 </div>
