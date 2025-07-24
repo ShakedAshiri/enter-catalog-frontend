@@ -1,39 +1,72 @@
 <div class="bg-color">
   <div class="container">
     <p class="title">צרו קשר עם <strong>ורמיליון אוטומט</strong></p>
-    @if (isLoggedIn) {
+    <form [formGroup]="form">
       <div class="inputs-container">
         <mat-form-field
           class="input-field small contact-worker"
           appearance="outline"
         >
-          <input matInput type="text" placeholder="שם מלא*" />
+          <input
+            matInput
+            [formControl]="displayNameControl"
+            type="text"
+            placeholder="שם מלא*"
+          />
+          @if (displayNameControl.hasError("required")) {
+            <mat-error>יש להזין את שמך המלא</mat-error>
+          }
+          @if (displayNameControl.hasError("minlength")) {
+            <mat-error>שם מלא חייב להכיל יותר משתי אותיות</mat-error>
+          }
+          @if (displayNameControl.hasError("pattern")) {
+            <mat-error>שם מלא חייב להכיל אותיות בלבד</mat-error>
+          }
         </mat-form-field>
         <mat-form-field
           class="input-field small contact-worker"
           appearance="outline"
         >
-          <input matInput type="text" placeholder="אימייל*" />
+          <input
+            matInput
+            [formControl]="emailControl"
+            type="text"
+            placeholder="אימייל*"
+          />
         </mat-form-field>
         <mat-form-field
           class="input-field small contact-worker"
           appearance="outline"
         >
-          <input matInput type="text" placeholder="???" />
+          <input
+            matInput
+            [formControl]="phoneNumberControl"
+            type="text"
+            placeholder="טלפון"
+          />
         </mat-form-field>
       </div>
-    }
-    <mat-form-field class="small light content" appearance="outline">
-      <textarea
-        matInput
-        name=""
-        placeholder="ספרו בקצרה על הפרויקט ומומחים שלנו יצרו אתכם קשר בהקדם"
-        id=""
-        rows="7"
-      ></textarea>
-    </mat-form-field>
-    <div class="button-container">
-      <button><span>שלח</span></button>
-    </div>
+      <mat-form-field class="small light content" appearance="outline">
+        <textarea
+          [formControl]="applicationContentControl"
+          matInput
+          name=""
+          placeholder="ספרו בקצרה על הפרויקט ומומחים שלנו יצרו אתכם קשר בהקדם"
+          id=""
+          rows="7"
+        ></textarea>
+      </mat-form-field>
+      <div class="button-container">
+        <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
+        <button
+          (click)="submit()"
+          [disabled]="!form.valid"
+          class="btn btn-green-light btn-full-small btn-signup"
+          [class.loading]="isFormSubmitting"
+        >
+          <span>שלח</span>
+        </button>
+      </div>
+    </form>
   </div>
 </div>
