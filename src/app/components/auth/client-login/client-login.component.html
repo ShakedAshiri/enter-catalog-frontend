@@ -29,7 +29,7 @@
     <!-- Google sign-in options -->
     <div class="social-login">
       <div id="google-signin-button"></div>
-      @if (isFormSubmitting) {
+      @if (isGoogleClientLoggingIn) {
         <div class="button-overlay"></div>
       }
     </div>
@@ -42,11 +42,11 @@
         [class.loading]="isFormSubmitting"
         [disabled]="!form.valid"
       >
-        @if (isFormSubmitting) {
+        @if (isFormSubmitting || isGoogleClientLoggingIn) {
           <mat-progress-spinner
             class="spinner"
             [mode]="'indeterminate'"
-            [diameter]="15"
+            [diameter]="21"
           />
         } @else {
           התחברות
@@ -64,8 +64,17 @@
   <div class="signup">
     <h1 class="signup-title">עוד לא נרשמתם?</h1>
     <h2 class="signup-subtitle">למה אתם מחכים?</h2>
+
     <button (click)="signup()" class="btn btn-green-light btn-full-small">
-      הרשמה
+      @if (isFormSubmitting || isGoogleClientLoggingIn) {
+        <mat-progress-spinner
+          class="spinner"
+          [mode]="'indeterminate'"
+          [diameter]="24"
+        />
+      } @else {
+        הרשמה
+      }
     </button>
   </div>
 

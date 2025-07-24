@@ -25,6 +25,8 @@ export class AuthService {
   public currentUser$ = this.getUserAsObservable();
   isProduction = environment.production;
 
+  isGoogleClientLoggingIn: boolean = false;
+
   constructor(
     private http: HttpClient,
     private userService: UserService,
@@ -161,6 +163,7 @@ export class AuthService {
         callback: (response: any) =>
           this.handleGoogleAuthResponse(response).subscribe({
             next: () => {
+              this.isGoogleClientLoggingIn = true;
               window.location.reload();
             },
             error: (err) => {

@@ -14,6 +14,10 @@ import { ImageService } from '../../shared/services/image.service';
 import { ClientLoginComponent } from '../auth/client-login/client-login.component';
 import { ClientSignupComponent } from '../auth/client-signup/client-signup.component';
 import { SuccessModalComponent } from '../../shared/components/success-modal/success-modal.component';
+import {
+  MatProgressSpinner,
+  MatProgressSpinnerModule,
+} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-navbar',
@@ -23,6 +27,8 @@ import { SuccessModalComponent } from '../../shared/components/success-modal/suc
     MatIconModule,
     CommonModule,
     RouterModule,
+    MatProgressSpinnerModule,
+    MatProgressSpinner,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
@@ -33,6 +39,8 @@ export class NavbarComponent {
   user$: Observable<User | null>;
 
   defaultAvatar: string;
+
+  isLoggingOut: boolean = false;
 
   constructor(
     private popupModalService: PopupModalService,
@@ -97,6 +105,8 @@ export class NavbarComponent {
   }
 
   logout(): void {
+    this.isLoggingOut = true;
+
     this.authService.logout().subscribe({
       next: () => {
         window.location.reload();
