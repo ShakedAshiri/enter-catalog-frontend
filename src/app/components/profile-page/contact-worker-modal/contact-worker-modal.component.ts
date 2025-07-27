@@ -1,4 +1,12 @@
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  QueryList,
+  Renderer2,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Subscription } from 'rxjs';
@@ -11,10 +19,11 @@ import {
   Validators,
 } from '@angular/forms';
 import phoneNumberValidator from '../../../shared/validators/phoneNumber.validator';
-import applicationContentValidator from '../../../shared/validators/applicationContent.validator';
 import { HiddenSubmitComponent } from '../../../shared/components/hidden-submit/hidden-submit.component';
 import { BaseModalComponent } from '../../../shared/components/base-modal/base-modal.component';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
+import noOnlySpacesValidator from '../../../shared/validators/no-only-spaces.validator';
+import { emailWithTLDValidator } from '../../../shared/validators/email.validator';
 
 @Component({
   selector: 'app-contact-worker-modal',
@@ -44,7 +53,7 @@ export class ContactWorkerModalComponent extends BaseModalComponent {
 
   emailControl: FormControl = new FormControl('', [
     Validators.required,
-    Validators.email,
+    emailWithTLDValidator(),
   ]);
 
   phoneNumberControl: FormControl = new FormControl('', [
@@ -52,7 +61,13 @@ export class ContactWorkerModalComponent extends BaseModalComponent {
   ]);
 
   applicationContentControl: FormControl = new FormControl('', [
-    applicationContentValidator(),
+    Validators.required,
+    Validators.minLength(3),
+    Validators.maxLength(500),
+    Validators.pattern(
+      '^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\\n ()\'\\\\\\-"`,.!?;:/]+$',
+    ),
+    noOnlySpacesValidator(),
   ]);
 
   constructor(private readonly authService: AuthService) {
@@ -96,4 +111,6 @@ export class ContactWorkerModalComponent extends BaseModalComponent {
   get isLoggedIn() {
     return this.authService.isLoggedIn();
   }
+
+  ngOnDestroy() {}
 }

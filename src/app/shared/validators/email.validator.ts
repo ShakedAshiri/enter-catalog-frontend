@@ -1,13 +1,9 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export default function phoneNumberValidator(): ValidatorFn {
+export function emailWithTLDValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
-
-    if (!/^(\+9725\d{8}|05\d{8})$/.test(value)) {
-      return { stringIsntPhoneNumber: true };
-    }
-
-    return null;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    return value && !emailRegex.test(value) ? { invalidEmail: true } : null;
   };
 }

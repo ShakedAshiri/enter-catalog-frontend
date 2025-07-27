@@ -34,6 +34,16 @@
   }
 }
 
+mat-form-field.contact-worker.ng-invalid.ng-touched {
+  margin-bottom: 30px;
+}
+
+mat-form-field.content.ng-invalid.ng-touched {
+  mat-error {
+    margin-top: -30px;
+  }
+}
+
 mat-form-field.small.light.content {
   width: 105%;
   margin-right: -16px;
@@ -59,4 +69,9 @@ textarea {
     font-size: 45px;
     padding: 7.5px 40px;
   }
+}
+
+mat-error {
+  margin-top: 10px;
+  display: block;
 }

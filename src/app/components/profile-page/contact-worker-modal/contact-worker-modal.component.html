@@ -17,7 +17,7 @@
             <mat-error>יש להזין את שמך המלא</mat-error>
           }
           @if (displayNameControl.hasError("minlength")) {
-            <mat-error>שם מלא חייב להכיל יותר משתי אותיות</mat-error>
+            <mat-error>הזן שם עם יותר מ-2 אותיות</mat-error>
           }
           @if (displayNameControl.hasError("pattern")) {
             <mat-error>שם מלא חייב להכיל אותיות בלבד</mat-error>
@@ -33,6 +33,12 @@
             type="text"
             placeholder="אימייל*"
           />
+          @if (emailControl.hasError("required")) {
+            <mat-error>יש להזין אימייל</mat-error>
+          }
+          @if (emailControl.hasError("invalidEmail")) {
+            <mat-error>האימייל לא תקין</mat-error>
+          }
         </mat-form-field>
         <mat-form-field
           class="input-field small contact-worker"
@@ -44,6 +50,9 @@
             type="text"
             placeholder="טלפון"
           />
+          @if (phoneNumberControl.hasError("stringIsntPhoneNumber")) {
+            <mat-error>הטלפון אינו תקין</mat-error>
+          }
         </mat-form-field>
       </div>
       <mat-form-field class="small light content" appearance="outline">
@@ -55,6 +64,31 @@
           id=""
           rows="7"
         ></textarea>
+        <!-- Validators.required,
+    Validators.minLength(3),
+    Validators.maxLength(500),
+    Validators.pattern(
+      '^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\\n ()\'\\\\\\-"`,.!?;:/]+$',
+    ),
+    noOnlySpacesValidator(), -->
+        @if (
+          applicationContentControl.hasError("required") ||
+          applicationContentControl.hasError("noOnlySpaces")
+        ) {
+          <mat-error>יש להזין תוכן פנייה</mat-error>
+        }
+        @if (applicationContentControl.hasError("minlength")) {
+          <mat-error>תוכן הפנייה חייב להיות עם 3 תווים ומעלה</mat-error>
+        }
+        @if (applicationContentControl.hasError("maxlength")) {
+          <mat-error>תוכן הפנייה חייב להיות מתחת ל500 תווים</mat-error>
+        }
+        @if (applicationContentControl.hasError("pattern")) {
+          <mat-error
+            >תוכן הפנייה יכול להזין אותיות ומספרים, נקודותיים וקווים
+            נטויים</mat-error
+          >
+        }
       </mat-form-field>
       <div class="button-container">
         <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
