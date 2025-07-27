@@ -19,6 +19,7 @@ import { ContactUsService } from '../../../shared/services/contact-us.service';
 import { PopupModalService } from '../../../shared/services/popup-modal.service';
 import { DataTableService } from '../../../shared/services/data-table.service';
 import { SuccessModalComponent } from '../../../shared/components/success-modal/success-modal.component';
+import { ClientSignupComponent } from '../../auth/client-signup/client-signup.component';
 
 @Component({
   selector: 'app-contact-us-homepage',
@@ -129,6 +130,10 @@ export class ContactUsHomepageComponent {
       });
 
     this.subscriptions.push(sub);
+  }
+
+  openSignUpModal() {
+    this.popupModalService.open(ClientSignupComponent);
   }
 
   ngOnDestroy() {
