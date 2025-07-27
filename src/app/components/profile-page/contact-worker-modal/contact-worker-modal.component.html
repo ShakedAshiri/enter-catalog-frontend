@@ -14,6 +14,7 @@
               matInput
               [formControl]="displayNameControl"
               type="text"
+              [autocomplete]="true"
               placeholder="שם מלא*"
             />
             @if (displayNameControl.hasError("required")) {
@@ -33,7 +34,8 @@
             <input
               matInput
               [formControl]="emailControl"
-              type="text"
+              type="email"
+              [autocomplete]="true"
               placeholder="אימייל*"
             />
             @if (emailControl.hasError("required")) {
@@ -50,7 +52,9 @@
             <input
               matInput
               [formControl]="phoneNumberControl"
-              type="text"
+              type="tel"
+              class="number_ltr"
+              [autocomplete]="true"
               placeholder="טלפון"
             />
             @if (phoneNumberControl.hasError("stringIsntPhoneNumber")) {

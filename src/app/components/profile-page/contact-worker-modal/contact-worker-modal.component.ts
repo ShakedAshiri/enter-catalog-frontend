@@ -18,6 +18,7 @@ import noOnlySpacesValidator from '../../../shared/validators/no-only-spaces.val
 import { emailWithTLDValidator } from '../../../shared/validators/email.validator';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from '../../../shared/models/user.class';
+import { UserService } from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-contact-worker-modal',
@@ -45,8 +46,11 @@ export class ContactWorkerModalComponent extends BaseModalComponent {
   phoneNumberControl!: FormControl;
   applicationContentControl!: FormControl;
 
+  isLoggedIn = false;
+
   constructor(
     private readonly authService: AuthService,
+    private readonly userService: UserService,
     private fb: FormBuilder,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
@@ -56,12 +60,12 @@ export class ContactWorkerModalComponent extends BaseModalComponent {
       this.worker = data.worker;
     }
 
-    const isLoggedIn = this.authService.isLoggedIn();
+    this.isLoggedIn = this.authService.isLoggedIn();
 
     this.displayNameControl = new FormControl(
       '',
       [
-        !isLoggedIn && Validators.required,
+        !this.isLoggedIn && Validators.required,
         Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
         Validators.minLength(2),
       ].filter(Boolean),
@@ -69,14 +73,14 @@ export class ContactWorkerModalComponent extends BaseModalComponent {
 
     this.emailControl = new FormControl(
       '',
-      [!isLoggedIn && Validators.required, emailWithTLDValidator()].filter(
+      [!this.isLoggedIn && Validators.required, emailWithTLDValidator()].filter(
         Boolean,
       ),
     );
 
     this.phoneNumberControl = new FormControl(
       '',
-      [!isLoggedIn && phoneNumberValidator()].filter(Boolean),
+      [!this.isLoggedIn && phoneNumberValidator()].filter(Boolean),
     );
 
     this.applicationContentControl = new FormControl('', [
@@ -100,32 +104,34 @@ export class ContactWorkerModalComponent extends BaseModalComponent {
   override submit(): void {
     this.isFormSubmitting = true;
 
-    // const sub = this.authService
-    //   .clientSignUp(
-    //     this.form.value.displayName,
-    //     this.form.value.email,
-    //     this.form.value.password,
-    //   )
-    //   .subscribe({
-    //     next: (result) => {
-    //       this.isFormSubmitting = false;
-    //       this.close(result);
-    //     },
-    //     error: ({ error }) => {
-    //       if (!this.isProduction) {
-    //         console.error('Error fetching data:', error);
-    //       }
+    const contactWorkerDto = {
+      applicationContent: this.applicationContentControl.value,
+      workerId: this.worker.id,
+      creationDate: new Date().toString(),
+      ...(!this.isLoggedIn && {
+        displayName: this.displayNameControl.value,
+        email: this.emailControl.value,
+      }),
+    };
 
-    //       this.isFormSubmitting = false;
-    //       // this.showSignUpServerError = true;
-    //       // this.signUpServerErrorString = error.message[0];
-    //     },
-    //   });
-    // this.subscriptions.push(sub);
-  }
+    const sub = this.userService.contactWorker(contactWorkerDto).subscribe({
+      next: (result) => {
+        console.log(result);
+        this.isFormSubmitting = false;
+        this.close();
+      },
+      error: ({ error }) => {
+        if (!this.isProduction) {
+          console.error('Error fetching data:', error);
+        }
 
-  get isLoggedIn() {
-    return this.authService.isLoggedIn();
+        this.isFormSubmitting = false;
+        // this.showSignUpServerError = true;
+        // this.signUpServerErrorString = error.message[0];
+      },
+    });
+
+    this.subscriptions.push(sub);
   }
 
   ngOnDestroy() {}

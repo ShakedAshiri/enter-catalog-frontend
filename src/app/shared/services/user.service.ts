@@ -4,6 +4,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { ApiConstants } from '../constants/api.constants';
 
+export interface ContactWorkerDto {
+  applicationContent: string;
+  workerId: number;
+  creationDate: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -85,5 +91,12 @@ export class UserService {
     });
 
     return this.http.patch<User>(url, {});
+  }
+
+  public contactWorker(contactWorkerDto: ContactWorkerDto) {
+    return this.http.post<User>(
+      ApiConstants.ENDPOINTS.USERS.CONTACT_WORKER,
+      contactWorkerDto,
+    );
   }
 }

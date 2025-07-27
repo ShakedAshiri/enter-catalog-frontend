@@ -78,3 +78,8 @@ mat-error {
   margin-top: 10px;
   display: block;
 }
+
+.number_ltr {
+  direction: rtl !important;
+  unicode-bidi: embed;
+}
