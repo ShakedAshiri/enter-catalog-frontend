@@ -42,36 +42,51 @@ export class ContactWorkerModalComponent extends BaseModalComponent {
 
   isProduction = environment.production;
   isFormSubmitting = false;
-  private fb = inject(FormBuilder);
   form: FormGroup;
 
-  displayNameControl: FormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
-    Validators.minLength(2),
-  ]);
+  displayNameControl!: FormControl;
+  emailControl!: FormControl;
+  phoneNumberControl!: FormControl;
+  applicationContentControl!: FormControl;
 
-  emailControl: FormControl = new FormControl('', [
-    Validators.required,
-    emailWithTLDValidator(),
-  ]);
-
-  phoneNumberControl: FormControl = new FormControl('', [
-    phoneNumberValidator(),
-  ]);
-
-  applicationContentControl: FormControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3),
-    Validators.maxLength(500),
-    Validators.pattern(
-      '^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\\n ()\'\\\\\\-"`,.!?;:/]+$',
-    ),
-    noOnlySpacesValidator(),
-  ]);
-
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private fb: FormBuilder,
+  ) {
     super();
+
+    const isLoggedIn = this.authService.isLoggedIn();
+
+    this.displayNameControl = new FormControl(
+      '',
+      [
+        !isLoggedIn && Validators.required,
+        Validators.pattern("^[a-zA-Z\u0590-\u05FF\u200f\u200e ']+$"),
+        Validators.minLength(2),
+      ].filter(Boolean),
+    ); // remove false validators
+
+    this.emailControl = new FormControl(
+      '',
+      [!isLoggedIn && Validators.required, emailWithTLDValidator()].filter(
+        Boolean,
+      ),
+    );
+
+    this.phoneNumberControl = new FormControl(
+      '',
+      [!isLoggedIn && phoneNumberValidator()].filter(Boolean),
+    );
+
+    this.applicationContentControl = new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(500),
+      Validators.pattern(
+        '^[0-9a-zA-Z\u0590-\u05FF\u200f\u200e\\n ()\'\\\\\\-"`,.!?;:/]+$',
+      ),
+      noOnlySpacesValidator(),
+    ]);
 
     this.form = this.fb.group({
       displayName: this.displayNameControl,

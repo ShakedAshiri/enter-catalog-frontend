@@ -2,59 +2,61 @@
   <div class="container">
     <p class="title">צרו קשר עם <strong>ורמיליון אוטומט</strong></p>
     <form [formGroup]="form">
-      <div class="inputs-container">
-        <mat-form-field
-          class="input-field small contact-worker"
-          appearance="outline"
-        >
-          <input
-            matInput
-            [formControl]="displayNameControl"
-            type="text"
-            placeholder="שם מלא*"
-          />
-          @if (displayNameControl.hasError("required")) {
-            <mat-error>יש להזין את שמך המלא</mat-error>
-          }
-          @if (displayNameControl.hasError("minlength")) {
-            <mat-error>הזן שם עם יותר מ-2 אותיות</mat-error>
-          }
-          @if (displayNameControl.hasError("pattern")) {
-            <mat-error>שם מלא חייב להכיל אותיות בלבד</mat-error>
-          }
-        </mat-form-field>
-        <mat-form-field
-          class="input-field small contact-worker"
-          appearance="outline"
-        >
-          <input
-            matInput
-            [formControl]="emailControl"
-            type="text"
-            placeholder="אימייל*"
-          />
-          @if (emailControl.hasError("required")) {
-            <mat-error>יש להזין אימייל</mat-error>
-          }
-          @if (emailControl.hasError("invalidEmail")) {
-            <mat-error>האימייל לא תקין</mat-error>
-          }
-        </mat-form-field>
-        <mat-form-field
-          class="input-field small contact-worker"
-          appearance="outline"
-        >
-          <input
-            matInput
-            [formControl]="phoneNumberControl"
-            type="text"
-            placeholder="טלפון"
-          />
-          @if (phoneNumberControl.hasError("stringIsntPhoneNumber")) {
-            <mat-error>הטלפון אינו תקין</mat-error>
-          }
-        </mat-form-field>
-      </div>
+      @if (!isLoggedIn) {
+        <div class="inputs-container">
+          <mat-form-field
+            class="input-field small contact-worker"
+            appearance="outline"
+          >
+            <input
+              matInput
+              [formControl]="displayNameControl"
+              type="text"
+              placeholder="שם מלא*"
+            />
+            @if (displayNameControl.hasError("required")) {
+              <mat-error>יש להזין את שמך המלא</mat-error>
+            }
+            @if (displayNameControl.hasError("minlength")) {
+              <mat-error>הזן שם עם יותר מ-2 אותיות</mat-error>
+            }
+            @if (displayNameControl.hasError("pattern")) {
+              <mat-error>שם מלא חייב להכיל אותיות בלבד</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field
+            class="input-field small contact-worker"
+            appearance="outline"
+          >
+            <input
+              matInput
+              [formControl]="emailControl"
+              type="text"
+              placeholder="אימייל*"
+            />
+            @if (emailControl.hasError("required")) {
+              <mat-error>יש להזין אימייל</mat-error>
+            }
+            @if (emailControl.hasError("invalidEmail")) {
+              <mat-error>האימייל לא תקין</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field
+            class="input-field small contact-worker"
+            appearance="outline"
+          >
+            <input
+              matInput
+              [formControl]="phoneNumberControl"
+              type="text"
+              placeholder="טלפון"
+            />
+            @if (phoneNumberControl.hasError("stringIsntPhoneNumber")) {
+              <mat-error>הטלפון אינו תקין</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
       <mat-form-field class="small light content" appearance="outline">
         <textarea
           [formControl]="applicationContentControl"
