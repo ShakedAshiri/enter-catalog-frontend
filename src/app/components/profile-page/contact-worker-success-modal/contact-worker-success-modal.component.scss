@@ -2,12 +2,31 @@
   background: #b1e0df;
 
   .container {
+    position: relative;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     background-color: white;
     margin: 50px 0 30px 0;
     padding: 40px 30px;
+
+    button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 24px;
+      color: #777;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+
+      &:hover {
+        color: #000;
+      }
+    }
   }
 }
 
