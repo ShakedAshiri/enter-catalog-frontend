@@ -99,7 +99,14 @@
           class="btn btn-green-light btn-full-small btn-signup"
           [class.loading]="isFormSubmitting"
         >
-          <span>שלח</span>
+          @if (isFormSubmitting) {
+            <div class="sending-container">
+              <span class="loading-text">שולח<span class="dots"></span></span>
+              <mat-spinner diameter="30"></mat-spinner>
+            </div>
+          } @else {
+            <span>שלח</span>
+          }
         </button>
       </div>
     </form>

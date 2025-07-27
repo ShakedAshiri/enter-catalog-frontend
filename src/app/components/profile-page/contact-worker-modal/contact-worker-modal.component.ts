@@ -19,6 +19,7 @@ import { emailWithTLDValidator } from '../../../shared/validators/email.validato
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from '../../../shared/models/user.class';
 import { UserService } from '../../../shared/services/user.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-contact-worker-modal',
@@ -28,6 +29,7 @@ import { UserService } from '../../../shared/services/user.service';
     MatError,
     ReactiveFormsModule,
     HiddenSubmitComponent,
+    MatProgressSpinner,
   ],
   templateUrl: './contact-worker-modal.component.html',
   styleUrl: './contact-worker-modal.component.scss',
@@ -115,19 +117,16 @@ export class ContactWorkerModalComponent extends BaseModalComponent {
     };
 
     const sub = this.userService.contactWorker(contactWorkerDto).subscribe({
-      next: (result) => {
-        console.log(result);
+      next: () => {
         this.isFormSubmitting = false;
-        this.close();
+        this.close({ success: true });
       },
       error: ({ error }) => {
         if (!this.isProduction) {
           console.error('Error fetching data:', error);
         }
-
         this.isFormSubmitting = false;
-        // this.showSignUpServerError = true;
-        // this.signUpServerErrorString = error.message[0];
+        this.close({ success: false });
       },
     });
 

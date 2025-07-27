@@ -1,0 +1,101 @@
+.bg-color {
+  background: #b1e0df;
+
+  .container {
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    margin: 50px 0 30px 0;
+    padding: 40px 30px;
+  }
+}
+
+.title {
+  padding: 0;
+  margin: 0;
+  color: #33ab33;
+  font-size: 49px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+img {
+  width: 60px;
+  margin: 0 auto;
+}
+
+.success-animation {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.circle {
+  width: 100px;
+  height: 100px;
+  border: 6px solid #e0e0e0;
+  border-top: 6px solid #4caf50;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation:
+    spin 1s ease-in-out forwards,
+    fillGreen 0.3s ease-in-out 1s forwards;
+  position: relative;
+  background-color: transparent;
+}
+
+.inner-border {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  border: 4px solid white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: showInnerBorder 0.3s ease-in-out 1.1s forwards;
+  z-index: 1;
+}
+
+.checkmark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  color: white;
+  opacity: 0;
+  z-index: 2;
+  animation: showCheck 0.3s ease-in-out 1.4s forwards;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(1080deg);
+  }
+}
+
+@keyframes fillGreen {
+  100% {
+    background-color: #4caf50;
+    border: none;
+  }
+}
+
+@keyframes showInnerBorder {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes showCheck {
+  to {
+    opacity: 1;
+  }
+}

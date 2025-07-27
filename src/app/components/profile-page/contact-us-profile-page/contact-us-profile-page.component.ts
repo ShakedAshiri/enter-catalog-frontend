@@ -15,10 +15,10 @@ import { environment } from '../../../../environments/environment';
 import { ServerErrorComponent } from '../../../shared/components/server-error/server-error.component';
 import { ContactUsService } from '../../../shared/services/contact-us.service';
 import { PopupModalService } from '../../../shared/services/popup-modal.service';
-import { DataTableService } from '../../../shared/services/data-table.service';
 import { SuccessModalComponent } from '../../../shared/components/success-modal/success-modal.component';
 import { ContactWorkerModalComponent } from '../contact-worker-modal/contact-worker-modal.component';
 import { User } from '../../../shared/models/user.class';
+import { ContactWorkerSuccessModalComponent } from '../contact-worker-success-modal/contact-worker-success-modal.component';
 
 @Component({
   selector: 'app-contact-us-profile-page',
@@ -100,6 +100,23 @@ export class ContactUsProfilePageComponent {
       },
       { worker: this.worker },
     );
+
+    const disalogRefSub = dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (!result) return;
+
+        if (result.success) {
+          this.popupModalService.open(ContactWorkerSuccessModalComponent, {
+            panelClass: 'no-radius-dialog',
+            width: 'max-content',
+          });
+        } else {
+          this.popupModalService.open(ServerErrorComponent);
+        }
+      },
+    });
+
+    this.subscriptions.push(disalogRefSub);
   }
 
   ngOnDestroy() {
