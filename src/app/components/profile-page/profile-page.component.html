@@ -20,5 +20,8 @@
     <mat-spinner class="spinner page-mid"></mat-spinner>
   </section>
 
-  <app-contact-us *ngIf="profileUser && !showUserProfileServerError" />
+  <app-contact-us-profile-page
+    [worker]="profileUser"
+    *ngIf="profileUser && shouldDisplayContactUs && !showUserProfileServerError"
+  />
 </div>

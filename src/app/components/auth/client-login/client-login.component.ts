@@ -67,6 +67,10 @@ export class ClientLoginComponent extends BaseModalComponent implements OnInit {
     }, 100);
   }
 
+  get isGoogleClientLoggingIn() {
+    return this.authService.isGoogleClientLoggingIn;
+  }
+
   override submit(): void {
     if (this.form.valid) {
       this.isFormSubmitting = true;

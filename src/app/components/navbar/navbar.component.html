@@ -7,8 +7,10 @@
   <ng-container *ngIf="user$ | async as user; else loginTemplate">
     <button
       class="btn btn-primary btn-dashboard"
+      [ngClass]="isLoggingOut ? 'opacity-50-disabled' : ''"
       *ngIf="[1, 2].includes(user.userRole.id)"
       [routerLink]="['/dashboard']"
+      [disabled]="isLoggingOut"
     >
       מסך ניהול
     </button>
@@ -19,7 +21,15 @@
         <span *ngIf="user.userRole.id === 3">
           <a [routerLink]="['/profile', user.id]">ניהול גלריה</a>&nbsp;|&nbsp;
         </span>
-        <a (click)="logout()">יציאה</a>
+        @if (isLoggingOut) {
+          <mat-progress-spinner
+            class="spinner"
+            [mode]="'indeterminate'"
+            [diameter]="13"
+          />
+        } @else {
+          <a (click)="logout()">יציאה</a>
+        }
       </div>
     </div>
   </ng-container>

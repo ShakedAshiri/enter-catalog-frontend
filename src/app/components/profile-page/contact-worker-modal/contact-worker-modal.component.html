@@ -1,0 +1,114 @@
+<div class="bg-color">
+  <div class="container">
+    <p class="title">
+      צרו קשר עם <strong>{{ worker.displayName }}</strong>
+    </p>
+    <form [formGroup]="form">
+      @if (!isLoggedIn) {
+        <div class="inputs-container">
+          <mat-form-field
+            class="input-field small contact-worker"
+            appearance="outline"
+          >
+            <input
+              matInput
+              [formControl]="displayNameControl"
+              type="text"
+              [autocomplete]="true"
+              placeholder="שם מלא*"
+            />
+            @if (displayNameControl.hasError("required")) {
+              <mat-error>יש להזין את שמך המלא</mat-error>
+            }
+            @if (displayNameControl.hasError("minlength")) {
+              <mat-error>הזן שם עם יותר מ-2 אותיות</mat-error>
+            }
+            @if (displayNameControl.hasError("pattern")) {
+              <mat-error>שם מלא חייב להכיל אותיות בלבד</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field
+            class="input-field small contact-worker"
+            appearance="outline"
+          >
+            <input
+              matInput
+              [formControl]="emailControl"
+              type="email"
+              [autocomplete]="true"
+              placeholder="אימייל*"
+            />
+            @if (emailControl.hasError("required")) {
+              <mat-error>יש להזין אימייל</mat-error>
+            }
+            @if (emailControl.hasError("invalidEmail")) {
+              <mat-error>האימייל לא תקין</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field
+            class="input-field small contact-worker"
+            appearance="outline"
+          >
+            <input
+              matInput
+              [formControl]="phoneNumberControl"
+              type="tel"
+              class="number_ltr"
+              [autocomplete]="true"
+              placeholder="טלפון"
+            />
+            @if (phoneNumberControl.hasError("stringIsntPhoneNumber")) {
+              <mat-error>הטלפון אינו תקין</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
+      <mat-form-field class="small light content" appearance="outline">
+        <textarea
+          [formControl]="applicationContentControl"
+          matInput
+          name=""
+          placeholder="ספרו בקצרה על הפרויקט ומומחים שלנו יצרו אתכם קשר בהקדם"
+          id=""
+          rows="7"
+        ></textarea>
+        @if (
+          applicationContentControl.hasError("required") ||
+          applicationContentControl.hasError("noOnlySpaces")
+        ) {
+          <mat-error>יש להזין תוכן פנייה</mat-error>
+        }
+        @if (applicationContentControl.hasError("minlength")) {
+          <mat-error>תוכן הפנייה חייב להיות עם 3 תווים ומעלה</mat-error>
+        }
+        @if (applicationContentControl.hasError("maxlength")) {
+          <mat-error>תוכן הפנייה חייב להיות מתחת ל500 תווים</mat-error>
+        }
+        @if (applicationContentControl.hasError("pattern")) {
+          <mat-error
+            >תוכן הפנייה יכול להזין אותיות ומספרים, נקודותיים וקווים
+            נטויים</mat-error
+          >
+        }
+      </mat-form-field>
+      <div class="button-container">
+        <app-hidden-submit (submission)="submit()" [disabled]="!form.valid" />
+        <button
+          (click)="submit()"
+          [disabled]="!form.valid"
+          class="btn btn-green-light btn-full-small btn-signup"
+          [class.loading]="isFormSubmitting"
+        >
+          @if (isFormSubmitting) {
+            <div class="sending-container">
+              <span class="loading-text">שולח<span class="dots"></span></span>
+              <mat-spinner diameter="30"></mat-spinner>
+            </div>
+          } @else {
+            <span>שלח</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
