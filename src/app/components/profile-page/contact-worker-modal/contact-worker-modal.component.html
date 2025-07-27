@@ -1,6 +1,8 @@
 <div class="bg-color">
   <div class="container">
-    <p class="title">צרו קשר עם <strong>ורמיליון אוטומט</strong></p>
+    <p class="title">
+      צרו קשר עם <strong>{{ worker.displayName }}</strong>
+    </p>
     <form [formGroup]="form">
       @if (!isLoggedIn) {
         <div class="inputs-container">

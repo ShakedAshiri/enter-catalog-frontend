@@ -1,12 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  QueryList,
-  Renderer2,
-  ViewChild,
-  ViewChildren,
-} from '@angular/core';
+import { Component, Inject, Optional } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Subscription } from 'rxjs';
@@ -24,6 +16,8 @@ import { BaseModalComponent } from '../../../shared/components/base-modal/base-m
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import noOnlySpacesValidator from '../../../shared/validators/no-only-spaces.validator';
 import { emailWithTLDValidator } from '../../../shared/validators/email.validator';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { User } from '../../../shared/models/user.class';
 
 @Component({
   selector: 'app-contact-worker-modal',
@@ -38,6 +32,8 @@ import { emailWithTLDValidator } from '../../../shared/validators/email.validato
   styleUrl: './contact-worker-modal.component.scss',
 })
 export class ContactWorkerModalComponent extends BaseModalComponent {
+  worker: User;
+
   private subscriptions: Subscription[] = [];
 
   isProduction = environment.production;
@@ -52,8 +48,13 @@ export class ContactWorkerModalComponent extends BaseModalComponent {
   constructor(
     private readonly authService: AuthService,
     private fb: FormBuilder,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     super();
+
+    if (data && data.worker) {
+      this.worker = data.worker;
+    }
 
     const isLoggedIn = this.authService.isLoggedIn();
 

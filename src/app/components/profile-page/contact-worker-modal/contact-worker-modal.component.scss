@@ -15,18 +15,20 @@
   padding: 0;
   margin: 0;
   color: #030303;
-  font-size: 60px;
+  font-size: 49px;
   margin-bottom: 15px;
-  text-wrap: nowrap;
 }
 
 .inputs-container {
   display: flex;
-  justify-content: space-between;
   margin-bottom: 13px;
   margin-top: 20px;
 
   .input-field {
+    &:not(:first-child) {
+      margin-right: 20px;
+    }
+
     background-color: #d9d9d9;
     width: 210px;
     height: 45px;
@@ -45,7 +47,7 @@ mat-form-field.content.ng-invalid.ng-touched {
 }
 
 mat-form-field.small.light.content {
-  width: 105%;
+  width: 702px;
   margin-right: -16px;
   font-size: 20px;
 }
@@ -59,6 +61,7 @@ textarea {
 .button-container {
   display: flex;
   flex-direction: row-reverse;
+  width: 670px;
 
   button {
     outline: none;

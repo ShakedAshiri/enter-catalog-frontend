@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -18,6 +18,7 @@ import { PopupModalService } from '../../../shared/services/popup-modal.service'
 import { DataTableService } from '../../../shared/services/data-table.service';
 import { SuccessModalComponent } from '../../../shared/components/success-modal/success-modal.component';
 import { ContactWorkerModalComponent } from '../contact-worker-modal/contact-worker-modal.component';
+import { User } from '../../../shared/models/user.class';
 
 @Component({
   selector: 'app-contact-us-profile-page',
@@ -36,6 +37,8 @@ export class ContactUsProfilePageComponent {
   isButtonDisabled = false;
   isFormSubmitting = false;
   isProduction = environment.production;
+
+  @Input() worker!: User;
 
   contactUsForm: FormGroup;
   nameControl = new FormControl('', [
@@ -89,10 +92,14 @@ export class ContactUsProfilePageComponent {
   }
 
   openContactWorkerModal() {
-    let dialogRef = this.popupModalService.open(ContactWorkerModalComponent, {
-      panelClass: 'no-radius-dialog',
-      width: 'max-content',
-    });
+    let dialogRef = this.popupModalService.open(
+      ContactWorkerModalComponent,
+      {
+        panelClass: 'no-radius-dialog',
+        width: 'max-content',
+      },
+      { worker: this.worker },
+    );
   }
 
   ngOnDestroy() {
