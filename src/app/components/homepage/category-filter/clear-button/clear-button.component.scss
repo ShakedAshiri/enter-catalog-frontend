@@ -1,0 +1,40 @@
+.container {
+  width: 60px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+  background-color: #f2ebeb;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.x-icon {
+  width: 20px;
+  height: 20px;
+  background-color: #a5a5a5; /* Gray circle */
+  border-radius: 50%;
+  position: relative;
+}
+
+/* The "X" */
+.x-icon::before,
+.x-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  height: 2px;
+  background-color: white;
+  transform-origin: center;
+}
+
+.x-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.x-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}

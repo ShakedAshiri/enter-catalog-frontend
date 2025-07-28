@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { ClearButtonComponent } from './clear-button/clear-button.component';
 
 @Component({
   selector: 'app-category-filter',
@@ -15,6 +16,7 @@ import { FormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     NgIf,
+    ClearButtonComponent,
   ],
   templateUrl: './category-filter.component.html',
   styleUrl: './category-filter.component.scss',
