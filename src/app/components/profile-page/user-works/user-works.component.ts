@@ -48,6 +48,8 @@ export class UserWorksComponent {
       UserWorkModalComponent,
       {
         disableClose: this.isEditable,
+        width: '80%',
+        maxWidth: '100%',
       },
       {
         isEditable: this.isEditable,

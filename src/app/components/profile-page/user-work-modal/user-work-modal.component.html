@@ -6,7 +6,10 @@
   <form [formGroup]="userWorkForm">
     <div class="card">
       <div class="card-img-container">
-        <mat-form-field appearance="outline" class="transparent hidden">
+        <mat-form-field
+          appearance="outline"
+          class="transparent hidden with-picture"
+        >
           <input
             matInput
             [formControl]="imagesControl.at(0)"
@@ -31,7 +34,7 @@
 
             <ng-template #imageContent>
               <img
-                *ngIf="images.length > 0; else emptyImage"
+                *ngIf="images.length > 0; else null"
                 [src]="selectedImage.url"
                 class="work-image"
               />
@@ -126,7 +129,7 @@
           }
         </mat-form-field>
       </div>
-      <div *ngIf="!isEditable">
+      <div *ngIf="!isEditable" class="description">
         {{ descriptionControl.value }}
       </div>
     </div>

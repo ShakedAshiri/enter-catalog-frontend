@@ -149,6 +149,13 @@ mat-form-field.small {
   }
 }
 
+mat-form-field.with-picture {
+  .mat-mdc-form-field-icon-suffix,
+  .mat-mdc-form-field-icon-prefix {
+    width: 100%;
+  }
+}
+
 mat-form-field.smaller {
   --mat-form-field-container-height: 45px;
   --mat-form-field-container-vertical-padding: 10px;
