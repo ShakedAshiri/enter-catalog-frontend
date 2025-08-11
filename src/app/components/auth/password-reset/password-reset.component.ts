@@ -83,7 +83,8 @@ export class PasswordResetComponent extends BaseModalComponent {
         .subscribe({
           next: () => {
             this.isFormSubmitting = false;
-            this.close(this.form.value);
+            this.authService.logout();
+            window.location.reload();
           },
           error: (error) => {
             if (!this.isProduction) {
